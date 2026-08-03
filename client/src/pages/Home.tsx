@@ -80,14 +80,15 @@ export default function Home() {
     .toFixed(3);
 
   return (
-    <div className="moi-pixel-perfect-root" dir="rtl">
-      {/* Official CSS Files */}
+    <div className="moi-original-clone" dir="rtl">
+      {/* Official CSS Files from MOI */}
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
       <link rel="stylesheet" href="https://www.moi.gov.kw/main/css/site.css?v=go_4IccMhw1NChPOSH_W7AbpThLoN7-zMHFe4trNRE0" />
+      <link rel="stylesheet" href="https://www.moi.gov.kw/main/lib/fontawesome/v7/css/all.css" />
       
       <style>{`
         body { background-color: rgb(236, 234, 228) !important; font-family: "Droid Arabic Kufi Regular", "Skia Regular", Arial, Tahoma, sans-serif !important; }
-        .moi-pixel-perfect-root { background-color: rgb(236, 234, 228); min-height: 100vh; }
+        .moi-original-clone { background-color: rgb(236, 234, 228); min-height: 100vh; }
         .container { background-color: #fff; box-shadow: 0 0 15px rgba(0,0,0,0.1); padding: 0 !important; max-width: 1140px; }
         
         /* Navbar Matching */
@@ -102,24 +103,18 @@ export default function Home() {
         .side-menu-container .active a { color: #000576 !important; }
         .side-menu-icon { width: 45px; margin-left: 15px; }
         
-        /* Inquiry Section */
+        /* Content area */
         .content-main { background-color: rgb(236, 234, 228); padding: 30px 20px; }
         .article-info { background: #fff; padding: 25px; border: 1px solid #ddd; }
-        .btn-secondary { background-color: #000576 !important; border-color: #000576 !important; width: 214px; height: 35px; font-size: 14px; }
+        .btn-moi { background-color: #000576 !important; border-color: #000576 !important; color: #fff !important; width: 214px; height: 35px; font-size: 14px; border-radius: 4px; }
         
-        /* ReadSpeaker Button */
-        .rs-btn { background: #f8f9fa; border: 1px solid #ddd; padding: 5px 15px; border-radius: 20px; font-size: 12px; color: #333; display: inline-flex; align-items: center; text-decoration: none !important; margin-bottom: 15px; }
-        .rs-btn:before { content: "▶"; margin-left: 8px; color: #000576; }
-
-        /* Responsive Mobile - Absolute Pixel Perfect */
+        /* Responsive Mobile */
         @media (max-width: 768px) {
           .container { width: 100% !important; max-width: 100% !important; }
           .side-menu-container { min-height: auto; margin-top: 20px; }
           .navbar-nav .nav-link { padding: 10px 15px !important; border-bottom: none !important; }
           .moi-header-logo { height: 80px !important; }
           .main-header-title { height: 30px !important; }
-          .col-4.col-md-2 { flex: 0 0 33.333333%; max-width: 33.333333%; }
-          .col-8.col-md-10 { flex: 0 0 66.666667%; max-width: 66.666667%; }
         }
       `}</style>
 
@@ -191,8 +186,10 @@ export default function Home() {
           {/* Main Content Area - Left */}
           <div className="col-12 col-md-8 order-md-1 content-main">
             {/* ReadSpeaker */}
-            <div className="text-left">
-              <a href="#" className="rs-btn">استمع</a>
+            <div className="text-left mb-3">
+              <a href="#" className="btn btn-light btn-sm rounded-pill px-3 border">
+                <i className="fas fa-play-circle text-primary ml-1"></i> استمع
+              </a>
             </div>
 
             <div className="text-center mb-4">
@@ -200,38 +197,28 @@ export default function Home() {
               <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" className="img-fluid" alt="divider" />
             </div>
 
-            {/* Form Section */}
+            {/* Inquiry Form - Original Structure */}
             <div className="article-info text-center mx-auto" style={{ maxWidth: "750px" }}>
               <form onSubmit={handleInquire}>
-                <div className="form-row text-right">
-                  <div className="col-12 col-md-6 mb-3">
-                    <label className="font-weight-bold small">Enquiry Type</label>
-                    <div className="d-flex mt-1">
-                      <div className="custom-control custom-radio ml-4">
-                        <input type="radio" id="typeInd" name="enqType" className="custom-control-input" checked={enquiryType === "1"} onChange={() => setEnquiryType("1")} />
-                        <label className="custom-control-label" htmlFor="typeInd">الأفراد</label>
-                      </div>
-                      <div className="custom-control custom-radio">
-                        <input type="radio" id="typeComp" name="enqType" className="custom-control-input" checked={enquiryType === "2"} onChange={() => setEnquiryType("2")} />
-                        <label className="custom-control-label" htmlFor="typeComp">الشركات</label>
-                      </div>
-                    </div>
-                  </div>
+                <div className="form-group text-right">
+                  <label className="font-weight-bold small">Enquiry Type</label>
+                  <select className="form-control" value={enquiryType} onChange={(e) => setEnquiryType(e.target.value)}>
+                    <option value="1">الأفراد</option>
+                    <option value="2">الشركات</option>
+                  </select>
                 </div>
-                <div className="form-row text-right">
-                  <div className="col-12 col-md-6 mb-4">
-                    <label className="font-weight-bold small">الرقم المدني أو الرقم الموحد</label>
-                    <input type="text" className="form-control" value={civilId} onChange={(e) => setCivilId(e.target.value)} />
-                  </div>
+                <div className="form-group text-right">
+                  <label className="font-weight-bold small">الرقم المدني أو الرقم الموحد</label>
+                  <input type="text" className="form-control" value={civilId} onChange={(e) => setCivilId(e.target.value)} />
                 </div>
-                <div className="text-center">
-                  <button type="submit" className="btn btn-secondary" disabled={isSearching}>
+                <div className="text-center mt-4">
+                  <button type="submit" className="btn btn-moi" disabled={isSearching}>
                     {isSearching ? "جاري البحث..." : "إستعلم"}
                   </button>
                 </div>
               </form>
 
-              {/* Legend */}
+              {/* Legend Section */}
               <div className="d-flex justify-content-end mt-4 mb-2 small">
                 <div className="d-flex align-items-center ml-3">
                   <span className="badge badge-success ml-1" style={{ width: "12px", height: "12px", borderRadius: "2px" }}>&nbsp;</span>
@@ -243,7 +230,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Results */}
+              {/* Status/Results */}
               {results && results.success && results.fines.length === 0 && (
                 <div className="alert alert-info mt-4 text-center font-weight-bold" style={{ backgroundColor: "#d1ecf1", color: "#0c5460", borderColor: "#bee5eb" }}>
                   Person does not have any Violations
@@ -290,13 +277,13 @@ export default function Home() {
                   </div>
                   <div className="d-flex justify-content-between align-items-center bg-light p-3 border mt-3">
                     <h5 className="m-0 font-weight-bold" style={{ color: "#000576", fontSize: "1rem" }}>إجمالي المختار: {totalPayableAmount} د.ك</h5>
-                    <button onClick={handlePay} disabled={selectedFines.length === 0} className="btn btn-secondary" style={{ width: "120px" }}>دفع</button>
+                    <button onClick={handlePay} disabled={selectedFines.length === 0} className="btn btn-moi" style={{ width: "120px" }}>دفع</button>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Bottom Sections - Absolute Match */}
+            {/* Additional Sections - Absolute Match */}
             <div className="row no-gutters mt-4">
               <div className="col-12 col-md-6 pr-md-2 mb-3">
                 <div className="article-info text-center h-100">
@@ -304,7 +291,7 @@ export default function Home() {
                   <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" className="mb-3" alt="bar" />
                   <select className="form-control mb-2"><option>المرور</option><option>الإقامة</option></select>
                   <input type="text" className="form-control mb-2" placeholder="الرقم المدني" />
-                  <button className="btn btn-block btn-secondary mt-3" style={{ width: "100%" }}>دفع</button>
+                  <button className="btn btn-block btn-secondary mt-3" style={{ width: "100%", backgroundColor: "#6c757d", border: "none" }}>دفع</button>
                 </div>
               </div>
               <div className="col-12 col-md-6 pl-md-2 mb-3">
@@ -323,7 +310,7 @@ export default function Home() {
         </div>
 
         {/* Footer - Absolute Match */}
-        <footer className="col-sm-12 text-center text-white mt-2 p-0" style={{ backgroundColor: "#000576", padding: "20px 0 !important" }}>
+        <footer className="col-sm-12 text-center text-white p-0" style={{ backgroundColor: "#000576", padding: "20px 0 !important" }}>
           <div className="py-3">
             <div className="mb-3">
               <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" className="mx-2" style={{ width: "24px", filter: "brightness(0) invert(1)" }} alt="YT" />
