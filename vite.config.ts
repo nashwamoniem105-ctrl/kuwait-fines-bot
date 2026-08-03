@@ -1,4 +1,4 @@
-import { jsxLocPlugin } from "@builder.io/vite-plugin-jsx-loc";
+
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import fs from "node:fs";
@@ -155,7 +155,7 @@ try {
   // ignore
 }
 
-const plugins: any[] = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusDebugCollector()];
+const plugins: any[] = [react(), tailwindcss(), vitePluginManusDebugCollector()];
 if (manusRuntimePlugin) {
   plugins.push(manusRuntimePlugin);
 }
