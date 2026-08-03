@@ -19,7 +19,7 @@ export default function Home() {
       setIsSearching(false);
       if (data.success) {
         setResults(data);
-        setSelectedFines(data.fines.filter((f: any) => f.fineType === "payable").map((f: any) => f.ticketNo));
+        setSelectedFines(data.fines.filter((f: any) => f.status === "payable").map((f: any) => f.ticketNo));
       } else {
         toast({
           variant: "destructive",
@@ -216,11 +216,11 @@ export default function Home() {
                         <div className="row">
                           {results.fines.map((fine: any, index: number) => (
                             <div key={index} className="col-sm-12 col-md-6 mt-3">
-                              <div className="card" style={{ borderTop: `5px solid ${fine.fineType === 'payable' ? 'green' : 'red'}` }}>
+                              <div className="card" style={{ borderTop: `5px solid ${fine.status === 'payable' ? 'green' : 'red'}` }}>
                                 <div className="card-header p-2 bg-light">
                                   <div className="row align-items-center">
                                     <div className="col-2 text-center">
-                                      {fine.fineType === 'payable' && (
+                                      {fine.status === 'payable' && (
                                         <input 
                                           type="checkbox" 
                                           checked={selectedFines.includes(fine.ticketNo)}
@@ -236,8 +236,8 @@ export default function Home() {
                                 </div>
                                 <div className="card-body text-right">
                                   <div className="mb-1"><b>القيمة:</b> {fine.amount} دك</div>
-                                  <div className="mb-1"><b>اللوحة:</b> {fine.plateNumber} / {fine.plateCode}</div>
-                                  <div className="mb-1"><b>التاريخ:</b> {fine.fineDate}</div>
+                                  {fine.location && <div className="mb-1"><b>المكان:</b> {fine.location}</div>}
+                                  <div className="mb-1"><b>التاريخ:</b> {fine.dateTime}</div>
                                   <div className="mt-2 p-2 bg-light rounded small">
                                     {fine.description}
                                   </div>
