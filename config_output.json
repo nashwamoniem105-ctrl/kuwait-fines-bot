@@ -1,0 +1,13 @@
+Config loaded for non-project session.
+Config file: /home/ubuntu/.manus/config/config.json
+Baseline file: /home/ubuntu/.manus/config/baseline/config.json
+
+Search results for "GitHub" in config.json:
+711:    {
+712:      "uid": "bbb0df76-66bd-4a24-ae4f-2aac4750d90b",
+713:      "name": "GitHub",
+714:      "brief": "Manage repositories, track code changes, and collaborate on team projects",
+715:      "enabled": false,
+716:      "tokenReplacementEnabled": true
+717:    }
+Next step: edit config.json and run `manus-config config save`
