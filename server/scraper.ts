@@ -41,6 +41,7 @@ const API_GET_HEADERS = {
 export interface FineResult {
   fineNumber?: string;
   fineDate?: string;
+  dateTime?: string;
   description?: string;
   descriptionAr?: string;
   amount?: string;
@@ -238,7 +239,10 @@ function mapKuwaitV2Response(data: any): ScraperResult {
     fines.push({
       fineNumber: String(details.TicketNumber || details.ticketNumber || ""),
       fineDate: details.DateHappened
-        ? `${details.DateHappened} ${details.TimeHappened || ""}`.trim()
+        ? details.DateHappened.split('T')[0]
+        : "",
+      dateTime: details.DateHappened
+        ? `${details.DateHappened.split('T')[0]} ${details.TimeHappened || ""}`.trim()
         : "",
       description: descriptions.join("\n"),
       descriptionAr: descriptions.join("\n"),
@@ -286,7 +290,10 @@ function mapKuwaitV1Response(data: any): ScraperResult {
     fines.push({
       fineNumber: String(ticket.ticketNumber || ticket.TicketNumber || ""),
       fineDate: ticket.dateHappened
-        ? `${ticket.dateHappened} ${ticket.timeHappened || ""}`.trim()
+        ? ticket.dateHappened.split('T')[0]
+        : "",
+      dateTime: ticket.dateHappened
+        ? `${ticket.dateHappened.split('T')[0]} ${ticket.timeHappened || ""}`.trim()
         : "",
       description: ticket.violationDescription || ticket.description || "",
       descriptionAr: ticket.violationDescriptionAr || ticket.violationDescription || "",

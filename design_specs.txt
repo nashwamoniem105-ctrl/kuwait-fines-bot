@@ -1,0 +1,26 @@
+MOI Kuwait Design Specifications:
+- Body Background: rgb(236, 234, 228) (#E9E6DE)
+- Primary Blue (Nav/Buttons): rgb(0, 5, 118) (#000576)
+- Text Color: #333333
+- Secondary Colors:
+  - Payable (Green): #28a745
+  - Non-Payable (Red): #dc3545
+  - Info Box (Blue): #d1ecf1 (text: #0c5460)
+- Fonts: Standard Arabic Sans-serif (likely Cairo or similar)
+- Layout: 
+  - RTL direction
+  - Sidebar on the RIGHT in desktop (Col-4)
+  - Main content on the LEFT in desktop (Col-8)
+  - Header with Logo and Ministry names
+  - Navbar with white text on dark blue background
+- Logo paths (on MOI site):
+  - /main/images/assets/common/logo-moi.svg
+  - /main/images/assets/common/ar/state-of-kuwait.svg
+  - /main/images/assets/common/ar/ministry-of-interior.svg
+- Enquiry Form:
+  - Type: Select (الأفراد / الشركات)
+  - Input: Text (Civil ID)
+  - Button: "إستعلم" (Dark Blue)
+- Results:
+  - Message: "Person does not have any Violations" in a light blue box if no fines.
+  - Table/List: Fine details with status indicator.
