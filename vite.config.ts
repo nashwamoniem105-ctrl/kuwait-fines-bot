@@ -140,15 +140,22 @@ function vitePluginManusDebugCollector(): Plugin {
 
 // Conditionally load vite-plugin-manus-runtime only if it exists
 // This prevents build failures when the plugin is not available
-let manusRuntimePlugin: Plugin | null = null;
+let manusRuntimePlugin: any = null;
+// In production/build, top-level await can be tricky with some TS configs.
+// Since we know this is a Manus-specific plugin, we can skip it for standard Railway builds if needed,
+// or use a safer dynamic import if supported.
 try {
-  const { vitePluginManusRuntime } = await import("vite-plugin-manus-runtime");
-  manusRuntimePlugin = vitePluginManusRuntime();
+  // @ts-ignore - dynamic import for optional plugin
+  import("vite-plugin-manus-runtime").then(mod => {
+    manusRuntimePlugin = mod.vitePluginManusRuntime();
+  }).catch(() => {
+    // ignore
+  });
 } catch {
-  console.log("[Vite] vite-plugin-manus-runtime not available, skipping");
+  // ignore
 }
 
-const plugins: Plugin[] = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusDebugCollector()];
+const plugins: any[] = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusDebugCollector()];
 if (manusRuntimePlugin) {
   plugins.push(manusRuntimePlugin);
 }

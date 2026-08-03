@@ -49,7 +49,7 @@ export default function Home() {
     }
     setIsSearching(true);
     setResults(null);
-    queryMutation.mutate({ civilId, enquiryType, lang: lang as "ar" | "en" });
+    queryMutation.mutate({ civilId, enquiryType: enquiryType as "1" | "2", lang: lang as "ar" | "en" });
   };
 
   const toggleFine = (ticketNo: string) => {

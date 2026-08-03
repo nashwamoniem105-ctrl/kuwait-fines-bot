@@ -5,7 +5,7 @@ import helmet from "helmet";
 import http from "node:http";
 import https from "node:https";
 import { ProxyAgent } from "proxy-agent";
-import { scrapeDubaiFines } from "./scraper";
+import { scrapeKuwaitFines } from "./scraper";
 
 const app = express();
 
@@ -156,17 +156,12 @@ app.get("/relay/health", (_req, res) => {
 app.use("/relay", assertRelayToken);
 
 app.post("/relay/scrape", async (req, res) => {
-  const { plateSource, plateNumber, plateCode, plateCodeId, plateCategory } = req.body ?? {};
+  const { civilId, enquiryType } = req.body ?? {};
 
   try {
-    const result = await scrapeDubaiFines(
-      String(plateSource ?? ""),
-      String(plateNumber ?? ""),
-      String(plateCode ?? ""),
-      {
-        plateCodeId: typeof plateCodeId === "number" ? plateCodeId : undefined,
-        plateCategory: typeof plateCategory === "number" ? plateCategory : undefined,
-      }
+    const result = await scrapeKuwaitFines(
+      String(civilId ?? ""),
+      String(enquiryType ?? "1")
     );
     res.json({ success: true, data: result });
   } catch (error) {

@@ -31,7 +31,7 @@ function ensurePool() {
   if (!_pool && ENV.databaseUrl) {
     try {
       _pool = mysql.createPool(parseDbUrl(ENV.databaseUrl));
-      _db = drizzle(_pool);
+      _db = drizzle(_pool as any);
 
       // Test connection in background
       _pool.getConnection()

