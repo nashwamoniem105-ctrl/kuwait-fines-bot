@@ -78,189 +78,292 @@ export default function Home() {
   };
 
   const totalPayableAmount = results?.fines
-    .filter((f: any) => selectedFines.includes(f.ticketNo))
+    .filter((f: any) => selectedFines.includes(ficketNo))
     .reduce((sum: number, f: any) => sum + parseFloat(f.amount), 0)
     .toFixed(3);
 
   return (
     <div className="moi-theme" dir="rtl">
-      <div className="container">
-        {/* Header Section */}
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        {/* Header Section - Matching MOI website */}
         <header>
-          <div className="row align-items-center py-2 bg-white">
-            <div className="col-4 col-md-2 text-center">
+          <div style={{ display: "flex", alignItems: "center", padding: "10px 0", backgroundColor: "#fff" }}>
+            <div style={{ flex: "0 0 16.666%", maxWidth: "16.666%", textAlign: "center" }}>
               <a href="/">
                 <img src="/main/images/assets/common/logo-moi.svg" style={{ height: "120px" }} alt="Logo" />
               </a>
             </div>
-            <div className="col-8 col-md-4">
-              <div className="d-flex flex-column align-items-start pr-3">
+            <div style={{ flex: "0 0 33.333%", maxWidth: "33.333%" }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", paddingRight: "15px" }}>
                 <img src="/main/images/assets/common/ar/state-of-kuwait.svg" style={{ height: "40px", marginBottom: "10px" }} alt="Kuwait" />
                 <img src="/main/images/assets/common/ar/ministry-of-interior.svg" style={{ height: "35px" }} alt="MOI" />
               </div>
             </div>
+            <div style={{ flex: 1 }}></div>
           </div>
           
-          <nav className="navbar navbar-expand-lg navbar-dark shadow-sm mt-2">
-            <div className="container p-0">
-              <ul className="navbar-nav w-100 d-flex flex-row p-0">
-                <li className="nav-item active">
-                  <a className="nav-link" href="/">الرئيسيــة</a>
+          <nav className="navbar navbar-expand-lg navbar-dark">
+            <div className="container" style={{ padding: 0, maxWidth: "1200px" }}>
+              <ul style={{ display: "flex", flexDirection: "row", padding: 0, margin: 0, listStyle: "none", width: "100%" }}>
+                <li className="nav-item active" style={{ minWidth: "100px", textAlign: "center" }}>
+                  <a className="nav-link" href="/" style={{ color: "#fff", lineHeight: "40px", padding: "0 20px", textDecoration: "none" }}>الرئيسيــة</a>
                 </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">الخدمات الإلكترونيـة</a>
+                <li className="nav-item" style={{ minWidth: "100px", textAlign: "center" }}>
+                  <a className="nav-link" href="#" style={{ color: "#fff", lineHeight: "40px", padding: "0 20px", textDecoration: "none" }}>الخدمات الإلكترونيـة</a>
                 </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">إدارات توعوية</a>
+                <li className="nav-item" style={{ minWidth: "100px", textAlign: "center" }}>
+                  <a className="nav-link" href="#" style={{ color: "#fff", lineHeight: "40px", padding: "0 20px", textDecoration: "none" }}>إدارات توعوية</a>
                 </li>
-                <li className="nav-item d-none d-md-block">
-                  <a className="nav-link" href="#">أرقام الطوارئ</a>
+                <li className="nav-item" style={{ minWidth: "100px", textAlign: "center" }}>
+                  <a className="nav-link" href="#" style={{ color: "#fff", lineHeight: "40px", padding: "0 20px", textDecoration: "none" }}>أرقام الطوارئ</a>
+                </li>
+                <li className="nav-item" style={{ minWidth: "100px", textAlign: "center" }}>
+                  <a className="nav-link" href="#" style={{ color: "#fff", lineHeight: "40px", padding: "0 20px", textDecoration: "none" }}>منصة المواعيد</a>
                 </li>
               </ul>
             </div>
           </nav>
         </header>
 
-        {/* Main Content Area */}
-        <div className="container-fluid content-main p-0 mt-0">
-          <div className="row m-0">
-            {/* Side Menu - Only visible on desktop */}
-            <div className="col-md-4 side-menu d-none d-md-block p-0">
-              <div className="side-menu-item p-3 border-bottom d-flex align-items-center">
-                <img src="/main/images/assets/general-traffic/ico-renew-license.svg" className="side-menu-icon" />
-                <span className="small font-weight-bold">الخدمات الالكترونية لرخص السوق</span>
+        {/* Main Content Area - Side menu on RIGHT (first in RTL DOM), content on LEFT */}
+        <div style={{ display: "flex", flexWrap: "nowrap", padding: 0, marginTop: 0, background: "#E9E6DE", minHeight: "500px" }}>
+          
+          {/* Side Menu - RIGHT side (first in RTL flow) */}
+          <div style={{ 
+            width: "33.333%", 
+            maxWidth: "33.333%",
+            backgroundColor: "#000576",
+            color: "#fff",
+            minWidth: "0",
+            boxSizing: "border-box",
+            alignSelf: "stretch"
+          }}>
+            <a href="#" style={{ color: "#fff", textDecoration: "none", display: "block" }}>
+              <div style={{ padding: "15px 15px", borderBottom: "1px solid rgba(255,255,255,0.15)", display: "flex", alignItems: "center" }}>
+                <img src="/main/images/assets/general-traffic/ico-renew-license.svg" style={{ width: "3.4em" }} />
+                <span style={{ fontSize: "0.85rem", fontWeight: "bold", marginRight: "10px" }}>الخدمات الالكترونية لرخص السوق</span>
               </div>
-              <div className="side-menu-item p-3 border-bottom d-flex align-items-center active" style={{ backgroundColor: "#fff" }}>
-                <img src="/main/images/assets/common/ico-payment.svg" className="side-menu-icon" />
-                <span className="small font-weight-bold">دفع المخالفات</span>
+            </a>
+            <a href="#" style={{ color: "#fff", textDecoration: "none", display: "block" }}>
+              <div style={{ padding: "15px 15px", borderBottom: "1px solid rgba(255,255,255,0.15)", display: "flex", alignItems: "center", backgroundColor: "#fff", color: "#000576" }}>
+                <img src="/main/images/assets/common/ico-payment.svg" style={{ width: "3.4em" }} />
+                <span style={{ fontSize: "0.85rem", fontWeight: "bold", marginRight: "10px", color: "#000576" }}>دفع المخالفات</span>
               </div>
-              <div className="side-menu-item p-3 border-bottom d-flex align-items-center">
-                <img src="/main/images/assets/general-traffic/ico-booking.svg" className="side-menu-icon" />
-                <span className="small font-weight-bold">نظام مواعيد اختبار القيادة</span>
+            </a>
+            <a href="#" style={{ color: "#fff", textDecoration: "none", display: "block" }}>
+              <div style={{ padding: "15px 15px", borderBottom: "1px solid rgba(255,255,255,0.15)", display: "flex", alignItems: "center" }}>
+                <img src="/main/images/assets/general-traffic/ico-booking.svg" style={{ width: "3.4em" }} />
+                <span style={{ fontSize: "0.85rem", fontWeight: "bold", marginRight: "10px" }}>نظام مواعيد اختبار القيادة</span>
               </div>
-              <div className="side-menu-item p-3 border-bottom d-flex align-items-center">
-                <img src="/main/images/assets/general-traffic/ico-procedures.svg" className="side-menu-icon" />
-                <span className="small font-weight-bold">معاملات المرور</span>
+            </a>
+            <a href="#" style={{ color: "#fff", textDecoration: "none", display: "block" }}>
+              <div style={{ padding: "15px 15px", borderBottom: "1px solid rgba(255,255,255,0.15)", display: "flex", alignItems: "center" }}>
+                <img src="/main/images/assets/general-traffic/ico-procedures.svg" style={{ width: "3.4em" }} />
+                <span style={{ fontSize: "0.85rem", fontWeight: "bold", marginRight: "10px" }}>معاملات المرور</span>
+              </div>
+            </a>
+            <a href="#" style={{ color: "#fff", textDecoration: "none", display: "block" }}>
+              <div style={{ padding: "15px 15px", borderBottom: "1px solid rgba(255,255,255,0.15)", display: "flex", alignItems: "center" }}>
+                <img src="/main/images/assets/general-traffic/ico-locations-sections.svg" style={{ width: "3.4em" }} />
+                <span style={{ fontSize: "0.85rem", fontWeight: "bold", marginRight: "10px" }}>مواقع الإدارة العامة للمرور</span>
+              </div>
+            </a>
+            <a href="/main/content/docs/gdt/driving-license-conditions.pdf" style={{ color: "#fff", textDecoration: "none", display: "block" }}>
+              <div style={{ padding: "15px 15px", display: "flex", alignItems: "center" }}>
+                <img src="/main/images/assets/common/ico-pdf-doc.svg" style={{ width: "3.4em" }} />
+                <span style={{ fontSize: "0.85rem", fontWeight: "bold", marginRight: "10px" }}>شروط منح رخص السوق لغير الكويتيين</span>
+              </div>
+            </a>
+          </div>
+
+          {/* Main Content - LEFT side */}
+          <div style={{ 
+            width: "66.667%", 
+            maxWidth: "66.667%",
+            padding: "30px 25px",
+            backgroundColor: "#E9E6DE",
+            boxSizing: "border-box",
+          }}>
+            <div style={{ textAlign: "center", paddingTop: "15px" }}>
+              <h4 style={{ color: "#000576", fontWeight: "bold", fontSize: "1.1rem" }}>الإدارة العامة للمرور</h4>
+              <div style={{ marginTop: "8px", marginBottom: "20px" }}>
+                <img src="/main/images/assets/common/ico-horizontal-bar.svg" alt="bar" style={{ maxWidth: "100%" }} />
               </div>
             </div>
 
-            {/* Main Content */}
-            <div className="col-12 col-md-8 p-4">
-              <div className="title-section">
-                الإدارة العامة للمرور
-                <div className="mt-2">
-                  <img src="/main/images/assets/common/ico-horizontal-bar.svg" alt="bar" />
-                </div>
+            <form onSubmit={handleInquire} style={{ maxWidth: "600px", margin: "0 auto" }}>
+              <div style={{ marginBottom: "25px" }}>
+                <label style={{ fontWeight: "bold", marginBottom: "8px", display: "block", color: "#333" }}>نوع الاستعلام</label>
+                <select 
+                  id="enquiryType"
+                  style={{ 
+                    width: "100%", 
+                    padding: "8px 12px", 
+                    fontSize: "1rem",
+                    borderRadius: "0",
+                    border: "1px solid #ccc",
+                    backgroundColor: "#fff",
+                    color: "#000576",
+                    height: "42px",
+                    boxSizing: "border-box"
+                  }}
+                  value={enquiryType} 
+                  onChange={(e) => setEnquiryType(e.target.value)}
+                >
+                  <option value="1">الأفراد</option>
+                  <option value="2">الشركات</option>
+                </select>
               </div>
 
-              <form onSubmit={handleInquire} className="mt-4">
-                <div className="form-group mb-4">
-                  <label className="font-weight-bold mb-2">نوع الاستعلام</label>
-                  <select 
-                    className="form-control" 
-                    value={enquiryType} 
-                    onChange={(e) => setEnquiryType(e.target.value)}
-                  >
-                    <option value="1">الأفراد</option>
-                    <option value="2">الشركات</option>
-                  </select>
+              <div style={{ marginBottom: "25px" }}>
+                <label style={{ fontWeight: "bold", marginBottom: "8px", display: "block", color: "#333" }}>
+                  {enquiryType === "1" ? "الرقم المدني أو الرقم الموحد" : "الرقم الموحد للشركة"}
+                </label>
+                <input 
+                  id="civilId"
+                  type="text"
+                  style={{
+                    width: "100%",
+                    padding: "8px 12px",
+                    fontSize: "1.2rem",
+                    fontWeight: "bold",
+                    borderRadius: "0",
+                    border: "1px solid #ccc",
+                    backgroundColor: "#fff",
+                    color: "#000576",
+                    textAlign: "center",
+                    height: "42px",
+                    boxSizing: "border-box"
+                  }}
+                  value={civilId}
+                  onChange={(e) => setCivilId(e.target.value)}
+                  maxLength={12}
+                  placeholder="أدخل الرقم هنا"
+                />
+              </div>
+
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <button 
+                  id="btnEnquire"
+                  type="submit" 
+                  style={{
+                    backgroundColor: "#000576",
+                    color: "#fff",
+                    border: "none",
+                    padding: "10px 50px",
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                    height: "42px",
+                    minWidth: "180px",
+                    borderRadius: "0",
+                  }}
+                  disabled={isSearching}
+                >
+                  {isSearching ? "جاري البحث..." : "إستعلم"}
+                </button>
+              </div>
+            </form>
+
+            {/* Results Display */}
+            {results && (
+              <div style={{ marginTop: "40px", maxWidth: "700px", margin: "40px auto 0" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "2px solid #000576", paddingBottom: "10px", marginBottom: "20px", fontWeight: "bold" }}>
+                  <span>عدد المخالفات: {results.totalFines}</span>
+                  <span style={{ color: "#cc0000" }}>الإجمالي: {results.totalAmount} دك</span>
                 </div>
 
-                <div className="form-group mb-4">
-                  <label className="font-weight-bold mb-2">
-                    {enquiryType === "1" ? "الرقم المدني أو الرقم الموحد" : "الرقم الموحد للشركة"}
-                  </label>
-                  <input 
-                    type="text"
-                    className="form-control text-center font-weight-bold"
-                    style={{ fontSize: "1.2rem", color: "#000576" }}
-                    value={civilId}
-                    onChange={(e) => setCivilId(e.target.value)}
-                    maxLength={12}
-                    placeholder="أدخل الرقم هنا"
-                  />
-                </div>
-
-                <div className="row">
-                  <div className="col-md-6">
-                    <button 
-                      type="submit" 
-                      className="btn btn-primary btn-block"
-                      disabled={isSearching}
-                    >
-                      {isSearching ? "جاري البحث..." : "إستعلم"}
-                    </button>
-                  </div>
-                </div>
-              </form>
-
-              {/* Results Display */}
-              {results && (
-                <div className="results-container mt-5">
-                  <div className="d-flex justify-content-between border-bottom pb-2 mb-3 font-weight-bold">
-                    <span>عدد المخالفات: {results.totalFines}</span>
-                    <span className="text-danger">الإجمالي: {results.totalAmount} دك</span>
-                  </div>
-
-                  <div className="row">
-                    {results.fines.map((fine: any, index: number) => (
-                      <div key={index} className="col-12 mb-3">
-                        <div className="card shadow-none mb-3" style={{ borderRight: `5px solid ${fine.status === 'payable' ? '#28a745' : '#dc3545'}`, borderRadius: '0' }}>
-                          <div className="card-header bg-light d-flex justify-content-between align-items-center p-2">
-                            <div className="d-flex align-items-center">
-                              {fine.status === 'payable' && (
-                                <input 
-                                  type="checkbox" 
-                                  checked={selectedFines.includes(fine.ticketNo)}
-                                  onChange={() => toggleFine(fine.ticketNo)}
-                                  className="ml-2"
-                                  style={{ width: '18px', height: '18px' }}
-                                />
-                              )}
-                              <span className="font-weight-bold small">رقم المخالفة: {fine.ticketNo}</span>
-                            </div>
-                            <span className={`badge ${fine.status === 'payable' ? 'badge-success' : 'badge-danger'}`} style={{ fontSize: '10px' }}>
-                              {fine.status === 'payable' ? 'قابلة للدفع' : 'غير قابلة للدفع'}
-                            </span>
-                          </div>
-                          <div className="card-body p-2 small">
-                            <div className="row m-0">
-                              <div className="col-6 p-1"><b>القيمة:</b> {fine.amount} دك</div>
-                              <div className="col-6 p-1"><b>التاريخ:</b> {fine.dateTime}</div>
-                              <div className="col-12 p-1 border-top mt-1 pt-1"><b>الوصف:</b> {fine.description}</div>
-                            </div>
-                          </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {results.fines.map((fine: any, index: number) => (
+                    <div key={index} style={{ 
+                      border: "1px solid #ddd", 
+                      borderRight: `5px solid ${fine.status === 'payable' ? '#28a745' : '#dc3545'}`,
+                      borderRadius: "0",
+                      backgroundColor: "#fff"
+                    }}>
+                      <div style={{ 
+                        display: "flex", 
+                        justifyContent: "space-between", 
+                        alignItems: "center", 
+                        padding: "10px 15px", 
+                        backgroundColor: "#f8f9fa",
+                        borderBottom: "1px solid #ddd"
+                      }}>
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          {fine.status === 'payable' && (
+                            <input 
+                              type="checkbox" 
+                              checked={selectedFines.includes(fine.ticketNo)}
+                              onChange={() => toggleFine(fine.ticketNo)}
+                              style={{ marginLeft: "10px", width: "18px", height: "18px" }}
+                            />
+                          )}
+                          <span style={{ fontWeight: "bold", fontSize: "0.85rem" }}>رقم المخالفة: {fine.ticketNo}</span>
+                        </div>
+                        <span style={{ 
+                          padding: "3px 10px", 
+                          fontSize: "0.7rem", 
+                          color: "#fff",
+                          borderRadius: "3px",
+                          backgroundColor: fine.status === 'payable' ? '#28a745' : '#dc3545'
+                        }}>
+                          {fine.status === 'payable' ? 'قابلة للدفع' : 'غير قابلة للدفع'}
+                        </span>
+                      </div>
+                      <div style={{ padding: "12px 15px", fontSize: "0.85rem" }}>
+                        <div style={{ display: "flex", gap: "20px", marginBottom: "8px", flexWrap: "wrap" }}>
+                          <span><b>القيمة:</b> {fine.amount} دك</span>
+                          <span><b>التاريخ:</b> {fine.dateTime}</span>
+                        </div>
+                        <div style={{ borderTop: "1px solid #eee", paddingTop: "8px" }}>
+                          <b>الوصف:</b> {fine.description}
                         </div>
                       </div>
-                    ))}
-                  </div>
-
-                  {results.fines.length > 0 && (
-                    <div className="mt-4 p-3 bg-white border shadow-sm">
-                      <div className="d-flex justify-content-between align-items-center">
-                        <h5 className="m-0 font-weight-bold text-success">
-                          إجمالي المختار: {totalPayableAmount} دك
-                        </h5>
-                        <button 
-                          className="btn btn-primary px-5"
-                          onClick={handlePay}
-                          disabled={selectedFines.length === 0}
-                        >
-                          إدفع
-                        </button>
-                      </div>
                     </div>
-                  )}
+                  ))}
                 </div>
-              )}
-            </div>
+
+                {results.fines.length > 0 && (
+                  <div style={{ marginTop: "25px", padding: "15px 20px", backgroundColor: "#fff", border: "1px solid #ddd", boxShadow: "0 2px 4px rgba(0,0,0,0.1)" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <h5 style={{ margin: 0, fontWeight: "bold", color: "#28a745" }}>
+                        إجمالي المختار: {totalPayableAmount} دك
+                      </h5>
+                      <button 
+                        style={{
+                          backgroundColor: "#000576",
+                          color: "#fff",
+                          border: "none",
+                          padding: "10px 40px",
+                          fontSize: "1rem",
+                          fontWeight: "bold",
+                          cursor: selectedFines.length > 0 ? "pointer" : "not-allowed",
+                          borderRadius: "0",
+                          opacity: selectedFines.length === 0 ? 0.6 : 1
+                        }}
+                        onClick={handlePay}
+                        disabled={selectedFines.length === 0}
+                      >
+                        إدفع
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Footer */}
-        <footer className="footer text-center mt-0">
-          <div className="container">
-            <p className="m-0">جميع الحقوق محفوظة © وزارة الداخلية - دولة الكويت 2026</p>
+        {/* Footer - Matching original MOI */}
+        <footer style={{ 
+          backgroundColor: "#000576", 
+          color: "#fff", 
+          padding: "20px 0", 
+          textAlign: "center",
+          marginTop: 0
+        }}>
+          <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 15px" }}>
+            <p style={{ margin: 0, fontSize: "12px" }}>جميع الحقوق محفوظة © وزارة الداخلية - دولة الكويت 2026</p>
           </div>
         </footer>
       </div>

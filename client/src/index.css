@@ -78,78 +78,15 @@
   --sidebar-ring: #ffffff;
 }
 
+/*
+ * CRITICAL: Disable Tailwind's base reset that overrides Bootstrap defaults.
+ * We only want Tailwind utilities (for components that use it) and keep
+ * Bootstrap's .container, .row, .col-*, .navbar, etc. intact.
+ */
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-    box-sizing: border-box;
-  }
+  /* Do NOT use @apply for Bootstrap classes here. */
   
-  /* Bootstrap Utility Classes */
-  .d-flex { display: flex !important; }
-  .flex-row { flex-direction: row !important; }
-  .flex-column { flex-direction: column !important; }
-  .align-items-center { align-items: center !important; }
-  .justify-content-between { justify-content: space-between !important; }
-  .text-center { text-align: center !important; }
-  .text-right { text-align: right !important; }
-  .w-100 { width: 100% !important; }
-  .p-0 { padding: 0 !important; }
-  .m-0 { margin: 0 !important; }
-  .mt-2 { margin-top: 0.5rem !important; }
-  .py-2 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
-  .pr-3 { padding-right: 1rem !important; }
-  .shadow-sm { box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important; }
-  .bg-white { background-color: #fff !important; }
-  .bg-light { background-color: #f8f9fa !important; }
-  .border-bottom { border-bottom: 1px solid #dee2e6 !important; }
-  .font-weight-bold { font-weight: 700 !important; }
-  .small { font-size: 80% !important; }
-  
-  .navbar-nav {
-    display: flex;
-    flex-direction: row;
-    padding-right: 0;
-    margin-bottom: 0;
-    list-style: none;
-    width: 100%;
-    justify-content: flex-start;
-  }
-  
-  .nav-item {
-    list-style: none;
-  }
-  
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
-  }
-  
-  .col-4 { flex: 0 0 33.333333%; max-width: 33.333333%; }
-  .col-8 { flex: 0 0 66.666667%; max-width: 66.666667%; }
-  
-  @media (min-width: 768px) {
-    .col-md-2 { flex: 0 0 16.666667%; max-width: 16.666667%; }
-    .col-md-4 { flex: 0 0 33.333333%; max-width: 33.333333%; }
-    .col-md-8 { flex: 0 0 66.666667%; max-width: 66.666667%; }
-    .d-md-block { display: block !important; }
-  }
-  
-  .container {
-    width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
-  }
-  
-  @media (min-width: 1200px) {
-    .container { max-width: 1140px; }
-  }
-
   body {
-    @apply bg-background text-foreground;
     direction: rtl;
     font-family: 'Droid Arabic Kufi Regular', 'Cairo', 'Segoe UI', Tahoma, sans-serif;
     font-size: 14px;
@@ -159,133 +96,217 @@
     background-size: 77px 200px;
     background-repeat: repeat;
     min-height: 100vh;
+    color: #333;
   }
+
   html {
     height: 100%;
     position: relative;
   }
+
   a {
     color: #000576;
     text-decoration: none;
   }
+
   a:hover {
     text-decoration: none;
   }
 }
 
-/* MOI Specific Overrides */
-.moi-theme .container {
-    max-width: 1200px;
-    background: transparent;
+/* =========================================================================
+ * MOI Theme Overrides - scoped under .moi-theme to avoid global conflicts
+ * ========================================================================= */
+
+.moi-theme {
+  direction: rtl;
 }
 
+.moi-theme .container {
+  max-width: 1200px;
+  background: transparent;
+}
+
+.moi-theme .container-fluid {
+  display: block; /* override Tailwind's inline-block */
+  width: 100%;
+}
+
+/* Header & Navbar */
 .moi-theme header {
-    background-repeat: repeat-x;
-    background-size: 77px 200px;
-    padding-bottom: 0;
+  background-repeat: repeat-x;
+  background-size: 77px 200px;
+  padding-bottom: 0;
 }
 
 .moi-theme .navbar {
-    background-color: #000576 !important;
-    padding: 0 !important;
-    min-height: 45px;
-    z-index: 1000;
-    position: relative;
+  background-color: #000576 !important;
+  padding: 0 !important;
+  min-height: 45px;
+  z-index: 1000;
+  position: relative;
+}
+
+.moi-theme .navbar > .container {
+  height: 100%;
 }
 
 .moi-theme .nav-link {
-    color: #ffffff !important;
-    line-height: 40px;
-    padding: 0 20px !important;
-    font-size: 14px;
-    transition: all 0.2s;
-    display: block;
-    text-decoration: none;
+  color: #ffffff !important;
+  line-height: 40px;
+  padding: 0 20px !important;
+  font-size: 14px;
+  transition: all 0.2s;
+  display: block;
+  text-decoration: none;
 }
 
 .moi-theme .nav-item.active .nav-link, 
 .moi-theme .nav-link:hover {
-    background-color: #e9e6de !important;
-    color: #013D71 !important;
+  background-color: #e9e6de !important;
+  color: #013D71 !important;
 }
 
+.moi-theme .navbar-nav .nav-item {
+  min-width: 100px;
+  text-align: center;
+}
+
+/* Content Area */
 .moi-theme .content-main {
-    background: #E9E6DE;
-    min-height: 500px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    margin-top: 0;
-    display: flex;
+  background: #E9E6DE;
+  min-height: 500px;
+  margin-top: 0;
 }
 
+/* Side Menu - MUST match original: dark blue background, white text */
 .moi-theme .side-menu {
-    border-left: 1px solid #d6dce5;
-    background-color: #f8f9fa;
-    min-height: 500px;
+  background-color: #000576 !important;
+  color: #fff !important;
+  padding: 20px;
+  min-height: 500px;
 }
 
 .moi-theme .side-menu-item {
-    padding: 15px 10px;
-    border-bottom: 1px solid #d6dce5;
-    display: flex;
-    align-items: center;
-    color: #000576;
-    font-weight: 500;
-    background-color: #f8f9fa;
+  padding: 15px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  color: #fff !important;
+  font-weight: 500;
+  background-color: transparent !important;
+  transition: background-color 0.2s;
+}
+
+.moi-theme .side-menu-item:hover {
+  background-color: rgba(255,255,255,0.1) !important;
+  color: #c09f66 !important;
+}
+
+.moi-theme .side-menu-item.active {
+  background-color: #fff !important;
+  color: #000576 !important;
+}
+
+.moi-theme .side-menu-item.active span {
+  color: #000576 !important;
 }
 
 .moi-theme .side-menu-icon {
-    width: 35px;
-    margin-left: 10px;
-    flex-shrink: 0;
+  width: 3.4em;
+  margin-left: 10px;
+  flex-shrink: 0;
 }
 
+/* Title */
 .moi-theme .title-section {
-    color: #000576;
-    font-size: 22px;
-    font-weight: bold;
-    padding: 20px 0;
-    text-align: center;
-    border-bottom: 2px solid #000576;
-    margin-bottom: 25px;
+  color: #000576;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 20px 0;
+  text-align: center;
+  border-bottom: 2px solid #000576;
+  margin-bottom: 25px;
 }
 
+/* Form Elements */
 .moi-theme .form-control {
-    border-radius: 0;
-    border: 1px solid #ccc;
-    height: 45px;
+  border-radius: 0;
+  border: 1px solid #ccc;
+  height: 45px;
+  background-color: #fff;
+  color: #000576;
 }
 
+.moi-theme .form-control:focus {
+  border-color: #000576;
+  box-shadow: 0 0 0 0.2rem rgba(0,5,118,0.25);
+}
+
+.moi-theme select.form-control {
+  padding: 0 0 10px 0;
+}
+
+/* Buttons */
 .moi-theme .btn-primary {
-    background-color: #000576;
-    border-color: #000576;
-    border-radius: 0;
-    font-weight: bold;
-    height: 45px;
+  background-color: #000576;
+  border-color: #000576;
+  border-radius: 0;
+  font-weight: bold;
+  height: 45px;
+  color: #fff;
 }
 
 .moi-theme .btn-primary:hover {
-    background-color: #000350;
+  background-color: #000350;
+  border-color: #000350;
+  color: #fff;
 }
 
+.moi-theme .btn-primary:disabled {
+  background-color: #000576;
+  opacity: 0.6;
+}
+
+/* Footer */
 .moi-theme .footer {
-    background-color: #000576;
-    color: #fff;
-    padding: 20px 0;
-    margin-top: 30px;
+  background-color: #000576;
+  color: #fff;
+  padding: 20px 0;
+  margin-top: 0;
 }
 
-/* Custom styles for violation cards */
+.moi-theme .footer a {
+  color: #fff;
+}
+
+/* Violation Cards */
 .moi-theme .fine-card {
-    border: 1px solid #ddd;
-    margin-bottom: 15px;
-    background: #fff;
+  border: 1px solid #ddd;
+  margin-bottom: 15px;
+  background: #fff;
+  border-radius: 0;
 }
 
-.moi-theme .fine-card-header {
-    background: #f8f9fa;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.moi-theme .card {
+  border-radius: 0;
+}
+
+.moi-theme .card-header {
+  background-color: #f8f9fa;
+  border-radius: 0;
+}
+
+/* Results container */
+.moi-theme .results-container {
+  background: transparent;
+}
+
+/* Bootstrap button overrides in MOI theme */
+.moi-theme .badge-success {
+  background-color: #28a745;
+}
+
+.moi-theme .badge-danger {
+  background-color: #dc3545;
 }
