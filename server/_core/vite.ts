@@ -53,50 +53,73 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  // Try multiple possible paths for the dist directory
+  // In production, the server is bundled into dist/index.js
+  // So __dirname is 'dist'
+  // The static files are in 'dist/public'
+  
+  const rootDir = process.cwd();
+  const distPublicPath = path.resolve(rootDir, "dist", "public");
+  const appDistPublicPath = "/app/dist/public";
+  const relativePublicPath = path.resolve(__dirname, "public");
+
   const possiblePaths = [
-    path.resolve(process.cwd(), "dist", "public"),
-    path.resolve(__dirname, "public"),
-    path.resolve(__dirname, "..", "dist", "public"),
-    path.resolve(__dirname, "..", "public"),
+    distPublicPath,
+    appDistPublicPath,
+    relativePublicPath,
+    path.resolve(rootDir, "public"),
   ];
 
   let distPath = "";
+  console.log(`[Static] Current working directory: ${rootDir}`);
+  console.log(`[Static] __dirname: ${__dirname}`);
+
   for (const p of possiblePaths) {
-    console.log(`Checking for static files in: ${p}`);
-    if (fs.existsSync(p) && fs.existsSync(path.join(p, "index.html"))) {
-      distPath = p;
-      console.log(`Found static files at: ${distPath}`);
-      break;
+    console.log(`[Static] Checking path: ${p}`);
+    if (fs.existsSync(p)) {
+      const files = fs.readdirSync(p);
+      console.log(`[Static] Path exists. Files: ${files.slice(0, 5).join(", ")}${files.length > 5 ? "..." : ""}`);
+      if (files.includes("index.html")) {
+        distPath = p;
+        console.log(`[Static] Found valid dist directory at: ${distPath}`);
+        break;
+      }
+    } else {
+      console.log(`[Static] Path does not exist: ${p}`);
     }
   }
 
   if (!distPath) {
-    distPath = possiblePaths[0];
-    console.error(
-      `Could not find a valid build directory with index.html. Defaulting to: ${distPath}`
-    );
-    // Log what we DO find to help debugging
+    distPath = distPublicPath;
+    console.error(`[Static] CRITICAL: Could not find build directory with index.html. Defaulting to: ${distPath}`);
+    
+    // Emergency directory listing
     try {
-      const rootFiles = fs.readdirSync(process.cwd());
-      console.log(`Root directory files: ${rootFiles.join(", ")}`);
-      if (fs.existsSync(path.join(process.cwd(), "dist"))) {
-        console.log(`Dist directory files: ${fs.readdirSync(path.join(process.cwd(), "dist")).join(", ")}`);
+      console.log(`[Static] Root listing: ${fs.readdirSync(rootDir).join(", ")}`);
+      if (fs.existsSync(path.join(rootDir, "dist"))) {
+        console.log(`[Static] dist listing: ${fs.readdirSync(path.join(rootDir, "dist")).join(", ")}`);
       }
     } catch (e) {
-      console.error(`Error listing directories: ${e}`);
+      console.error(`[Static] Error listing directories: ${e}`);
     }
   }
 
   app.use(express.static(distPath));
 
-  // fall through to index.html if the file doesn't exist
   app.use("*", (req, res) => {
     const indexPath = path.resolve(distPath, "index.html");
     if (fs.existsSync(indexPath)) {
       res.sendFile(indexPath);
     } else {
-      res.status(404).send(`Not Found: ${req.originalUrl} (Static path: ${distPath})`);
+      res.status(404).json({
+        error: "Not Found",
+        message: `The requested URL ${req.originalUrl} was not found on this server.`,
+        debug: {
+          cwd: rootDir,
+          distPath: distPath,
+          indexPath: indexPath,
+          exists: fs.existsSync(indexPath)
+        }
+      });
     }
   });
 }
