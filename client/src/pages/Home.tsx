@@ -88,67 +88,43 @@ export default function Home() {
       <div className="container">
         <header>
           <div className="row">
-            <div className="col-4 col-md-2 col-lg-2 text-center">
-              <a className="navbar-brand m-0" href="/">
-                <img src="/main/images/assets/common/logo-moi.svg" style={{ height: "120px" }} alt="وزارة الداخلية" />
-              </a>
-            </div>
-            <div className="col-1 align-self-center">
-              <div className="row">
-                <div className="col text-center">
-                  <img src="/main/images/assets/common/ar/state-of-kuwait.svg" className="text-center main-header-title" alt="دولة الكويت" />
+            <div className="col-12 py-3 d-flex justify-content-between align-items-center">
+              <div className="d-flex align-items-center">
+                <a className="navbar-brand m-0" href="/">
+                  <img src="/main/images/assets/common/logo-moi.svg" style={{ height: "100px" }} alt="وزارة الداخلية" />
+                </a>
+                <div className="mr-3 d-none d-md-block">
+                  <img src="/main/images/assets/common/ar/state-of-kuwait.svg" style={{ height: "40px", display: "block", marginBottom: "5px" }} alt="دولة الكويت" />
+                  <img src="/main/images/assets/common/ar/ministry-of-interior.svg" style={{ height: "35px" }} alt="وزارة الداخلية" />
                 </div>
               </div>
-              <div className="row">
-                <div className="col text-center">
-                  <img src="/main/images/assets/common/ar/ministry-of-interior.svg" className="mt-2 main-header-title" alt="وزارة الداخلية" />
-                </div>
+              <div className="text-left d-none d-sm-block">
+                <div style={{ color: "#000576", fontWeight: "bold", fontSize: "18px" }}>دولة الكويت</div>
+                <div style={{ color: "#000576", fontSize: "16px" }}>وزارة الداخلية</div>
               </div>
             </div>
           </div>
-          <nav className="navbar navbar-expand-lg navbar-dark border-bottom box-shadow" style={{ backgroundColor: "#000576" }}>
-            <a className="navbar-brand" href="/"></a>
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse flex-sm-row-reverse" id="navbarResponsive">
-              <ul className="navbar-nav flex-grow-1 p-0 clearfix" style={{ margin: "0 auto", verticalAlign: "top" }}>
-                <li className="nav-item active">
-                  <a className="nav-link" href="/" style={{ color: "#fff" }}>
-                    الرئيسيــة
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#" style={{ color: "#fff" }}>
-                    الخدمات الإلكترونيـة
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#" style={{ color: "#fff" }}>
-                    إدارات توعوية
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#" style={{ color: "#fff" }}>
-                    الإصدارات الإلكترونية
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#" style={{ color: "#fff" }}>
-                    يهمنا رايك
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#" style={{ color: "#fff" }}>
-                    أرقام الطوارئ
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#" style={{ color: "#fff" }}>
-                    منصة المواعيد
-                  </a>
-                </li>
-              </ul>
+          <nav className="navbar navbar-expand-lg navbar-dark border-bottom box-shadow" style={{ backgroundColor: "#000576", minHeight: "50px" }}>
+            <div className="container p-0">
+              <button className="navbar-toggler mr-2" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+                <span className="navbar-toggler-icon"></span>
+              </button>
+              <div className="collapse navbar-collapse" id="navbarResponsive">
+                <ul className="navbar-nav w-100 d-flex justify-content-start p-0">
+                  <li className="nav-item active">
+                    <a className="nav-link px-4" href="/" style={{ color: "#fff", fontWeight: "bold" }}>الرئيسيــة</a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link px-4" href="#" style={{ color: "#fff" }}>الخدمات الإلكترونيـة</a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link px-4" href="#" style={{ color: "#fff" }}>إدارات توعوية</a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link px-4" href="#" style={{ color: "#fff" }}>أرقام الطوارئ</a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </nav>
         </header>
