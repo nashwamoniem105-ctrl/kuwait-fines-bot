@@ -152,7 +152,7 @@ export const appRouter = router({
               ? (fine.descriptionAr || fine.description || "")
               : (fine.description || fine.descriptionAr || ""),
             dateTime: fine.fineDate || "",
-            status: fine.isPaid === "paid" ? "paid" : (fine.fineType === "blackpoints" ? "blackpoints" : "payable"),
+            status: fine.isPaid === "paid" ? "paid" : (fine.fineType === "blackpoints" ? "blackpoints" : (fine.fineType === "unpayable" ? "unpayable" : "payable")),
             isPaid: fine.isPaid === "paid",
             violationType: fine.violationType || undefined,
             payableOnline: fine.payableOnline || undefined,

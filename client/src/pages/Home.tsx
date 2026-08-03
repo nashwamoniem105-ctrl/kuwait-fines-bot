@@ -265,7 +265,7 @@ export default function Home() {
                         <div className="row">
                           {results.fines.map((fine: any, index: number) => (
                             <div key={index} className="col-sm-12 col-md-6 mt-3">
-                              <div className="card" style={{ borderTop: `5px solid ${fine.status === 'payable' ? '#28a745' : '#dc3545'}`, borderRadius: "0" }}>
+                              <div className="card" style={{ borderTop: `5px solid ${fine.status === 'payable' ? '#28a745' : (fine.status === 'unpayable' ? '#ffc107' : '#dc3545')}`, borderRadius: "0" }}>
                                 <div className="card-header p-2 bg-light" style={{ borderBottom: "1px solid #ddd" }}>
                                   <div className="row align-items-center">
                                     <div className="col-2 text-center">
@@ -279,7 +279,12 @@ export default function Home() {
                                       )}
                                     </div>
                                     <div className="col-10 text-right">
-                                      <b style={{ color: "#000576" }}>رقم المخالفة:</b> {fine.ticketNo}
+                                      <div className="d-flex justify-content-between align-items-center">
+                                        <span className={`badge ${fine.status === 'payable' ? 'badge-success' : (fine.status === 'unpayable' ? 'badge-warning' : 'badge-danger')}`}>
+                                          {fine.status === 'payable' ? 'قابلة للدفع' : (fine.status === 'unpayable' ? 'غير قابلة للدفع إلكترونياً' : (fine.status === 'paid' ? 'مدفوعة' : 'نقاط سوداء'))}
+                                        </span>
+                                        <span><b style={{ color: "#000576" }}>رقم المخالفة:</b> {fine.ticketNo}</span>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
