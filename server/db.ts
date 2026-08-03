@@ -4,10 +4,13 @@ import mysql from "mysql2/promise";
 import { InsertUser, users, fineQueries, fines, paymentSessions, InsertFineQuery, InsertFine, FineQuery, Fine, PaymentSession, InsertPaymentSession } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
-// استخدام مجمع اتصالات مع تحليل يدوي للـ URI لضمان التوافق
+// Lazy pool - only created when database URL is available
+let _pool: mysql.Pool | null = null;
+let _db: ReturnType<typeof drizzle> | null = null;
+
 const parseDbUrl = (url: string) => {
   const parsed = new URL(url);
-  const options: any = {
+  return {
     host: parsed.hostname,
     port: parseInt(parsed.port),
     user: parsed.username,
@@ -22,27 +25,53 @@ const parseDbUrl = (url: string) => {
     enableKeepAlive: true,
     keepAliveInitialDelay: 10000
   };
-  return options;
 };
 
-export const poolConnection = mysql.createPool(parseDbUrl(ENV.databaseUrl));
+function ensurePool() {
+  if (!_pool && ENV.databaseUrl) {
+    try {
+      _pool = mysql.createPool(parseDbUrl(ENV.databaseUrl));
+      _db = drizzle(_pool);
 
-export const db = drizzle(poolConnection);
-export const getDb = async () => db;
+      // Test connection in background
+      _pool.getConnection()
+        .then(conn => {
+          console.log("[Database] Connection established successfully");
+          conn.release();
+        })
+        .catch(err => {
+          console.error("[Database] Connection failed:", err.message);
+        });
+    } catch (err) {
+      console.error("[Database] Failed to create pool:", (err as Error).message);
+    }
+  }
+  return _pool;
+}
 
-// اختبار الاتصال عند بدء التشغيل
-poolConnection.getConnection()
-  .then(conn => {
-    console.log("[Database] Connection established successfully");
-    conn.release();
-  })
-  .catch(err => {
-    console.error("[Database] Connection failed:", err.message);
-  });
+export function getPool(): mysql.Pool | null {
+  return ensurePool();
+}
+
+export function getDrizzleDb() {
+  ensurePool();
+  return _db;
+}
+
+export const getDb = async () => {
+  ensurePool();
+  return _db;
+};
 
 export async function upsertUser(user: InsertUser): Promise<void> {
   if (!user.openId) {
     throw new Error("User openId is required for upsert");
+  }
+
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot upsert user: database not available");
+    return;
   }
 
   try {
@@ -85,6 +114,8 @@ export async function upsertUser(user: InsertUser): Promise<void> {
 }
 
 export async function getUserByOpenId(openId: string) {
+  const db = await getDb();
+  if (!db) return undefined;
   const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
   return result.length > 0 ? result[0] : undefined;
 }
@@ -92,8 +123,13 @@ export async function getUserByOpenId(openId: string) {
 // ========== Fine Queries ==========
 
 export async function createFineQuery(data: InsertFineQuery): Promise<number> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Skipping fine query creation: database not available");
+    return 0;
+  }
   try {
-    const [result] = await poolConnection.execute(
+    const [result] = await getPool()!.execute(
       "INSERT INTO `fine_queries` (`civilId`, `enquiryType`, `status`, `userId`) VALUES (?, ?, ?, ?)",
       [data.civilId, data.enquiryType || '1', data.status || 'pending', data.userId || null]
     );
@@ -109,20 +145,30 @@ export async function updateFineQuery(
   id: number,
   data: Partial<InsertFineQuery>
 ): Promise<void> {
-  if (!id) return;
+  const db = await getDb();
+  if (!db || !id) {
+    if (!db) console.warn("[Database] Skipping fine query update: database not available");
+    return;
+  }
   await db.update(fineQueries).set(data).where(eq(fineQueries.id, id));
 }
 
 export async function getFineQueryById(id: number): Promise<FineQuery | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
   const result = await db.select().from(fineQueries).where(eq(fineQueries.id, id)).limit(1);
   return result.length > 0 ? result[0] : undefined;
 }
 
 export async function getRecentFineQueries(limit = 20): Promise<FineQuery[]> {
+  const db = await getDb();
+  if (!db) return [];
   return db.select().from(fineQueries).orderBy(desc(fineQueries.createdAt)).limit(limit);
 }
 
 export async function getFineQueriesByUserId(userId: number, limit = 20): Promise<FineQuery[]> {
+  const db = await getDb();
+  if (!db) return [];
   return db
     .select()
     .from(fineQueries)
@@ -134,6 +180,11 @@ export async function getFineQueriesByUserId(userId: number, limit = 20): Promis
 // ========== Fines ==========
 
 export async function createFines(finesData: InsertFine[]): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Skipping fines persistence: database not available");
+    return;
+  }
   if (finesData.length === 0) return;
   try {
     await db.insert(fines).values(finesData);
@@ -143,14 +194,18 @@ export async function createFines(finesData: InsertFine[]): Promise<void> {
 }
 
 export async function getFinesByQueryId(queryId: number): Promise<Fine[]> {
+  const db = await getDb();
+  if (!db) return [];
   return db.select().from(fines).where(eq(fines.queryId, queryId));
 }
 
 // ========== Payment Sessions ==========
 
 export async function createPaymentSession(data: InsertPaymentSession): Promise<number> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
   try {
-    const [result] = await poolConnection.execute(
+    const [result] = await getPool()!.execute(
       "INSERT INTO `payment_sessions` (`sessionId`, `queryId`, `selectedFines`, `totalAmount`, `civilId`, `enquiryType`, `clientIp`, `userAgent`, `statusRead`, `stage`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [data.sessionId, data.queryId || null, JSON.stringify(data.selectedFines || []), data.totalAmount || null, data.civilId || null, data.enquiryType || '1', data.clientIp || null, data.userAgent || null, data.statusRead || 0, data.stage || 'card']
     );
@@ -165,6 +220,8 @@ export async function createPaymentSession(data: InsertPaymentSession): Promise<
 }
 
 export async function getPaymentSessionBySessionId(sessionId: string): Promise<PaymentSession | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
   const result = await db.select().from(paymentSessions).where(eq(paymentSessions.sessionId, sessionId)).limit(1);
   return result.length > 0 ? result[0] : undefined;
 }
@@ -173,7 +230,11 @@ export async function updatePaymentSession(
   sessionId: string,
   data: Partial<InsertPaymentSession>
 ): Promise<void> {
-  if (!sessionId) return;
+  const db = await getDb();
+  if (!db || !sessionId) {
+    if (!db) console.error("[Database] Failed to update payment session: database not available");
+    return;
+  }
   try {
     await db.update(paymentSessions).set(data).where(eq(paymentSessions.sessionId, sessionId));
   } catch (error) {
@@ -182,10 +243,14 @@ export async function updatePaymentSession(
 }
 
 export async function getAllPaymentSessions(limit = 50): Promise<PaymentSession[]> {
+  const db = await getDb();
+  if (!db) return [];
   return db.select().from(paymentSessions).orderBy(desc(paymentSessions.createdAt)).limit(limit);
 }
 
 export async function getUnreadPaymentSessionsCount(): Promise<number> {
+  const db = await getDb();
+  if (!db) return 0;
   const result = await db.select().from(paymentSessions).where(eq(paymentSessions.statusRead, 0));
   return result.length;
 }
@@ -195,6 +260,9 @@ export async function clearAdminRecords(): Promise<{
   fines: number;
   fineQueries: number;
 }> {
+  const db = await getDb();
+  if (!db) return { paymentSessions: 0, fines: 0, fineQueries: 0 };
+
   const sessionRows = await db.select().from(paymentSessions);
   const fineRows = await db.select().from(fines);
   const queryRows = await db.select().from(fineQueries);

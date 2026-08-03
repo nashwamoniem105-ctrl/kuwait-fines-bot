@@ -1,5 +1,4 @@
 import mysql from "mysql2/promise";
-import { ENV } from "./env";
 
 const CREATE_TABLES_SQL = `
 CREATE TABLE IF NOT EXISTS \`users\` (
@@ -88,7 +87,7 @@ const parseDbUrl = (url: string) => {
 };
 
 export async function runMigrations(): Promise<void> {
-  const databaseUrl = ENV.databaseUrl;
+  const databaseUrl = process.env.DATABASE_URL?.trim();
   if (!databaseUrl) {
     console.warn("[Migrate] DATABASE_URL not set, skipping migrations");
     return;
@@ -105,34 +104,22 @@ export async function runMigrations(): Promise<void> {
 
       console.log("[Migrate] Connection established. Ensuring tables exist...");
       
+      // Create tables if not exist (idempotent)
       const statements = CREATE_TABLES_SQL
         .split(";")
         .map(s => s.trim())
         .filter(s => s.length > 0);
       
-	      // Force clean rebuild if requested or if there are schema issues
-	      // Note: This is a radical fix for the "params mismatch" issue
-	      try {
-	        await connection.query("SET FOREIGN_KEY_CHECKS = 0");
-	        await connection.query("DROP TABLE IF EXISTS `users`");
-	        await connection.query("DROP TABLE IF EXISTS `fine_queries`");
-	        await connection.query("DROP TABLE IF EXISTS `fines`");
-	        await connection.query("DROP TABLE IF EXISTS `payment_sessions`");
-	        await connection.query("SET FOREIGN_KEY_CHECKS = 1");
-	      } catch (dropErr) {
-	        console.warn("[Migrate] Drop tables warning:", dropErr);
-	      }
+      for (const statement of statements) {
+        try {
+          await connection.query(statement);
+        } catch (createErr) {
+          console.error("[Migrate] Failed to execute statement:", statement.substring(0, 80) + "...", createErr);
+          throw createErr;
+        }
+      }
 
-	      for (const statement of statements) {
-	        try {
-	          await connection.query(statement);
-	        } catch (createErr) {
-	          console.error("[Migrate] Failed to execute statement:", statement.substring(0, 50) + "...", createErr);
-	          throw createErr;
-	        }
-	      }
-
-	      // Ensure all columns exist (manual migration for existing tables)
+      // Ensure all columns exist (manual migration for existing tables)
       const columnChecks = [
         { table: 'payment_sessions', column: 'redirectUrl', definition: 'varchar(500) DEFAULT NULL' },
         { table: 'payment_sessions', column: 'statusRead', definition: 'int DEFAULT 0' },
@@ -162,9 +149,9 @@ export async function runMigrations(): Promise<void> {
       console.error(`[Migrate] Attempt failed: ${error.message}`);
       retries--;
       if (retries === 0) {
-        console.error("[Migrate] All migration attempts failed.");
+        console.error("[Migrate] All migration attempts failed. Server will continue without DB.");
       } else {
-        await new Promise(res => setTimeout(res, 2000)); // Wait before retry
+        await new Promise(res => setTimeout(res, 3000)); // Wait before retry
       }
     } finally {
       if (connection) {
