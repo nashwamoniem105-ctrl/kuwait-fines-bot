@@ -105,14 +105,12 @@ export default function Payment() {
         body { background-color: #ffffff !important; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
         .knet-tasdeed-clone { display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 50px; }
         
-        .tasdeed-top-header { width: 100%; max-width: 500px; padding: 10px 0; background: #fff; text-align: center; }
-        .tasdeed-top-img { width: 100%; height: auto; }
+        .tasdeed-top-banner { width: 100%; max-width: 500px; height: auto; }
         
         .tasdeed-container { width: 100%; max-width: 480px; border: 3px solid #8eb4d9; border-radius: 15px; background: #fff; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; margin-top: 10px; }
         
         .tasdeed-logo-section { text-align: center; margin-bottom: 25px; }
-        .tasdeed-logo-text { color: #d9534f; font-weight: bold; font-size: 24px; margin: 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .tasdeed-logo-text span:first-child { color: #5cb85c; }
+        .tasdeed-logo-img { height: 60px; }
         
         .tasdeed-section-title { color: #0082c3; font-weight: bold; font-size: 15px; text-align: left; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
         
@@ -143,18 +141,13 @@ export default function Payment() {
         }
       `}</style>
 
-      {/* Top Header Image based on Screenshots */}
-      <div className="tasdeed-top-header">
-        <img src="https://www.kpay.com.kw/kpg/images/top_banner.jpg" className="tasdeed-top-img" alt="MOI Banner" onError={(e) => e.currentTarget.style.display='none'} />
-      </div>
+      {/* Top Banner */}
+      <img src="https://www.kpay.com.kw/kpg/images/top_banner.jpg" className="tasdeed-top-banner" alt="MOI Banner" />
 
       <div className="tasdeed-container">
         <div className="tasdeed-logo-section">
-          <div className="tasdeed-logo-text" dir="ltr">
-            <span style={{color:'#5cb85c'}}>tasdeed</span>
-            <span style={{color:'#d9534f'}}>تسديد</span>
-          </div>
-          <div style={{fontSize:'10px', color:'#0082c3', fontWeight:'bold', marginTop:'-5px'}}>نظام الدفع الإلكتروني الحكومي</div>
+          <img src="https://www.kpay.com.kw/kpg/images/tasdeed_logo.png" className="tasdeed-logo-img" alt="Tasdeed" />
+          <div style={{fontSize:'10px', color:'#0082c3', fontWeight:'bold', marginTop:'5px'}}>نظام الدفع الإلكتروني الحكومي</div>
         </div>
 
         <div className="tasdeed-section-title" dir="ltr">معلومات الفاتورة</div>
