@@ -1,10 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { trpc } from "@/lib/trpc";
-import { Loader2, RotateCcw, CheckCircle2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
 
@@ -16,13 +12,14 @@ export default function Home() {
   const [enquiryType, setEnquiryType] = useState("1");
   const [results, setResults] = useState<any>(null);
   const [selectedFines, setSelectedFines] = useState<string[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   const queryMutation = trpc.fines.query.useMutation({
     onSuccess: (data) => {
+      setIsSearching(false);
       if (data.success) {
         setResults(data);
-        // Default select all payable fines
-        setSelectedFines(data.fines.filter((f: any) => f.status === "payable").map((f: any) => f.ticketNo));
+        setSelectedFines(data.fines.filter((f: any) => f.fineType === "payable").map((f: any) => f.ticketNo));
       } else {
         toast({
           variant: "destructive",
@@ -32,6 +29,7 @@ export default function Home() {
       }
     },
     onError: (error) => {
+      setIsSearching(false);
       toast({
         variant: "destructive",
         title: "خطأ في الاتصال",
@@ -45,17 +43,13 @@ export default function Home() {
     if (civilId.length < 8) {
       toast({
         variant: "destructive",
-        description: "يرجى إدخال رقم مدني صحيح",
+        description: "البيانات المدخلة غير صحيحة",
       });
       return;
     }
-    queryMutation.mutate({ civilId, enquiryType, lang: lang as "ar" | "en" });
-  };
-
-  const handleReset = () => {
-    setCivilId("");
+    setIsSearching(true);
     setResults(null);
-    setSelectedFines([]);
+    queryMutation.mutate({ civilId, enquiryType, lang: lang as "ar" | "en" });
   };
 
   const toggleFine = (ticketNo: string) => {
@@ -83,207 +77,224 @@ export default function Home() {
     setLocation("/payment");
   };
 
+  const totalPayableAmount = results?.fines
+    .filter((f: any) => selectedFines.includes(f.ticketNo))
+    .reduce((sum: number, f: any) => sum + parseFloat(f.amount), 0)
+    .toFixed(3);
+
   return (
-    <div className="min-h-screen bg-[#f4f4f4] font-cairo text-[#333]" dir="rtl">
-      {/* Top Header with Logos */}
-      <header className="bg-white border-b border-gray-200">
-        <div className="container mx-auto px-4 py-2 flex justify-between items-center">
-          <div className="flex items-center gap-4">
-             <img src="/logo-moi.svg" alt="MOI Logo" className="h-16" />
-          </div>
-          <div className="flex gap-4 items-center">
-            <img src="/state-of-kuwait.svg" alt="Kuwait State" className="h-10" />
-            <img src="/ministry-of-interior.svg" alt="Ministry of Interior" className="h-12" />
-          </div>
-        </div>
-        <nav className="bg-[#003366] text-white py-2">
-          <div className="container mx-auto px-4 flex justify-between items-center text-sm font-bold">
-            <div className="flex gap-6">
-              <span className="hover:text-gray-300 cursor-pointer">الرئيسيــة</span>
-              <span className="hover:text-gray-300 cursor-pointer border-b-2 border-white pb-1">الخدمات الإلكترونيـة</span>
-              <span className="hover:text-gray-300 cursor-pointer">إدارات توعوية</span>
-              <span className="hover:text-gray-300 cursor-pointer">أرقام الطوارئ</span>
+    <div className="moi-theme" dir="rtl">
+      <div className="container">
+        <header>
+          <div className="row">
+            <div className="col-4 col-md-2 col-lg-2 text-center">
+              <a className="navbar-brand m-0" href="/">
+                <img src="/main/images/assets/common/logo-moi.svg" style={{ height: "120px" }} alt="Logo" />
+              </a>
             </div>
-            <div className="flex gap-4">
-              <span className="cursor-pointer">English</span>
-            </div>
-          </div>
-        </nav>
-      </header>
-
-      <main className="container mx-auto px-4 py-8 max-w-5xl">
-        <div className="bg-white rounded shadow-sm border border-gray-200 overflow-hidden">
-          {/* Section Title */}
-          <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-            <h1 className="text-xl font-bold text-[#003366] flex items-center gap-3">
-              <img src="/logo-general-traffic.svg" alt="Traffic" className="h-10" />
-              الإدارة العامة للمرور
-            </h1>
-          </div>
-
-          <CardContent className="p-6">
-            {!results ? (
-              <div className="max-w-xl mx-auto py-10">
-                <form onSubmit={handleInquire} className="space-y-8 text-right">
-                  <div className="space-y-4">
-                    <label className="block font-bold text-gray-700 text-lg">Enquiry Type</label>
-                    <div className="flex gap-8 justify-end items-center bg-gray-50 p-4 rounded-lg border border-gray-200">
-                      <label className="flex items-center gap-3 cursor-pointer text-lg">
-                        <span>الأفراد</span>
-                        <input 
-                          type="radio" 
-                          name="type" 
-                          value="1" 
-                          checked={enquiryType === "1"} 
-                          onChange={(e) => setEnquiryType(e.target.value)}
-                          className="w-5 h-5 accent-[#003366]"
-                        />
-                      </label>
-                      <label className="flex items-center gap-3 cursor-pointer text-lg">
-                        <span>الشركات</span>
-                        <input 
-                          type="radio" 
-                          name="type" 
-                          value="2" 
-                          checked={enquiryType === "2"} 
-                          onChange={(e) => setEnquiryType(e.target.value)}
-                          className="w-5 h-5 accent-[#003366]"
-                        />
-                      </label>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <label className="block font-bold text-gray-700 text-lg">الرقم المدني أو الرقم الموحد</label>
-                    <Input
-                      value={civilId}
-                      onChange={(e) => setCivilId(e.target.value)}
-                      placeholder="أدخل الرقم المدني"
-                      className="text-center text-2xl py-8 border-2 border-gray-300 focus:border-[#003366] rounded-md"
-                      maxLength={12}
-                    />
-                  </div>
-
-                  <Button 
-                    type="submit" 
-                    disabled={queryMutation.isPending}
-                    className="w-full py-8 bg-[#003366] hover:bg-[#002244] text-white font-bold text-xl rounded shadow-md transition-all"
-                  >
-                    {queryMutation.isPending ? <Loader2 className="animate-spin h-8 w-8" /> : "إستعلم"}
-                  </Button>
-                </form>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {/* Summary Info */}
-                <div className="bg-[#f8f9fa] p-5 rounded border border-gray-300 flex flex-row-reverse justify-around items-center">
-                  <div className="text-right">
-                    <div className="text-gray-600 text-sm mb-1">عدد المخالفات</div>
-                    <div className="text-[#003366] font-bold text-2xl">{results.totalFines}</div>
-                  </div>
-                  <div className="h-10 w-px bg-gray-300"></div>
-                  <div className="text-right">
-                    <div className="text-gray-600 text-sm mb-1">المبلغ الاجمالي</div>
-                    <div className="text-[#003366] font-bold text-2xl">{results.totalAmount} دك</div>
-                  </div>
+            <div className="col-1 align-self-center">
+              <div className="row">
+                <div className="col text-center">
+                  <img src="/main/images/assets/common/ar/state-of-kuwait.svg" className="text-center main-header-title" alt="State of Kuwait" />
                 </div>
+              </div>
+              <div className="row">
+                <div className="col text-center">
+                  <img src="/main/images/assets/common/ar/ministry-of-interior.svg" className="mt-2 main-header-title" alt="MOI" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <nav className="navbar navbar-expand-lg navbar-dark border-bottom box-shadow">
+            <div className="container">
+              <div className="navbar-collapse collapse flex-sm-row-reverse" id="navbarResponsive">
+                <ul className="navbar-nav flex-grow-1 p-0 clearfix" style={{ margin: "0 auto", verticalAlign: "top" }}>
+                  <div className="d-flex flex-sm-row flex-column container-navlinks">
+                    <li className="nav-item active">
+                      <a className="nav-link" href="/">الرئيسيــة</a>
+                    </li>
+                    <li className="nav-item">
+                      <a className="nav-link" href="#">الخدمات الإلكترونيـة</a>
+                    </li>
+                    <li className="nav-item">
+                      <a className="nav-link" href="#">إدارات توعوية</a>
+                    </li>
+                  </div>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </header>
 
-                {/* Violations Grid - Matching Kuwait MOI Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                  {results.fines.map((fine: any, idx: number) => (
-                    <div 
-                      key={idx} 
-                      className={`relative bg-white border border-gray-300 rounded-md shadow-sm text-right overflow-hidden ${
-                        fine.status === 'payable' ? 'border-t-4 border-t-green-600' : 'border-t-4 border-t-red-600'
-                      }`}
-                    >
-                      <div className="p-5 space-y-3">
-                        <div className="flex justify-between items-center border-b border-gray-100 pb-3 mb-2">
-                          {fine.status === 'payable' && (
-                            <input 
-                              type="checkbox" 
-                              checked={selectedFines.includes(fine.ticketNo)}
-                              onChange={() => toggleFine(fine.ticketNo)}
-                              className="w-6 h-6 accent-green-600 cursor-pointer"
-                            />
-                          )}
-                          <div className="text-[#003366] font-bold text-lg">
-                            رقم: <span className="text-gray-800">{fine.ticketNo}</span>
+        <div className="container-fluid">
+          <div className="row">
+            <main role="main" className="col-12 pb-3">
+              <div className="row mt-3">
+                <div className="col-12 text-right">
+                  <h4 className="font-weight-bold" style={{ color: "#000576" }}>
+                    <img src="/main/images/assets/general-traffic/logo-general-traffic.svg" style={{ height: "40px" }} className="ml-2" alt="Traffic" />
+                    الإدارة العامة للمرور
+                  </h4>
+                </div>
+              </div>
+
+              <div className="row mt-2">
+                <div className="col-12">
+                  <div className="card shadow-sm p-4">
+                    <form id="enquireForm" onSubmit={handleInquire}>
+                      <div className="form-row">
+                        <div className="col-sm-12 col-md-6">
+                          <label className="font-weight-bold">نوع الاستعلام</label>
+                          <div className="d-flex mt-2 mb-3">
+                            <div className="custom-control custom-radio custom-control-inline">
+                              <input 
+                                type="radio" id="typeIndividual" name="enquiryType" className="custom-control-input" 
+                                value="1" checked={enquiryType === "1"} onChange={() => setEnquiryType("1")} 
+                              />
+                              <label className="custom-control-label" htmlFor="typeIndividual">الأفراد</label>
+                            </div>
+                            <div className="custom-control custom-radio custom-control-inline">
+                              <input 
+                                type="radio" id="typeCompany" name="enquiryType" className="custom-control-input" 
+                                value="2" checked={enquiryType === "2"} onChange={() => setEnquiryType("2")} 
+                              />
+                              <label className="custom-control-label" htmlFor="typeCompany">الشركات</label>
+                            </div>
                           </div>
                         </div>
-                        
-                        <div className="space-y-2 text-base">
-                          <div className="flex justify-between flex-row-reverse">
-                            <span className="text-gray-600">قيمة المخالفة:</span>
-                            <span className="font-bold text-[#003366]">{fine.amount} دك</span>
+                      </div>
+                      <div className="form-row mt-2">
+                        <div className="col-sm-12 col-md-4">
+                          <label id="lblEnquiryType" className="font-weight-bold">
+                            {enquiryType === "1" ? "الرقم المدني أو الرقم الموحد" : "الرقم الموحد للشركة"}
+                          </label>
+                          <input 
+                            className="form-control form-control-lg text-center font-weight-bold" 
+                            id="civilId" 
+                            name="civilId" 
+                            value={civilId}
+                            onChange={(e) => setCivilId(e.target.value)}
+                            maxLength={12} 
+                            style={{ fontSize: "1.5rem", color: "#000576" }}
+                          />
+                        </div>
+                      </div>
+                      <div className="form-row mt-4">
+                        <div className="col-sm-12 col-md-4">
+                          <button 
+                            id="btnEnquire" 
+                            type="submit" 
+                            className="btn btn-primary btn-block btn-lg"
+                            disabled={isSearching}
+                            style={{ backgroundColor: "#000576", borderColor: "#000576" }}
+                          >
+                            {isSearching ? "جاري البحث..." : "إستعلم"}
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+
+                    {isSearching && (
+                      <div className="d-flex justify-content-center mt-4">
+                        <div className="spinner-grow text-primary" role="status">
+                          <span className="sr-only">Loading...</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {results && (
+                      <div id="responseInfo" className="mt-4">
+                        <div className="row alert alert-secondary" role="alert">
+                          <div className="col-md-6 col-sm-12 text-right">
+                            <b className="ml-2">عدد المخالفات:</b> {results.totalFines}
                           </div>
-                          <div className="flex justify-between flex-row-reverse">
-                            <span className="text-gray-600">رقم اللوحة:</span>
-                            <span className="font-bold">{fine.plateNumber || "---"}</span>
-                          </div>
-                          <div className="flex justify-between flex-row-reverse">
-                            <span className="text-gray-600">تاريخ المخالفة:</span>
-                            <span className="font-bold">{fine.dateTime}</span>
+                          <div className="col-md-6 col-sm-12 text-right">
+                            <b className="ml-2">المبلغ الاجمالي:</b> {results.totalAmount} دك
                           </div>
                         </div>
 
-                        {fine.description && (
-                          <div className="mt-4 p-3 bg-gray-50 rounded text-sm text-gray-700 border border-gray-100 leading-relaxed">
-                            {fine.description}
+                        <div className="row">
+                          {results.fines.map((fine: any, index: number) => (
+                            <div key={index} className="col-sm-12 col-md-6 mt-3">
+                              <div className="card" style={{ borderTop: `5px solid ${fine.fineType === 'payable' ? 'green' : 'red'}` }}>
+                                <div className="card-header p-2 bg-light">
+                                  <div className="row align-items-center">
+                                    <div className="col-2 text-center">
+                                      {fine.fineType === 'payable' && (
+                                        <input 
+                                          type="checkbox" 
+                                          checked={selectedFines.includes(fine.ticketNo)}
+                                          onChange={() => toggleFine(fine.ticketNo)}
+                                          style={{ width: "20px", height: "20px" }}
+                                        />
+                                      )}
+                                    </div>
+                                    <div className="col-10 text-right">
+                                      <b style={{ color: "#000576" }}>رقم المخالفة:</b> {fine.ticketNo}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="card-body text-right">
+                                  <div className="mb-1"><b>القيمة:</b> {fine.amount} دك</div>
+                                  <div className="mb-1"><b>اللوحة:</b> {fine.plateNumber} / {fine.plateCode}</div>
+                                  <div className="mb-1"><b>التاريخ:</b> {fine.fineDate}</div>
+                                  <div className="mt-2 p-2 bg-light rounded small">
+                                    {fine.description}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {results.fines.length > 0 && (
+                          <div className="mt-4 border-top pt-4">
+                            <div className="row align-items-center">
+                              <div className="col-md-6 text-right">
+                                <h5 className="font-weight-bold text-success">
+                                  إجمالي القيمة المختارة: {totalPayableAmount} دك
+                                </h5>
+                              </div>
+                              <div className="col-md-6 text-left">
+                                <button 
+                                  className="btn btn-success btn-lg px-5"
+                                  onClick={handlePay}
+                                  disabled={selectedFines.length === 0}
+                                >
+                                  إدفع المختارة
+                                </button>
+                              </div>
+                            </div>
+                            <div className="alert alert-warning mt-3 text-right">
+                              بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
+                            </div>
+                          </div>
+                        )}
+
+                        {results.fines.length === 0 && !isSearching && (
+                          <div className="alert alert-success mt-4 text-center py-4">
+                            <h5>لا يوجد مخالفات مسجلة</h5>
                           </div>
                         )}
                       </div>
-                    </div>
-                  ))}
-                </div>
-
-                {results.fines.length === 0 && (
-                  <div className="text-center py-16 bg-green-50 rounded-lg border-2 border-dashed border-green-200">
-                    <CheckCircle2 className="mx-auto h-16 w-16 text-green-600 mb-4" />
-                    <p className="text-2xl font-bold text-green-800">لا توجد مخالفات مسجلة على هذا الرقم</p>
+                    )}
                   </div>
-                )}
-
-                {/* Footer Actions */}
-                <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12 pt-6 border-t border-gray-200">
-                  {selectedFines.length > 0 && (
-                    <Button 
-                      onClick={handlePay}
-                      className="bg-green-600 hover:bg-green-700 text-white font-bold py-7 px-16 text-xl rounded shadow-lg transition-all"
-                    >
-                      دفع المختارة ({selectedFines.length})
-                    </Button>
-                  )}
-                  <Button 
-                    variant="outline" 
-                    onClick={handleReset}
-                    className="border-2 border-[#003366] text-[#003366] hover:bg-gray-50 py-7 px-16 text-xl rounded font-bold transition-all"
-                  >
-                    <RotateCcw className="ml-3 h-6 w-6" />
-                    استعلام جديد
-                  </Button>
-                </div>
-
-                <div className="mt-10 p-5 bg-blue-50 border-r-4 border-blue-600 rounded shadow-sm text-right">
-                  <p className="text-blue-900 font-bold text-lg mb-2">ملاحظة هامة:</p>
-                  <p className="text-blue-800 text-base">بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة.</p>
                 </div>
               </div>
-            )}
-          </CardContent>
-        </div>
-      </main>
-
-      <footer className="bg-[#003366] text-white py-10 mt-20 border-t-4 border-yellow-500">
-        <div className="container mx-auto px-4 text-center">
-          <div className="flex justify-center gap-8 mb-6">
-            <span className="text-3xl hover:text-yellow-500 cursor-pointer transition-colors">𝕏</span>
-            <span className="text-3xl hover:text-yellow-500 cursor-pointer transition-colors">f</span>
-            <span className="text-3xl hover:text-yellow-500 cursor-pointer transition-colors">📷</span>
-            <span className="text-3xl hover:text-yellow-500 cursor-pointer transition-colors">▶️</span>
+            </main>
           </div>
-          <p className="text-base opacity-80">البوابة الإلكترونية لوزارة الداخلية - دولة الكويت</p>
-          <p className="text-sm mt-2 opacity-60">© جميع الحقوق محفوظة لوزارة الداخلية - 2026</p>
+        </div>
+      </div>
+
+      <footer className="footer mt-auto py-4 bg-light border-top">
+        <div className="container text-center">
+          <div className="mb-3">
+            <img src="/main/images/assets/social-media/ico-youtube.svg" className="mx-2" style={{ height: "24px" }} alt="Youtube" />
+            <img src="/main/images/assets/social-media/ico-instagram.svg" className="mx-2" style={{ height: "24px" }} alt="Instagram" />
+            <img src="/main/images/assets/social-media/ico-twitter.svg" className="mx-2" style={{ height: "24px" }} alt="Twitter" />
+            <img src="/main/images/assets/social-media/ico-facebook.svg" className="mx-2" style={{ height: "24px" }} alt="Facebook" />
+          </div>
+          <span className="text-muted">© جميع الحقوق محفوظة لوزارة الداخلية - دولة الكويت - 2026</span>
         </div>
       </footer>
     </div>
