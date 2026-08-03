@@ -54,18 +54,23 @@ export async function setupVite(app: Express, server: Server) {
 
 export function serveStatic(app: Express) {
   // In production, the server is bundled into dist/index.js
-  // So __dirname is 'dist'
+  // So __dirname is '/app/dist' (when bundled with esbuild)
   // The static files are in 'dist/public'
   
   const rootDir = process.cwd();
   const distPublicPath = path.resolve(rootDir, "dist", "public");
   const appDistPublicPath = "/app/dist/public";
+  // When bundled, __dirname is the output dir (e.g., /app/dist)
+  // The public files are in __dirname/public
   const relativePublicPath = path.resolve(__dirname, "public");
+  // Also try parent of __dirname + public (in case __dirname is deeper)
+  const parentPublicPath = path.resolve(path.dirname(__dirname), "public");
 
   const possiblePaths = [
     distPublicPath,
     appDistPublicPath,
     relativePublicPath,
+    parentPublicPath,
     path.resolve(rootDir, "public"),
   ];
 

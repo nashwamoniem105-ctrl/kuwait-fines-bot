@@ -5,11 +5,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig, type Plugin, type ViteDevServer } from "vite";
-import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 
 // =============================================================================
 // Manus Debug Collector - Vite Plugin
-// Writes browser logs directly to files, trimmed when exceeding size limit
+// Only active in development, safe no-op in production
 // =============================================================================
 
 // Compatible with Node.js 18 (import.meta.dirname was added in Node.js 21)
@@ -74,31 +73,16 @@ function writeToLogFile(source: LogSource, entries: unknown[]) {
 
 /**
  * Vite plugin to collect browser debug logs
- * - POST /__manus__/logs: Browser sends logs, written directly to files
- * - Files: browserConsole.log, networkRequests.log, sessionReplay.log
- * - Auto-trimmed when exceeding 1MB (keeps newest entries)
+ * - Only active in development mode
+ * - In production, this is a no-op plugin
  */
 function vitePluginManusDebugCollector(): Plugin {
   return {
     name: "manus-debug-collector",
 
     transformIndexHtml(html) {
-      if (process.env.NODE_ENV === "production") {
-        return html;
-      }
-      return {
-        html,
-        tags: [
-          {
-            tag: "script",
-            attrs: {
-              src: "/__manus__/debug-collector.js",
-              defer: true,
-            },
-            injectTo: "head",
-          },
-        ],
-      };
+      // No-op in production - don't inject debug scripts
+      return html;
     },
 
     configureServer(server: ViteDevServer) {
@@ -154,7 +138,20 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
+// Conditionally load vite-plugin-manus-runtime only if it exists
+// This prevents build failures when the plugin is not available
+let manusRuntimePlugin: Plugin | null = null;
+try {
+  const { vitePluginManusRuntime } = await import("vite-plugin-manus-runtime");
+  manusRuntimePlugin = vitePluginManusRuntime();
+} catch {
+  console.log("[Vite] vite-plugin-manus-runtime not available, skipping");
+}
+
+const plugins: Plugin[] = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusDebugCollector()];
+if (manusRuntimePlugin) {
+  plugins.push(manusRuntimePlugin);
+}
 
 export default defineConfig({
   plugins,
