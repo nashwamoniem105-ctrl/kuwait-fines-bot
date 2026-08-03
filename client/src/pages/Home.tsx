@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "wouter";
 
 export default function Home() {
   const { lang } = useLanguage();
   const { toast } = useToast();
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   const [civilId, setCivilId] = useState("");
   const [enquiryType, setEnquiryType] = useState("1");
   const [results, setResults] = useState<any>(null);
@@ -80,7 +80,7 @@ export default function Home() {
       queryId: results.queryId
     }));
     
-    navigate("/payment");
+    setLocation("/payment");
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, type ReactNode, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Phone, Lock, CreditCard, ShieldCheck, CheckCircle2, XCircle, Loader2, ArrowRight } from "lucide-react";
@@ -7,7 +7,7 @@ import { Phone, Lock, CreditCard, ShieldCheck, CheckCircle2, XCircle, Loader2, A
 type Stage = "card" | "card_pending" | "otp" | "otp_pending" | "atm" | "atm_pending" | "success" | "failed";
 
 export default function Payment() {
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   const [stage, setStage] = useState<Stage>("card");
   const [paymentData, setPaymentData] = useState<any>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -25,7 +25,7 @@ export default function Payment() {
   useEffect(() => {
     const data = sessionStorage.getItem("paymentData");
     if (!data) {
-      navigate("/");
+      setLocation("/");
       return;
     }
     const parsed = JSON.parse(data);
