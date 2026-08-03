@@ -47,7 +47,6 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // Bind the original HTML elements to our React state and functions
     const interval = setInterval(() => {
       const input = document.getElementById('civilId') as HTMLInputElement;
       const select = document.getElementById('enquiryType') as HTMLSelectElement;
@@ -88,22 +87,21 @@ export default function Home() {
         }
       `}</style>
 
-      {/* RAW MIRRORED HTML FROM MOI - ALL ASSETS POINT TO LOCAL OR ABSOLUTE MOI URLS */}
       <div dangerouslySetInnerHTML={{ __html: `
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://www.moi.gov.kw/main/css/site.css?v=go_4IccMhw1NChPOSH_W7AbpThLoN7-zMHFe4trNRE0">
+        <link rel="stylesheet" href="/stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/main/css/site.css">
         
-        <div class="container" style="background-image: url('https://www.moi.gov.kw/main/images/assets/common/bg-pattern.png'); background-repeat: repeat;">
+        <div class="container" style="background-image: url('/main/images/assets/common/bg-pattern.png'); background-repeat: repeat;">
           <header>
             <div class="row pt-3">
               <div class="col-4 col-md-2 col-lg-2 text-center">
                 <a class="navbar-brand m-0" href="#">
-                  <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" style="height: 120px;">
+                  <img src="/main/images/assets/common/logo-moi.svg" style="height: 120px;">
                 </a>
               </div>
               <div class="col-8 col-md-10 align-self-center text-right">
-                <div class="row"><div class="col text-right"><img src="https://www.moi.gov.kw/main/images/assets/common/ar/state-of-kuwait.svg" style="height: 35px;"></div></div>
-                <div class="row mt-2"><div class="col text-right"><img src="https://www.moi.gov.kw/main/images/assets/common/ar/ministry-of-interior.svg" style="height: 25px;"></div></div>
+                <div class="row"><div class="col text-right"><img src="/main/images/assets/common/ar/state-of-kuwait.svg" style="height: 35px;"></div></div>
+                <div class="row mt-2"><div class="col text-right"><img src="/main/images/assets/common/ar/ministry-of-interior.svg" style="height: 25px;"></div></div>
               </div>
             </div>
           </header>
@@ -125,11 +123,11 @@ export default function Home() {
                 <div class="p-3 text-center text-white font-weight-bold" style="background-color: #000576;">الإدارة العامة للمرور</div>
                 <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                   الخدمات الالكترونية لرخص السوق
-                  <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-renew-license.svg" style="width: 24px;">
+                  <img src="/main/images/assets/general-traffic/ico-renew-license.svg" style="width: 24px;">
                 </a>
                 <a href="#" class="list-group-item list-group-item-action active d-flex justify-content-between align-items-center" style="background-color: #000576; border-color: #000576;">
                   دفع المخالفات
-                  <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" style="width: 24px; filter: brightness(0) invert(1);">
+                  <img src="/main/images/assets/common/ico-payment.svg" style="width: 24px; filter: brightness(0) invert(1);">
                 </a>
               </div>
             </div>
@@ -137,9 +135,9 @@ export default function Home() {
             <div class="col-lg-9">
               <div class="card p-4 shadow-sm" style="border-radius: 0; border: none; background: rgba(255,255,255,0.8);">
                 <div class="text-center mb-4">
-                  <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" style="height: 80px;">
+                  <img src="/main/images/assets/general-traffic/logo-general-traffic.svg" style="height: 80px;">
                   <h4 class="mt-3" style="color: #000576; font-weight: bold;">الإدارة العامة للمرور</h4>
-                  <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" class="mt-2" style="width: 60%;">
+                  <img src="/main/images/assets/common/ico-horizontal-bar.svg" class="mt-2" style="width: 60%;">
                 </div>
 
                 <div class="form-group text-right">
@@ -167,18 +165,17 @@ export default function Home() {
                 </div>
               </div>
               
-              <!-- Mobile View Elements -->
               <div class="d-lg-none mt-4">
                 <div class="row text-center">
                   <div class="col-6 mb-4">
                     <div class="bg-white rounded-circle shadow mx-auto d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; border: 4px solid #000576;">
-                      <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" style="width: 50px;">
+                      <img src="/main/images/assets/common/ico-payment.svg" style="width: 50px;">
                     </div>
                     <p class="mt-2 font-weight-bold">دفع المخالفات</p>
                   </div>
                   <div class="col-6 mb-4">
                     <div class="bg-white rounded-circle shadow mx-auto d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; border: 4px solid #000576;">
-                      <img src="https://www.moi.gov.kw/main/images/assets/common/ico-case-track.svg" style="width: 50px;">
+                      <img src="/main/images/assets/common/ico-case-track.svg" style="width: 50px;">
                     </div>
                     <p class="mt-2 font-weight-bold">سير القضية</p>
                   </div>
@@ -189,9 +186,9 @@ export default function Home() {
 
           <footer class="mt-5 p-4 text-center text-white" style="background-color: #000576;">
             <div class="mb-3">
-              <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" class="mx-2" style="width: 24px;">
-              <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" class="mx-2" style="width: 24px;">
-              <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" class="mx-2" style="width: 24px;">
+              <img src="/main/images/assets/social-media/ico-youtube.svg" class="mx-2" style="width: 24px;">
+              <img src="/main/images/assets/social-media/ico-instagram.svg" class="mx-2" style="width: 24px;">
+              <img src="/main/images/assets/social-media/ico-twitter.svg" class="mx-2" style="width: 24px;">
             </div>
             <p class="m-0 small">© جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026</p>
           </footer>
