@@ -75,73 +75,74 @@ export default function Home() {
   };
 
   const totalPayableAmount = results?.fines
-    .filter((f: any) => selectedFines.includes(f.ticketNo))
-    .reduce((sum: number, f: any) => sum + parseFloat(f.amount), 0)
-    .toFixed(3);
+    ? results.fines
+        .filter((f: any) => selectedFines.includes(f.ticketNo))
+        .reduce((sum: number, f: any) => sum + parseFloat(f.amount), 0)
+        .toFixed(3)
+    : "0.000";
 
   return (
-    <div className="moi-original-clone" dir="rtl">
-      {/* Official CSS Files from MOI */}
+    <div className="moi-kuwait-portal" dir="rtl">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
-      <link rel="stylesheet" href="https://www.moi.gov.kw/main/css/site.css?v=go_4IccMhw1NChPOSH_W7AbpThLoN7-zMHFe4trNRE0" />
+      <link rel="stylesheet" href="https://www.moi.gov.kw/main/css/site.css" />
       <link rel="stylesheet" href="https://www.moi.gov.kw/main/lib/fontawesome/v7/css/all.css" />
       
       <style>{`
-        body { background-color: rgb(236, 234, 228) !important; font-family: "Droid Arabic Kufi Regular", "Skia Regular", Arial, Tahoma, sans-serif !important; }
-        .moi-original-clone { background-color: rgb(236, 234, 228); min-height: 100vh; }
-        .container { background-color: #fff; box-shadow: 0 0 15px rgba(0,0,0,0.1); padding: 0 !important; max-width: 1140px; }
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+        :root { --moi-blue: #000576; --moi-bg: #e9e6de; }
+        body { background-color: var(--moi-bg) !important; font-family: "Droid Arabic Kufi Regular", "Cairo", Arial, sans-serif !important; }
+        .main-container { background-color: #fff; max-width: 1140px; margin: 0 auto; box-shadow: 0 0 20px rgba(0,0,0,0.1); width: 100%; min-height: 100vh; }
+        header.moi-header { padding: 15px 30px; border-bottom: 1px solid #eee; }
+        .moi-logo { height: 110px; }
+        .state-titles { text-align: left; }
+        .state-titles img { height: 35px; margin-bottom: 5px; display: block; margin-left: auto; }
+        .moi-nav { background-color: var(--moi-blue) !important; padding: 0 !important; }
+        .moi-nav .nav-link { color: rgba(255,255,255,0.7) !important; padding: 15px 20px !important; font-size: 15px; }
+        .moi-nav .nav-item.active .nav-link { color: #fff !important; background-color: rgba(255,255,255,0.1); border-bottom: 3px solid #fff; }
+        .moi-sidebar { background-color: var(--moi-blue); padding: 0; }
+        .moi-sidebar-item { display: flex; align-items: center; padding: 15px 20px; color: #fff !important; text-decoration: none !important; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .moi-sidebar-item.active { background-color: #fff !important; color: var(--moi-blue) !important; }
+        .moi-sidebar-item img { width: 40px; margin-left: 15px; }
+        .moi-content { padding: 40px 30px; background-color: var(--moi-bg); }
+        .moi-card { background: #fff; padding: 30px; border: 1px solid #ddd; }
+        .moi-title-section h4 { color: var(--moi-blue); font-weight: bold; }
+        .form-label { font-weight: bold; color: var(--moi-blue); font-size: 14px; text-align: right; display: block; }
+        .moi-input { border-radius: 4px; border: 1px solid #ccc; height: 45px; }
+        .btn-enquire { background-color: var(--moi-blue); color: #fff; width: 220px; height: 45px; font-weight: bold; border: none; border-radius: 4px; }
         
-        /* Navbar Matching */
-        .navbar { background-color: #000576 !important; border-bottom: 1px solid #dee2e6 !important; box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important; padding: 0 !important; }
-        .navbar-nav .nav-link { color: rgba(255,255,255,.5) !important; padding: 18px 20px !important; font-size: 14px; }
-        .navbar-nav .nav-item.active .nav-link { color: #fff !important; border-bottom: 3px solid #fff; background: transparent; }
+        /* Fine Cards Style - Absolute Match */
+        .fine-card { border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; overflow: hidden; position: relative; }
+        .fine-card-header { background: #f8f9fa; padding: 10px 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .fine-card-body { padding: 15px; }
+        .fine-detail-row { display: flex; margin-bottom: 8px; font-size: 14px; }
+        .fine-detail-label { color: #666; width: 120px; font-weight: bold; }
+        .fine-detail-value { color: #333; flex: 1; }
+        .fine-status-badge { position: absolute; top: 10px; left: 15px; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .fine-checkbox { transform: scale(1.5); cursor: pointer; }
         
-        /* Sidebar Matching */
-        .side-menu-container { background-color: #000576; padding: 0; min-height: 600px; }
-        .side-menu-container a { display: flex; align-items: center; padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,.1); text-decoration: none !important; color: #fff !important; }
-        .side-menu-container .active { background-color: #fff !important; color: #000576 !important; font-weight: bold; }
-        .side-menu-container .active a { color: #000576 !important; }
-        .side-menu-icon { width: 45px; margin-left: 15px; }
-        
-        /* Content area */
-        .content-main { background-color: rgb(236, 234, 228); padding: 30px 20px; }
-        .article-info { background: #fff; padding: 25px; border: 1px solid #ddd; }
-        .btn-moi { background-color: #000576 !important; border-color: #000576 !important; color: #fff !important; width: 214px; height: 35px; font-size: 14px; border-radius: 4px; }
-        
-        /* Responsive Mobile */
-        @media (max-width: 768px) {
-          .container { width: 100% !important; max-width: 100% !important; }
-          .side-menu-container { min-height: auto; margin-top: 20px; }
-          .navbar-nav .nav-link { padding: 10px 15px !important; border-bottom: none !important; }
-          .moi-header-logo { height: 80px !important; }
-          .main-header-title { height: 30px !important; }
+        @media (max-width: 991px) {
+          .moi-logo { height: 80px; }
+          .state-titles img { height: 25px; }
+          .moi-content { padding: 20px 15px; }
         }
       `}</style>
 
-      <div className="container">
-        {/* Header - Absolute Match */}
-        <header className="px-3 py-2">
-          <div className="row align-items-center no-gutters">
-            <div className="col-4 col-md-2 text-center">
-              <a href="https://www.moi.gov.kw/main/">
-                <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" className="moi-header-logo" style={{ height: "120px" }} alt="MOI Logo" />
-              </a>
-            </div>
-            <div className="col-8 col-md-10 d-flex flex-column align-items-end justify-content-center pr-md-5">
-              <img src="https://www.moi.gov.kw/main/images/assets/common/ar/state-of-kuwait.svg" className="main-header-title mb-1" style={{ height: "40px" }} alt="State of Kuwait" />
-              <img src="https://www.moi.gov.kw/main/images/assets/common/ar/ministry-of-interior.svg" className="main-header-title" style={{ height: "35px" }} alt="Ministry of Interior" />
+      <div className="main-container">
+        <header className="moi-header">
+          <div className="row no-gutters align-items-center">
+            <div className="col-4"><img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" className="moi-logo" alt="MOI" /></div>
+            <div className="col-8 state-titles">
+              <img src="https://www.moi.gov.kw/main/images/assets/common/ar/state-of-kuwait.svg" alt="Kuwait" />
+              <img src="https://www.moi.gov.kw/main/images/assets/common/ar/ministry-of-interior.svg" alt="MOI Title" />
             </div>
           </div>
         </header>
 
-        {/* Navbar - Absolute Match */}
-        <nav className="navbar navbar-expand-lg navbar-dark">
-          <div className="container px-0">
-            <button className="navbar-toggler ml-3" type="button" data-toggle="collapse" data-target="#moiNav">
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="moiNav">
-              <ul className="navbar-nav w-100 pr-0">
+        <nav className="navbar navbar-expand-lg navbar-dark moi-nav">
+          <div className="container-fluid">
+            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#moiNavbar"><span className="navbar-toggler-icon"></span></button>
+            <div className="collapse navbar-collapse" id="moiNavbar">
+              <ul className="navbar-nav pr-0">
                 <li className="nav-item"><a className="nav-link" href="#">الرئيسيــة</a></li>
                 <li className="nav-item active"><a className="nav-link" href="#">الخدمات الإلكترونيـة</a></li>
                 <li className="nav-item"><a className="nav-link" href="#">إدارات توعوية</a></li>
@@ -153,178 +154,71 @@ export default function Home() {
           </div>
         </nav>
 
-        {/* Main Layout */}
         <div className="row no-gutters">
-          {/* Sidebar - Right */}
-          <div className="col-12 col-md-4 order-md-2 side-menu-container">
-            <div className="d-flex flex-column">
-              <a href="#">
-                <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-renew-license.svg" className="side-menu-icon" />
-                <span>الخدمات الالكترونية لرخص السوق</span>
-              </a>
-              <div className="active">
-                <a href="#">
-                  <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" className="side-menu-icon" />
-                  <span>دفع المخالفات</span>
-                </a>
-              </div>
-              <a href="#">
-                <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-booking.svg" className="side-menu-icon" />
-                <span>نظام مواعيد اختبار القيادة</span>
-              </a>
-              <a href="#">
-                <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-procedures.svg" className="side-menu-icon" />
-                <span>معاملات المرور</span>
-              </a>
-              <a href="#">
-                <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-locations-sections.svg" className="side-menu-icon" />
-                <span>مواقع الإدارة العامة للمرور</span>
-              </a>
-            </div>
+          <div className="col-lg-4 order-lg-2 moi-sidebar">
+            <a href="#" className="moi-sidebar-item"><img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-renew-license.svg" alt="icon" /><span>الخدمات الالكترونية لرخص السوق</span></a>
+            <a href="#" className="moi-sidebar-item active"><img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" alt="icon" /><span>دفع المخالفات</span></a>
+            <a href="#" className="moi-sidebar-item"><img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-booking.svg" alt="icon" /><span>نظام مواعيد اختبار القيادة</span></a>
+            <a href="#" className="moi-sidebar-item"><img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-procedures.svg" alt="icon" /><span>معاملات المرور</span></a>
+            <a href="#" className="moi-sidebar-item"><img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-locations-sections.svg" alt="icon" /><span>مواقع الإدارة العامة للمرور</span></a>
           </div>
 
-          {/* Main Content Area - Left */}
-          <div className="col-12 col-md-8 order-md-1 content-main">
-            {/* ReadSpeaker */}
-            <div className="text-left mb-3">
-              <a href="#" className="btn btn-light btn-sm rounded-pill px-3 border">
-                <i className="fas fa-play-circle text-primary ml-1"></i> استمع
-              </a>
+          <div className="col-lg-8 order-lg-1 moi-content">
+            <div className="text-left mb-3"><button className="btn btn-sm btn-light border rounded-pill px-3"><i className="fas fa-volume-up ml-2 text-primary"></i> استمع</button></div>
+            <div className="moi-title-section text-center mb-4">
+              <h4>الإدارة العامة للمرور</h4>
+              <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" className="img-fluid" style={{maxWidth:'400px'}} alt="divider" />
             </div>
 
-            <div className="text-center mb-4">
-              <h4 style={{ color: "#000576", fontWeight: "bold" }}>الإدارة العامة للمرور</h4>
-              <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" className="img-fluid" alt="divider" />
-            </div>
-
-            {/* Inquiry Form - Original Structure */}
-            <div className="article-info text-center mx-auto" style={{ maxWidth: "750px" }}>
+            <div className="moi-card">
               <form onSubmit={handleInquire}>
-                <div className="form-group text-right">
-                  <label className="font-weight-bold small">Enquiry Type</label>
-                  <select className="form-control" value={enquiryType} onChange={(e) => setEnquiryType(e.target.value)}>
-                    <option value="1">الأفراد</option>
-                    <option value="2">الشركات</option>
+                <div className="form-group"><label className="form-label">Enquiry Type</label>
+                  <select className="form-control moi-input" value={enquiryType} onChange={(e) => setEnquiryType(e.target.value)}>
+                    <option value="1">الأفراد</option><option value="2">الشركات</option>
                   </select>
                 </div>
-                <div className="form-group text-right">
-                  <label className="font-weight-bold small">الرقم المدني أو الرقم الموحد</label>
-                  <input type="text" className="form-control" value={civilId} onChange={(e) => setCivilId(e.target.value)} />
+                <div className="form-group mt-4"><label className="form-label">الرقم المدني أو الرقم الموحد</label>
+                  <input type="text" className="form-control moi-input" value={civilId} onChange={(e) => setCivilId(e.target.value)} placeholder="أدخل الرقم المدني" />
                 </div>
-                <div className="text-center mt-4">
-                  <button type="submit" className="btn btn-moi" disabled={isSearching}>
-                    {isSearching ? "جاري البحث..." : "إستعلم"}
-                  </button>
-                </div>
+                <div className="text-center mt-4"><button type="submit" className="btn btn-enquire" disabled={isSearching}>{isSearching ? "جاري الاستعلام..." : "إستعلم"}</button></div>
               </form>
 
-              {/* Legend Section */}
-              <div className="d-flex justify-content-end mt-4 mb-2 small">
-                <div className="d-flex align-items-center ml-3">
-                  <span className="badge badge-success ml-1" style={{ width: "12px", height: "12px", borderRadius: "2px" }}>&nbsp;</span>
-                  <span>قابلة للدفع إلكترونياً</span>
-                </div>
-                <div className="d-flex align-items-center">
-                  <span className="badge badge-danger ml-1" style={{ width: "12px", height: "12px", borderRadius: "2px" }}>&nbsp;</span>
-                  <span>غير قابلة للدفع إلكترونياً</span>
-                </div>
-              </div>
-
-              {/* Status/Results */}
-              {results && results.success && results.fines.length === 0 && (
-                <div className="alert alert-info mt-4 text-center font-weight-bold" style={{ backgroundColor: "#d1ecf1", color: "#0c5460", borderColor: "#bee5eb" }}>
-                  Person does not have any Violations
-                </div>
-              )}
-
-              {results && results.success && results.fines.length > 0 && (
-                <div className="mt-4 text-right">
-                  <div className="d-flex justify-content-between border-bottom pb-2 mb-3" style={{ borderBottom: "2px solid #000576 !important" }}>
-                    <span className="font-weight-bold">عدد المخالفات: {results.fines.length}</span>
-                    <span className="font-weight-bold text-danger">الإجمالي: {results.totalAmount} د.ك</span>
+              {results && results.success && (
+                <div className="mt-5">
+                  <div className="d-flex justify-content-between mb-4 border-bottom pb-2">
+                    <span className="h6 font-weight-bold">عدد المخالفات: {results.fines.length}</span>
+                    <span className="h6 font-weight-bold text-danger">المبلغ الاجمالي: {results.totalAmount} دك</span>
                   </div>
-                  <div className="table-responsive">
-                    <table className="table table-bordered table-sm bg-white">
-                      <thead className="thead-light">
-                        <tr>
-                          <th className="text-center">إختر</th>
-                          <th>رقم المخالفة</th>
-                          <th>التاريخ</th>
-                          <th>القيمة</th>
-                          <th>الحالة</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {results.fines.map((fine: any, idx: number) => (
-                          <tr key={idx}>
-                            <td className="text-center">
-                              {fine.status === 'payable' && (
-                                <input type="checkbox" checked={selectedFines.includes(fine.ticketNo)} onChange={() => toggleFine(fine.ticketNo)} />
-                              )}
-                            </td>
-                            <td className="small">{fine.ticketNo}</td>
-                            <td className="small">{fine.dateTime}</td>
-                            <td className="font-weight-bold">{fine.amount}</td>
-                            <td>
-                              <span className={`badge badge-${fine.status === 'payable' ? 'success' : 'danger'}`} style={{ fontSize: "10px" }}>
-                                {fine.status === 'payable' ? 'قابلة للدفع' : 'غير قابلة'}
-                              </span>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                  <div className="d-flex justify-content-between align-items-center bg-light p-3 border mt-3">
-                    <h5 className="m-0 font-weight-bold" style={{ color: "#000576", fontSize: "1rem" }}>إجمالي المختار: {totalPayableAmount} د.ك</h5>
-                    <button onClick={handlePay} disabled={selectedFines.length === 0} className="btn btn-moi" style={{ width: "120px" }}>دفع</button>
+
+                  {results.fines.map((fine: any, idx: number) => (
+                    <div className="fine-card" key={idx}>
+                      <div className="fine-card-header">
+                        <span className="font-weight-bold">رقم: {fine.ticketNo}</span>
+                        {fine.status === 'payable' && (
+                          <input type="checkbox" className="fine-checkbox" checked={selectedFines.includes(fine.ticketNo)} onChange={() => toggleFine(fine.ticketNo)} />
+                        )}
+                      </div>
+                      <div className="fine-card-body">
+                        <div className="fine-detail-row"><span className="fine-detail-label">قيمة المخالفة:</span><span className="fine-detail-value font-weight-bold">{fine.amount} دك</span></div>
+                        <div className="fine-detail-row"><span className="fine-detail-label">رقم اللوحة:</span><span className="fine-detail-value">{fine.plateNumber || '33021/80'}</span></div>
+                        <div className="fine-detail-row"><span className="fine-detail-label">تاريخ المخالفة:</span><span className="fine-detail-value">{fine.dateTime}</span></div>
+                        <span className={`fine-status-badge ${fine.status === 'payable' ? 'bg-success text-white' : 'bg-danger text-white'}`}>
+                          {fine.status === 'payable' ? 'قابلة للدفع' : 'غير قابلة للدفع'}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  <div className="mt-4 p-3 border d-flex justify-content-between align-items-center bg-light sticky-bottom" style={{bottom:0}}>
+                    <span className="h5 font-weight-bold m-0">إجمالي المختار: {totalPayableAmount} دك</span>
+                    <button className="btn btn-enquire" style={{width:'120px'}} disabled={selectedFines.length === 0} onClick={handlePay}>إدفع</button>
                   </div>
                 </div>
               )}
-            </div>
-
-            {/* Additional Sections - Absolute Match */}
-            <div className="row no-gutters mt-4">
-              <div className="col-12 col-md-6 pr-md-2 mb-3">
-                <div className="article-info text-center h-100">
-                  <h5 style={{ color: "#000576", fontSize: "1rem", fontWeight: "bold" }}>دفع المخالفات والغرامات</h5>
-                  <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" className="mb-3" alt="bar" />
-                  <select className="form-control mb-2"><option>المرور</option><option>الإقامة</option></select>
-                  <input type="text" className="form-control mb-2" placeholder="الرقم المدني" />
-                  <button className="btn btn-block btn-secondary mt-3" style={{ width: "100%", backgroundColor: "#6c757d", border: "none" }}>دفع</button>
-                </div>
-              </div>
-              <div className="col-12 col-md-6 pl-md-2 mb-3">
-                <div className="article-info text-center h-100">
-                  <h5 style={{ color: "#000576", fontSize: "1rem", fontWeight: "bold" }}>الإستعلام عن رقم مرجع الداخلية</h5>
-                  <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" className="mb-3" alt="bar" />
-                  <input type="text" className="form-control mb-3" placeholder="الرقم المدني" />
-                  <div className="row no-gutters">
-                    <div className="col-6 pr-1"><button className="btn btn-block btn-outline-secondary small">للكويتيين</button></div>
-                    <div className="col-6 pl-1"><button className="btn btn-block btn-outline-secondary small">للمقيمين</button></div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
-
-        {/* Footer - Absolute Match */}
-        <footer className="col-sm-12 text-center text-white p-0" style={{ backgroundColor: "#000576", padding: "20px 0 !important" }}>
-          <div className="py-3">
-            <div className="mb-3">
-              <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" className="mx-2" style={{ width: "24px", filter: "brightness(0) invert(1)" }} alt="YT" />
-              <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" className="mx-2" style={{ width: "24px", filter: "brightness(0) invert(1)" }} alt="IG" />
-              <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" className="mx-2" style={{ width: "24px", filter: "brightness(0) invert(1)" }} alt="TW" />
-              <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" className="mx-2" style={{ width: "24px", filter: "brightness(0) invert(1)" }} alt="FB" />
-              &nbsp;&nbsp;
-              <img src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg" className="mx-2" style={{ width: "24px", filter: "brightness(0) invert(1)" }} alt="Android" />
-              &nbsp;&nbsp;
-              <img src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg" className="mx-2" style={{ width: "24px", filter: "brightness(0) invert(1)" }} alt="Apple" />
-            </div>
-            <div className="small">© جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026</div>
-          </div>
-        </footer>
+        <footer className="py-3 text-center border-top mt-auto bg-light"><p className="m-0 text-muted small">© جميع الحقوق محفوظة لوزارة الداخلية - دولة الكويت 2026</p></footer>
       </div>
     </div>
   );
