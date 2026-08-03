@@ -106,53 +106,49 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <nav className="navbar navbar-expand-lg navbar-dark border-bottom box-shadow">
-            <div className="container">
-              <a className="navbar-brand" href="/"></a>
-              <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-                <span className="navbar-toggler-icon"></span>
-              </button>
-              <div className="navbar-collapse collapse flex-sm-row-reverse" id="navbarResponsive">
-                <ul className="navbar-nav flex-grow-1 p-0 clearfix" style={{ margin: "0 auto", verticalAlign: "top" }}>
-                  <div className="d-flex flex-sm-row flex-column container-navlinks">
-                    <li className="nav-item active">
-                      <a className="nav-link" href="/">
-                        الرئيسيــة
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a className="nav-link" href="#">
-                        الخدمات الإلكترونيـة
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a className="nav-link" href="#">
-                        إدارات توعوية
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a className="nav-link" href="#">
-                        الإصدارات الإلكترونية
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a className="nav-link" href="#">
-                        يهمنا رايك
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a className="nav-link" href="#">
-                        أرقام الطوارئ
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a className="nav-link" href="#">
-                        منصة المواعيد
-                      </a>
-                    </li>
-                  </div>
-                </ul>
-              </div>
+          <nav className="navbar navbar-expand-lg navbar-dark border-bottom box-shadow" style={{ backgroundColor: "#000576" }}>
+            <a className="navbar-brand" href="/"></a>
+            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div className="collapse navbar-collapse flex-sm-row-reverse" id="navbarResponsive">
+              <ul className="navbar-nav flex-grow-1 p-0 clearfix" style={{ margin: "0 auto", verticalAlign: "top" }}>
+                <li className="nav-item active">
+                  <a className="nav-link" href="/" style={{ color: "#fff" }}>
+                    الرئيسيــة
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#" style={{ color: "#fff" }}>
+                    الخدمات الإلكترونيـة
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#" style={{ color: "#fff" }}>
+                    إدارات توعوية
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#" style={{ color: "#fff" }}>
+                    الإصدارات الإلكترونية
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#" style={{ color: "#fff" }}>
+                    يهمنا رايك
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#" style={{ color: "#fff" }}>
+                    أرقام الطوارئ
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#" style={{ color: "#fff" }}>
+                    منصة المواعيد
+                  </a>
+                </li>
+              </ul>
             </div>
           </nav>
         </header>

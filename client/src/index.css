@@ -90,9 +90,10 @@
     font-size: 14px;
     margin-bottom: 0;
     background-color: #eceae4;
-    background-image: url(/main/images/assets/common/bg-pattern.png);
+    background-image: url('/main/images/assets/common/bg-pattern.png');
     background-size: 77px 200px;
-    min-height: 100%;
+    background-repeat: repeat;
+    min-height: 100vh;
   }
   html {
     height: 100%;
@@ -107,23 +108,29 @@
   }
 }
 
-/* MOI Site Specific Styles */
+/* Override Tailwind resets to work with Bootstrap */
+.moi-theme * {
+  box-sizing: border-box;
+}
+
+/* MOI Navbar - exact colors */
 .moi-theme .navbar {
   background-color: #000576 !important;
-  border-bottom: 1px solid #ddd;
-  padding: 0;
-  margin: 0;
+  border-bottom: 1px solid #000576;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 .moi-theme .navbar-dark .navbar-nav .nav-link {
-  color: #eee;
+  color: #ffffff !important;
   line-height: 40px;
-  padding: 0 15px;
+  padding: 0 15px !important;
+  font-size: 14px;
 }
 
 .moi-theme .navbar-dark .navbar-nav .nav-link:hover,
 .moi-theme .navbar-dark .navbar-nav .nav-item.active .nav-link {
-  background-color: #e9e6de;
+  background-color: #e9e6de !important;
   color: #013D71 !important;
 }
 
@@ -132,9 +139,18 @@
   text-align: center;
 }
 
+.moi-theme .navbar-toggler {
+  color: #fff;
+  border-color: rgba(255,255,255,0.5);
+}
+
+.moi-theme .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
 .moi-theme .main-header-title {
   width: 100%;
-  max-width: 300px;
+  max-width: 280px;
 }
 
 .moi-theme .content-main {
@@ -142,10 +158,12 @@
   min-height: 450px;
 }
 
+/* Form controls matching MOI */
 .moi-theme .form-control {
   border-radius: 0;
   border: 1px solid #ccc;
   font-size: 14px;
+  background-color: #fff;
 }
 
 .moi-theme .form-control:focus {
@@ -174,6 +192,7 @@
 .moi-theme .card {
   border-radius: 0;
   border: 1px solid #ddd;
+  box-shadow: none;
 }
 
 .moi-theme .badge-success {
@@ -203,6 +222,10 @@
   border-color: #000576;
 }
 
+.moi-theme .custom-control-label::after {
+  /* custom radio dot */
+}
+
 .moi-theme .alert {
   border-radius: 0;
   border: 1px solid;
@@ -212,7 +235,7 @@
   color: #000576;
 }
 
-/* Override Tailwind container to match Bootstrap */
+/* Bootstrap container fix */
 .moi-theme .container {
   width: 100%;
   max-width: 1200px;
@@ -222,10 +245,9 @@
   padding-right: 15px;
 }
 
-/* Sidebar toggle */
-.moi-theme #formsSideBar {
-  transition: width 0.5s ease;
-  overflow: hidden;
+/* Box shadow utility */
+.moi-theme .box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
 /* Scrollbar styling */

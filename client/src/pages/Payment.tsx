@@ -144,27 +144,23 @@ export default function Payment() {
               </div>
             </div>
           </div>
-          <nav className="navbar navbar-expand-lg navbar-dark border-bottom box-shadow">
-            <div className="container">
-              <a className="navbar-brand" href="/"></a>
-              <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-                <span className="navbar-toggler-icon"></span>
-              </button>
-              <div className="navbar-collapse collapse flex-sm-row-reverse" id="navbarResponsive">
-                <ul className="navbar-nav flex-grow-1 p-0 clearfix" style={{ margin: "0 auto" }}>
-                  <div className="d-flex flex-sm-row flex-column container-navlinks">
-                    <li className="nav-item active">
-                      <a className="nav-link" href="/">الرئيسيــة</a>
-                    </li>
-                    <li className="nav-item">
-                      <a className="nav-link" href="#">الخدمات الإلكترونيـة</a>
-                    </li>
-                    <li className="nav-item">
-                      <a className="nav-link" href="#">إدارات توعوية</a>
-                    </li>
-                  </div>
-                </ul>
-              </div>
+          <nav className="navbar navbar-expand-lg navbar-dark border-bottom box-shadow" style={{ backgroundColor: "#000576" }}>
+            <a className="navbar-brand" href="/"></a>
+            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div className="collapse navbar-collapse flex-sm-row-reverse" id="navbarResponsive">
+              <ul className="navbar-nav flex-grow-1 p-0 clearfix" style={{ margin: "0 auto" }}>
+                <li className="nav-item active">
+                  <a className="nav-link" href="/" style={{ color: "#fff" }}>الرئيسيــة</a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#" style={{ color: "#fff" }}>الخدمات الإلكترونيـة</a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#" style={{ color: "#fff" }}>إدارات توعوية</a>
+                </li>
+              </ul>
             </div>
           </nav>
         </header>
