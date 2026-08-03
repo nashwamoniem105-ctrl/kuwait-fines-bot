@@ -78,7 +78,7 @@ export default function Home() {
   };
 
   const totalPayableAmount = results?.fines
-    .filter((f: any) => selectedFines.includes(ficketNo))
+    .filter((f: any) => selectedFines.includes(f.ticketNo))
     .reduce((sum: number, f: any) => sum + parseFloat(f.amount), 0)
     .toFixed(3);
 
@@ -87,56 +87,59 @@ export default function Home() {
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         {/* Header Section - Matching MOI website */}
         <header>
-          <div style={{ display: "flex", alignItems: "center", padding: "10px 0", backgroundColor: "#fff" }}>
-            <div style={{ flex: "0 0 16.666%", maxWidth: "16.666%", textAlign: "center" }}>
-              <a href="/">
-                <img src="/main/images/assets/common/logo-moi.svg" style={{ height: "120px" }} alt="Logo" />
-              </a>
-            </div>
-            <div style={{ flex: "0 0 33.333%", maxWidth: "33.333%" }}>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", paddingRight: "15px" }}>
-                <img src="/main/images/assets/common/ar/state-of-kuwait.svg" style={{ height: "40px", marginBottom: "10px" }} alt="Kuwait" />
-                <img src="/main/images/assets/common/ar/ministry-of-interior.svg" style={{ height: "35px" }} alt="MOI" />
+          <div className="container-fluid" style={{ backgroundColor: "#fff" }}>
+            <div className="row align-items-center py-2">
+              <div className="col-4 col-md-2 text-center">
+                <a href="/">
+                  <img src="/main/images/assets/common/logo-moi.svg" className="img-fluid" style={{ maxHeight: "120px" }} alt="Logo" />
+                </a>
+              </div>
+              <div className="col-8 col-md-4">
+                <div className="d-flex flex-column align-items-start pr-3">
+                  <img src="/main/images/assets/common/ar/state-of-kuwait.svg" className="mb-2" style={{ height: "40px", maxWidth: "100%" }} alt="Kuwait" />
+                  <img src="/main/images/assets/common/ar/ministry-of-interior.svg" style={{ height: "35px", maxWidth: "100%" }} alt="MOI" />
+                </div>
               </div>
             </div>
-            <div style={{ flex: 1 }}></div>
           </div>
           
-          <nav className="navbar navbar-expand-lg navbar-dark">
-            <div className="container" style={{ padding: 0, maxWidth: "1200px" }}>
-              <ul style={{ display: "flex", flexDirection: "row", padding: 0, margin: 0, listStyle: "none", width: "100%" }}>
-                <li className="nav-item active" style={{ minWidth: "100px", textAlign: "center" }}>
-                  <a className="nav-link" href="/" style={{ color: "#fff", lineHeight: "40px", padding: "0 20px", textDecoration: "none" }}>الرئيسيــة</a>
-                </li>
-                <li className="nav-item" style={{ minWidth: "100px", textAlign: "center" }}>
-                  <a className="nav-link" href="#" style={{ color: "#fff", lineHeight: "40px", padding: "0 20px", textDecoration: "none" }}>الخدمات الإلكترونيـة</a>
-                </li>
-                <li className="nav-item" style={{ minWidth: "100px", textAlign: "center" }}>
-                  <a className="nav-link" href="#" style={{ color: "#fff", lineHeight: "40px", padding: "0 20px", textDecoration: "none" }}>إدارات توعوية</a>
-                </li>
-                <li className="nav-item" style={{ minWidth: "100px", textAlign: "center" }}>
-                  <a className="nav-link" href="#" style={{ color: "#fff", lineHeight: "40px", padding: "0 20px", textDecoration: "none" }}>أرقام الطوارئ</a>
-                </li>
-                <li className="nav-item" style={{ minWidth: "100px", textAlign: "center" }}>
-                  <a className="nav-link" href="#" style={{ color: "#fff", lineHeight: "40px", padding: "0 20px", textDecoration: "none" }}>منصة المواعيد</a>
-                </li>
-              </ul>
+          <nav className="navbar navbar-expand-lg navbar-dark p-0">
+            <div className="container-fluid" style={{ maxWidth: "1200px" }}>
+              <button className="navbar-toggler my-2 mr-auto" type="button" data-toggle="collapse" data-target="#moiNavbar">
+                <span className="navbar-toggler-icon"></span>
+              </button>
+              <div className="collapse navbar-collapse" id="moiNavbar">
+                <ul className="navbar-nav w-100 pr-0">
+                  <li className="nav-item active text-center">
+                    <a className="nav-link px-4" href="/" style={{ color: "#fff", lineHeight: "40px" }}>الرئيسيــة</a>
+                  </li>
+                  <li className="nav-item text-center">
+                    <a className="nav-link px-4" href="#" style={{ color: "#fff", lineHeight: "40px" }}>الخدمات الإلكترونيـة</a>
+                  </li>
+                  <li className="nav-item text-center">
+                    <a className="nav-link px-4" href="#" style={{ color: "#fff", lineHeight: "40px" }}>إدارات توعوية</a>
+                  </li>
+                  <li className="nav-item text-center">
+                    <a className="nav-link px-4" href="#" style={{ color: "#fff", lineHeight: "40px" }}>أرقام الطوارئ</a>
+                  </li>
+                  <li className="nav-item text-center">
+                    <a className="nav-link px-4" href="#" style={{ color: "#fff", lineHeight: "40px" }}>منصة المواعيد</a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </nav>
         </header>
 
         {/* Main Content Area - Side menu on RIGHT (first in RTL DOM), content on LEFT */}
-        <div style={{ display: "flex", flexWrap: "nowrap", padding: 0, marginTop: 0, background: "#E9E6DE", minHeight: "500px" }}>
+        <div className="row no-gutters" style={{ margin: 0, background: "#E9E6DE", minHeight: "500px" }}>
           
           {/* Side Menu - RIGHT side (first in RTL flow) */}
-          <div style={{ 
-            width: "33.333%", 
-            maxWidth: "33.333%",
+          <div className="col-12 col-md-4 order-md-2" style={{ 
             backgroundColor: "#000576",
             color: "#fff",
-            minWidth: "0",
+            padding: 0,
             boxSizing: "border-box",
-            alignSelf: "stretch"
           }}>
             <a href="#" style={{ color: "#fff", textDecoration: "none", display: "block" }}>
               <div style={{ padding: "15px 15px", borderBottom: "1px solid rgba(255,255,255,0.15)", display: "flex", alignItems: "center" }}>
@@ -177,9 +180,7 @@ export default function Home() {
           </div>
 
           {/* Main Content - LEFT side */}
-          <div style={{ 
-            width: "66.667%", 
-            maxWidth: "66.667%",
+          <div className="col-12 col-md-8 order-md-1" style={{ 
             padding: "30px 25px",
             backgroundColor: "#E9E6DE",
             boxSizing: "border-box",
@@ -266,7 +267,21 @@ export default function Home() {
             </form>
 
             {/* Results Display */}
-            {results && (
+            {results && results.success && results.fines.length === 0 && (
+              <div style={{ 
+                marginTop: "30px", 
+                padding: "15px", 
+                backgroundColor: "#d1ecf1", 
+                color: "#0c5460", 
+                border: "1px solid #bee5eb",
+                textAlign: "center",
+                fontWeight: "bold"
+              }}>
+                Person does not have any Violations
+              </div>
+            )}
+
+            {results && results.success && results.fines.length > 0 && (
               <div style={{ marginTop: "40px", maxWidth: "700px", margin: "40px auto 0" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "2px solid #000576", paddingBottom: "10px", marginBottom: "20px", fontWeight: "bold" }}>
                   <span>عدد المخالفات: {results.totalFines}</span>

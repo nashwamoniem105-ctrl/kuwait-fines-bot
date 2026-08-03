@@ -153,11 +153,23 @@ export async function scrapeKuwaitFines(
     }
 
     // Handle no fines case
+    const isNoFinesMessage = data?.errorMsg && typeof data.errorMsg === "string" && 
+      (data.errorMsg.toLowerCase().includes("no") || data.errorMsg.includes("لا توجد"));
+    
     if (
       (data?.errorCode === "DP_Ex_Code_000") ||
-      (data?.errorMsg && typeof data.errorMsg === "string" && data.errorMsg.toLowerCase().includes("no")) ||
+      isNoFinesMessage ||
       (!data?.ExportGroupViolationsList && !data?.totalTicketsCount)
     ) {
+      // If it's a "no violations" message, it's a success with 0 fines
+      if (isNoFinesMessage && data.errorMsg.toLowerCase().includes("violations")) {
+        return {
+          success: true,
+          fines: [],
+          totalAmount: "0.00",
+        };
+      }
+
       // Check if it's truly "no fines" or an error
       if (data?.ExportGroupViolationsList === undefined && data?.totalTicketsCount === undefined && data?.errorMsg) {
         return {
