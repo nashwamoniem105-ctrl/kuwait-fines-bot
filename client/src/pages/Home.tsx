@@ -64,17 +64,19 @@ export default function Home() {
           font-family: 'Cairo', sans-serif !important;
           margin: 0;
           padding: 0;
+          height: 100%;
         }
 
         .moi-mobile-clone {
           background-color: var(--moi-bg);
           min-height: 100vh;
+          display: flex;
+          flex-direction: column;
           background-image: url('https://www.moi.gov.kw/main/images/assets/common/bg-pattern.png');
           background-repeat: repeat;
-          padding-bottom: 40px;
         }
 
-        /* Header Styles */
+        /* Header Styles - Swapped for correct RTL */
         .moi-header {
           padding: 20px;
           display: flex;
@@ -86,6 +88,7 @@ export default function Home() {
         .header-titles {
           text-align: right;
           color: var(--moi-blue);
+          order: 2; /* Move to left in RTL */
         }
 
         .header-titles h1 {
@@ -98,6 +101,10 @@ export default function Home() {
           font-size: 20px;
           font-weight: 600;
           margin: 0;
+        }
+
+        .moi-logo-container {
+          order: 1; /* Move to right in RTL */
         }
 
         .moi-logo-img {
@@ -118,10 +125,11 @@ export default function Home() {
           font-size: 24px;
         }
 
-        /* Tool Bar */
+        /* Tool Bar - Moved to left */
         .tool-bar {
           padding: 10px 15px;
           display: flex;
+          justify-content: flex-start; /* Aligned to left */
           gap: 10px;
         }
 
@@ -157,7 +165,7 @@ export default function Home() {
           height: 80px;
         }
 
-        /* Blue List Section */
+        /* Blue List Section - Icons on the RIGHT */
         .blue-list {
           background-color: var(--moi-blue);
           padding: 10px 0;
@@ -165,7 +173,7 @@ export default function Home() {
 
         .list-item {
           display: flex;
-          justify-content: space-between;
+          justify-content: flex-start;
           align-items: center;
           padding: 15px 25px;
           color: white;
@@ -173,14 +181,11 @@ export default function Home() {
           border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .list-item:last-child {
-          border-bottom: none;
-        }
-
         .item-text {
           font-size: 16px;
           font-weight: 600;
           text-align: right;
+          order: 1; /* Text on left of icon in RTL list */
           flex: 1;
         }
 
@@ -193,6 +198,7 @@ export default function Home() {
           align-items: center;
           justify-content: center;
           margin-left: 15px;
+          order: 2; /* Icon on right */
         }
 
         .item-icon-circle img {
@@ -203,14 +209,6 @@ export default function Home() {
         .form-section {
           padding: 30px 20px;
           text-align: center;
-        }
-
-        .form-group-label {
-          color: #666;
-          font-size: 16px;
-          margin-bottom: 8px;
-          display: block;
-          text-align: right;
         }
 
         .moi-select, .moi-input {
@@ -234,15 +232,6 @@ export default function Home() {
           font-weight: 700;
           font-size: 18px;
           border-radius: 4px;
-          margin-top: 10px;
-        }
-
-        .note-text {
-          font-size: 15px;
-          color: #333;
-          font-weight: 600;
-          margin-top: 25px;
-          line-height: 1.6;
         }
 
         .status-indicators {
@@ -267,7 +256,6 @@ export default function Home() {
           padding: 40px 0;
           display: flex;
           justify-content: center;
-          margin-top: 30px;
         }
 
         .big-circle {
@@ -280,66 +268,11 @@ export default function Home() {
           justify-content: center;
         }
 
-        .big-circle img {
-          width: 80px;
+        /* Footer - Sticky to bottom */
+        .moi-footer-container {
+          margin-top: auto;
         }
 
-        /* Inquiry Reference Section */
-        .ref-section {
-          padding: 30px 20px;
-          text-align: center;
-        }
-
-        .ref-title {
-          color: var(--moi-blue);
-          font-weight: 700;
-          font-size: 18px;
-          margin-bottom: 20px;
-          position: relative;
-        }
-
-        .ref-title::after {
-          content: "";
-          display: block;
-          width: 100%;
-          height: 1px;
-          background: #ccc;
-          margin-top: 10px;
-        }
-
-        .btn-ref {
-          width: 100%;
-          height: 45px;
-          background: #f0f0f0;
-          border: 1px solid var(--moi-blue);
-          color: var(--moi-blue);
-          font-weight: 600;
-          border-radius: 4px;
-          margin-bottom: 10px;
-        }
-
-        /* New Services Section */
-        .new-services-section {
-          background-color: var(--moi-blue);
-          padding: 40px 0;
-          display: flex;
-          justify-content: center;
-        }
-
-        .new-services-circle {
-          width: 140px;
-          height: 140px;
-          border: 2px solid white;
-          border-radius: 50%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          text-align: center;
-        }
-
-        /* Footer */
         .moi-footer {
           background-color: var(--moi-blue);
           padding: 20px;
@@ -361,6 +294,7 @@ export default function Home() {
         .copyright {
           color: white;
           font-size: 12px;
+          margin: 0;
         }
 
         @media (min-width: 992px) {
@@ -372,13 +306,15 @@ export default function Home() {
         }
       `}</style>
 
-      {/* Header */}
+      {/* Header - Logo on RIGHT, Titles on LEFT */}
       <div className="moi-header">
+        <div className="moi-logo-container">
+          <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" className="moi-logo-img" alt="MOI" />
+        </div>
         <div className="header-titles">
           <h1>دولة الكويت</h1>
           <h2>وزارة الداخلية</h2>
         </div>
-        <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" className="moi-logo-img" alt="MOI" />
       </div>
 
       {/* Navbar */}
@@ -386,51 +322,51 @@ export default function Home() {
         <div className="menu-icon">☰</div>
       </div>
 
-      {/* Tool Bar */}
+      {/* Tool Bar - Buttons on the LEFT */}
       <div className="tool-bar">
-        <div className="btn-listen">
-          <span style={{marginLeft:'8px'}}>استمع</span>
-          <img src="https://www.moi.gov.kw/main/images/assets/common/ico-speaker.svg" style={{width:'16px'}} alt="speaker" />
-        </div>
         <div className="btn-listen" style={{width:'40px', justifyContent:'center'}}>
           <span style={{borderLeft:'5px solid transparent', borderRight:'5px solid transparent', borderBottom:'10px solid #28a745', transform:'rotate(90deg)'}}></span>
+        </div>
+        <div className="btn-listen">
+          <img src="https://www.moi.gov.kw/main/images/assets/common/ico-speaker.svg" style={{width:'16px', marginLeft:'8px'}} alt="speaker" />
+          <span>استمع</span>
         </div>
       </div>
 
       {/* Dept Section */}
       <div className="dept-section">
         <div className="dept-title">
-          <span>الإدارة العامة للمرور</span>
           <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" className="dept-logo" alt="Traffic Logo" />
+          <span>الإدارة العامة للمرور</span>
         </div>
         <div style={{height:'1px', background:'#ccc', width:'60%', margin:'0 auto'}}></div>
       </div>
 
-      {/* Blue List */}
+      {/* Blue List - Icons on the RIGHT */}
       <div className="blue-list">
         <a href="#" className="list-item">
-          <div className="item-text">الخدمات الالكترونية لرخص السوق</div>
           <div className="item-icon-circle"><img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-renew-license.svg" alt="icon" /></div>
+          <div className="item-text">الخدمات الالكترونية لرخص السوق</div>
         </a>
         <a href="#" className="list-item">
-          <div className="item-text">دفع المخالفات</div>
           <div className="item-icon-circle"><img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" alt="icon" /></div>
+          <div className="item-text">دفع المخالفات</div>
         </a>
         <a href="#" className="list-item">
-          <div className="item-text">نظام مواعيد اختبار القيادة</div>
           <div className="item-icon-circle"><img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-booking.svg" alt="icon" /></div>
+          <div className="item-text">نظام مواعيد اختبار القيادة</div>
         </a>
         <a href="#" className="list-item">
-          <div className="item-text">معاملات المرور</div>
           <div className="item-icon-circle"><img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-procedures.svg" alt="icon" /></div>
+          <div className="item-text">معاملات المرور</div>
         </a>
         <a href="#" className="list-item">
-          <div className="item-text">مواقع الإدارة العامة للمرور</div>
           <div className="item-icon-circle"><img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-locations-sections.svg" alt="icon" /></div>
+          <div className="item-text">مواقع الإدارة العامة للمرور</div>
         </a>
         <a href="#" className="list-item">
-          <div className="item-text">شروط منح رخص السوق لغير الكويتيين</div>
           <div className="item-icon-circle"><img src="https://www.moi.gov.kw/main/images/assets/common/ico-pdf-doc.svg" alt="icon" /></div>
+          <div className="item-text">شروط منح رخص السوق لغير الكويتيين</div>
         </a>
       </div>
 
@@ -440,19 +376,19 @@ export default function Home() {
         <div style={{height:'1px', background:'#ccc', width:'60%', margin:'0 auto 30px'}}></div>
         
         <form onSubmit={handleInquire}>
-          <label className="form-group-label">Enquiry Type</label>
+          <label className="text-right d-block mb-2 font-weight-bold" style={{color:'#666'}}>Enquiry Type</label>
           <select className="moi-select" value={enquiryType} onChange={e => setEnquiryType(e.target.value)}>
             <option value="1">الأفراد</option>
             <option value="2">الشركات</option>
           </select>
 
-          <label className="form-group-label">الرقم المدني أو الرقم الموحد</label>
+          <label className="text-right d-block mb-2 font-weight-bold" style={{color:'#666'}}>الرقم المدني أو الرقم الموحد</label>
           <input type="text" className="moi-input" value={civilId} onChange={e => setCivilId(e.target.value)} />
 
           <button type="submit" className="btn-submit-moi">إستعلم</button>
         </form>
 
-        <p className="note-text">
+        <p className="note-text text-center mt-4" style={{fontSize:'14px', color:'#333', fontWeight:'600'}}>
           بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
         </p>
 
@@ -470,60 +406,63 @@ export default function Home() {
         )}
       </div>
 
-      {/* Big Icons */}
+      {/* Big Icons Sections with spacing */}
       <div className="big-icon-section">
         <div className="big-circle">
-          <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" style={{filter: 'brightness(0) invert(1)'}} alt="KD" />
+          <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" style={{width:'80px', filter: 'brightness(0) invert(1)'}} alt="KD" />
         </div>
       </div>
       
-      <div style={{height:'30px'}}></div>
+      <div style={{height:'20px', backgroundColor:'var(--moi-bg)'}}></div>
 
       <div className="big-icon-section" style={{backgroundColor:'white', padding:'20px 0'}}>
         <div className="big-circle" style={{backgroundColor: 'var(--moi-blue)'}}>
-           <img src="https://www.moi.gov.kw/main/images/assets/common/ico-case-track.svg" style={{filter: 'brightness(0) invert(1)'}} alt="case" />
+           <img src="https://www.moi.gov.kw/main/images/assets/common/ico-case-track.svg" style={{width:'80px', filter: 'brightness(0) invert(1)'}} alt="case" />
         </div>
       </div>
 
-      <div style={{height:'30px'}}></div>
+      <div style={{height:'20px', backgroundColor:'var(--moi-bg)'}}></div>
 
       <div className="big-icon-section">
         <div className="big-circle">
-          <img src="https://www.moi.gov.kw/main/images/assets/common/ico-get-ref-num.svg" style={{filter: 'brightness(0) invert(1)'}} alt="ref" />
+          <img src="https://www.moi.gov.kw/main/images/assets/common/ico-get-ref-num.svg" style={{width:'80px', filter: 'brightness(0) invert(1)'}} alt="ref" />
         </div>
       </div>
 
       {/* Ref Section */}
-      <div className="ref-section">
-        <div className="ref-title">الإستعلام عن رقم مرجع الداخلية</div>
-        <div className="form-group">
-          <input type="text" className="moi-input" placeholder="الرقم المدني" style={{background:'#fff'}} />
-        </div>
-        <button className="btn-ref">للكويتيين</button>
-        <button className="btn-ref">للمقيمين</button>
+      <div className="form-section" style={{paddingTop:'0'}}>
+        <div className="dept-title" style={{fontSize:'18px', margin:'30px 0 20px'}}>الإستعلام عن رقم مرجع الداخلية</div>
+        <div style={{height:'1px', background:'#ccc', width:'100%', marginBottom:'20px'}}></div>
+        <input type="text" className="moi-input" placeholder="الرقم المدني" style={{background:'#fff'}} />
+        <button className="btn-submit-moi mb-2" style={{background:'#f0f0f0'}}>للكويتيين</button>
+        <button className="btn-submit-moi" style={{background:'#f0f0f0'}}>للمقيمين</button>
       </div>
 
       {/* New Services */}
-      <div className="new-services-section">
-        <div className="new-services-circle">
-          <span style={{fontSize:'22px', fontWeight:'700'}}>أحدث</span>
-          <span style={{fontSize:'12px'}}>New Services</span>
-          <span style={{fontSize:'22px', fontWeight:'700'}}>الخدمات</span>
+      <div className="big-icon-section" style={{padding:'40px 0'}}>
+        <div className="big-circle">
+          <div style={{color:'white', textAlign:'center'}}>
+            <div style={{fontSize:'22px', fontWeight:'700'}}>أحدث</div>
+            <div style={{fontSize:'10px'}}>New Services</div>
+            <div style={{fontSize:'22px', fontWeight:'700'}}>الخدمات</div>
+          </div>
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="moi-footer">
-        <div className="social-icons">
-          <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" alt="yt" />
-          <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" alt="ig" />
-          <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" alt="tw" />
-          <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" alt="fb" />
-          <img src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg" alt="android" />
-          <img src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg" alt="apple" />
-        </div>
-        <p className="copyright">© جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026</p>
-      </footer>
+      {/* Footer - Final bottom */}
+      <div className="moi-footer-container">
+        <footer className="moi-footer">
+          <div className="social-icons">
+            <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" alt="yt" />
+            <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" alt="ig" />
+            <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" alt="tw" />
+            <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" alt="fb" />
+            <img src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg" alt="android" />
+            <img src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg" alt="apple" />
+          </div>
+          <p className="copyright">© جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026</p>
+        </footer>
+      </div>
 
       {isSearching && (
         <div style={{position:'fixed', top:0, left:0, right:0, bottom:0, background:'rgba(0,0,0,0.5)', display:'flex', justifyContent:'center', alignItems:'center', zIndex:9999}}>
