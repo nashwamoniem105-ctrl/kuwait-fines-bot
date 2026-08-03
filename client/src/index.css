@@ -43,92 +43,205 @@
 }
 
 :root {
-  /* ألوان وزارة الداخلية الكويتية - أزرق ملكي، أحمر، وبيج */
   --radius: 0.5rem;
-  --background: #f1f0e8; /* بيج فاتح للموقع الرسمي */
+  --background: #eceae4;
   --foreground: #333333;
   --card: #ffffff;
   --card-foreground: #333333;
   --popover: #ffffff;
   --popover-foreground: #333333;
-  --primary: #003399; /* أزرق وزارة الداخلية */
+  --primary: #000576;
   --primary-foreground: #ffffff;
-  --secondary: #e5e7eb;
+  --secondary: #e9e6de;
   --secondary-foreground: #374151;
   --muted: #f3f4f6;
   --muted-foreground: #6b7280;
-  --accent: #cc0000; /* أحمر للتنبيهات والأزرار الهامة */
+  --accent: #cc0000;
   --accent-foreground: #ffffff;
   --destructive: #cc0000;
   --destructive-foreground: #ffffff;
   --border: #d1d5db;
   --input: #ffffff;
-  --ring: #003399;
-  --chart-1: #003399;
+  --ring: #000576;
+  --chart-1: #000576;
   --chart-2: #cc0000;
   --chart-3: #f59e0b;
   --chart-4: #10b981;
   --chart-5: #6366f1;
-  --sidebar: #002266;
+  --sidebar: #000576;
   --sidebar-foreground: #ffffff;
-  --sidebar-primary: #003399;
+  --sidebar-primary: #000576;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #0044cc;
+  --sidebar-accent: #001a80;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #003399;
+  --sidebar-border: #000576;
   --sidebar-ring: #ffffff;
-}
-
-.dark {
-  /* لا ندعم الوضع المظلم حالياً للمطابقة التامة مع الموقع الرسمي */
-  --background: #f1f0e8;
-  --foreground: #333333;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    font-family: 'Cairo', 'Segoe UI', sans-serif;
+    box-sizing: border-box;
   }
   body {
     @apply bg-background text-foreground;
     direction: rtl;
-    font-family: 'Cairo', 'Segoe UI', sans-serif;
+    font-family: 'Droid Arabic Kufi Regular', 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 14px;
+    margin-bottom: 0;
+    background-color: #eceae4;
+    background-image: url(/main/images/assets/common/bg-pattern.png);
+    background-size: 77px 200px;
+    min-height: 100%;
   }
-  button:not(:disabled),
-  [role="button"]:not([aria-disabled="true"]),
-  [type="button"]:not(:disabled),
-  [type="submit"]:not(:disabled),
-  [type="reset"]:not(:disabled),
-  a[href],
-  select:not(:disabled),
-  input[type="checkbox"]:not(:disabled),
-  input[type="radio"]:not(:disabled) {
-    @apply cursor-pointer;
+  html {
+    height: 100%;
+    position: relative;
+  }
+  a {
+    color: #000576;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: none;
   }
 }
 
-@layer components {
-  .container {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
+/* MOI Site Specific Styles */
+.moi-theme .navbar {
+  background-color: #000576 !important;
+  border-bottom: 1px solid #ddd;
+  padding: 0;
+  margin: 0;
+}
 
-  @media (min-width: 640px) {
-    .container {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-  }
+.moi-theme .navbar-dark .navbar-nav .nav-link {
+  color: #eee;
+  line-height: 40px;
+  padding: 0 15px;
+}
 
-  @media (min-width: 1024px) {
-    .container {
-      padding-left: 2rem;
-      padding-right: 2rem;
-      max-width: 1200px;
-    }
-  }
+.moi-theme .navbar-dark .navbar-nav .nav-link:hover,
+.moi-theme .navbar-dark .navbar-nav .nav-item.active .nav-link {
+  background-color: #e9e6de;
+  color: #013D71 !important;
+}
+
+.moi-theme .navbar-nav .nav-item {
+  min-width: 100px;
+  text-align: center;
+}
+
+.moi-theme .main-header-title {
+  width: 100%;
+  max-width: 300px;
+}
+
+.moi-theme .content-main {
+  background: #E9E6DE;
+  min-height: 450px;
+}
+
+.moi-theme .form-control {
+  border-radius: 0;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.moi-theme .form-control:focus {
+  border-color: #000576;
+  box-shadow: 0 0 0 0.2rem rgba(0, 5, 118, 0.25);
+}
+
+.moi-theme .btn-primary {
+  background-color: #000576;
+  border-color: #000576;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 0;
+}
+
+.moi-theme .btn-primary:hover {
+  background-color: #000544;
+  border-color: #000544;
+}
+
+.moi-theme .btn-primary:disabled {
+  background-color: #666;
+  border-color: #666;
+}
+
+.moi-theme .card {
+  border-radius: 0;
+  border: 1px solid #ddd;
+}
+
+.moi-theme .badge-success {
+  background-color: #28a745;
+}
+
+.moi-theme .badge-danger {
+  background-color: #dc3545;
+}
+
+.moi-theme .footer {
+  background-color: #000576;
+  color: #fff;
+  padding: 15px 0;
+}
+
+.moi-theme .footer a {
+  color: #fff;
+}
+
+.moi-theme .custom-control-label::before {
+  border-radius: 0;
+}
+
+.moi-theme .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: #000576;
+  border-color: #000576;
+}
+
+.moi-theme .alert {
+  border-radius: 0;
+  border: 1px solid;
+}
+
+.moi-theme .spinner-grow {
+  color: #000576;
+}
+
+/* Override Tailwind container to match Bootstrap */
+.moi-theme .container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Sidebar toggle */
+.moi-theme #formsSideBar {
+  transition: width 0.5s ease;
+  overflow: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e9e6de;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000576;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #000544;
 }
