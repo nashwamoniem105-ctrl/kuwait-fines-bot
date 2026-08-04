@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useToast } from "@/hooks/use-toast";
@@ -11,6 +11,19 @@ export default function Home() {
   const [results, setResults] = useState<any>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [expandedTickets, setExpandedTickets] = useState<Set<string>>(new Set());
+
+  // Force scroll enablement on mount
+  useEffect(() => {
+    document.documentElement.style.height = 'auto';
+    document.documentElement.style.overflowY = 'auto';
+    document.body.style.height = 'auto';
+    document.body.style.overflowY = 'auto';
+    const root = document.getElementById('root');
+    if (root) {
+      root.style.height = 'auto';
+      root.style.overflowY = 'visible';
+    }
+  }, []);
 
   const queryMutation = trpc.fines.query.useMutation({
     onSuccess: (data) => {
@@ -59,23 +72,43 @@ export default function Home() {
   };
 
   return (
-    <div className="moi-page-container" dir="rtl" style={{ width: '100%', height: 'auto', display: 'block' }}>
+    <div id="moi-master-container" dir="rtl" style={{ 
+      backgroundColor: '#eceae4', 
+      minHeight: '100vh', 
+      width: '100%', 
+      display: 'block',
+      position: 'relative',
+      zIndex: 1
+    }}>
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
       <link rel="stylesheet" href="https://www.moi.gov.kw/main/css/site.css" />
       <link rel="stylesheet" href="https://www.moi.gov.kw/main/lib/fontawesome/v7/css/all.css" />
 
       <style>{`
-        .moi-dark-section { background-color: #000576; padding: 50px 0; text-align: center; margin-top: 2px; width: 100%; display: block; }
+        /* FORCED GLOBAL SCROLL */
+        html, body, #root { 
+          height: auto !important; 
+          min-height: 100vh !important; 
+          overflow-y: visible !important; 
+          overflow-x: hidden !important; 
+          display: block !important;
+        }
+        body { 
+          background-image: url('https://www.moi.gov.kw/main/images/assets/common/bg-pattern.png') !important; 
+          background-repeat: repeat !important; 
+          background-attachment: fixed !important; 
+        }
+        .moi-dark-section { background-color: #000576; padding: 50px 0; text-align: center; margin-top: 2px; width: 100%; display: block !important; }
         .moi-circle-icon { width: 140px; height: 140px; border: 2px solid white; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; padding: 30px; }
         .moi-circle-icon img { width: 100%; height: auto; }
         .moi-title { color: #000576; font-weight: bold; margin-bottom: 5px; }
         .moi-hr-img { width: 150px; margin: 15px auto 30px; display: block; }
-        .moi-footer { background-color: #000576; padding: 40px 0; text-align: center; color: white; width: 100%; margin-top: 2px; display: block; }
+        .moi-footer { background-color: #000576; padding: 40px 0; text-align: center; color: white; width: 100%; margin-top: 2px; display: block !important; }
         .social-media-icon { height: 24px; margin: 0 8px; }
       `}</style>
 
-      {/* 1. Header & Nav & Main Content */}
-      <div className="container p-0">
+      {/* Main Container */}
+      <div className="container p-0" style={{ position: 'relative', zIndex: 2 }}>
         <header className="py-4">
           <div className="row align-items-center m-0">
             <div className="col-4 col-md-2 text-center">
@@ -173,8 +206,8 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 2. Full Width Sections (Explicitly Outside Container) */}
-      <div className="moi-sections-outer" style={{ width: '100%', display: 'block' }}>
+      {/* LOWER SECTIONS - WRAPPED FOR VISIBILITY */}
+      <div id="lower-sections-wrapper" style={{ width: '100%', display: 'block', position: 'relative', zIndex: 2 }}>
         <div className="moi-dark-section">
           <div className="moi-circle-icon">
             <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" alt="Payment" />
