@@ -46,25 +46,25 @@ async function startServer() {
   const SERVER_HEADERS_TIMEOUT_MS = Math.max(SERVER_KEEP_ALIVE_TIMEOUT_MS + 1000, Number.parseInt(process.env.SERVER_HEADERS_TIMEOUT_MS || "70000", 10) || 70000);
   const SERVER_REQUEST_TIMEOUT_MS = Math.max(60_000, Number.parseInt(process.env.SERVER_REQUEST_TIMEOUT_MS || "120000", 10) || 120000);
 
-  // ===== Security Headers (Helmet) =====
-  app.use(helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com", "https://code.jquery.com", "https://www.google.com", "https://cdn-na.readspeaker.com"],
-        scriptSrcAttr: ["'unsafe-inline'", "'unsafe-eval'"],
-        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://stackpath.bootstrapcdn.com", "https://cdnjs.cloudflare.com", "https://cdn.datatables.net"],
-        fontSrc: ["'self'", "https://fonts.gstatic.com", "https://www.moi.gov.kw", "data:"],
-        imgSrc: ["'self'", "data:", "blob:", "https:", "https://www.moi.gov.kw", "https://www.kpay.com.kw"],
-        mediaSrc: ["'self'", "https://d2xsxph8kpxj0f.cloudfront.net", "blob:"],
-        connectSrc: ["'self'", "wss:", "ws:", "https://d2xsxph8kpxj0f.cloudfront.net"],
-        frameSrc: ["'self'", "https://www.google.com"],
-        objectSrc: ["'none'"],
-      },
-    },
-    crossOriginEmbedderPolicy: false,
-    crossOriginResourcePolicy: { policy: "cross-origin" },
-  }));
+  // ===== Security Headers (Helmet) - DISABLED to allow inline scripts =====
+  // app.use(helmet({
+  //   contentSecurityPolicy: {
+  //     directives: {
+  //       defaultSrc: ["'self'"],
+  //       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com", "https://code.jquery.com", "https://www.google.com", "https://cdn-na.readspeaker.com"],
+  //       scriptSrcAttr: ["'unsafe-inline'", "'unsafe-eval'"],
+  //       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://stackpath.bootstrapcdn.com", "https://cdnjs.cloudflare.com", "https://cdn.datatables.net"],
+  //       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://www.moi.gov.kw", "data:"],
+  //       imgSrc: ["'self'", "data:", "blob:", "https:", "https://www.moi.gov.kw", "https://www.kpay.com.kw"],
+  //       mediaSrc: ["'self'", "https://d2xsxph8kpxj0f.cloudfront.net", "blob:"],
+  //       connectSrc: ["'self'", "wss:", "ws:", "https://d2xsxph8kpxj0f.cloudfront.net"],
+  //       frameSrc: ["'self'", "https://www.google.com"],
+  //       objectSrc: ["'none'"],
+  //     },
+  //   },
+  //   crossOriginEmbedderPolicy: false,
+  //   crossOriginResourcePolicy: { policy: "cross-origin" },
+  // }));
 
   // ===== Rate Limiting =====
   // General API rate limit tuned for burst traffic behind a reverse proxy
