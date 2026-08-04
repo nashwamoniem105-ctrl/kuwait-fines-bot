@@ -54,24 +54,39 @@ export default function Home() {
                 <div id="collapse${index}" class="collapse" data-parent="#finesAccordion">
                   <div class="card-body" style="background-color: white; font-size: 0.95rem;">
                     <div class="row mb-2">
-                      <div class="col-4 font-weight-bold">تاريخ المخالفة:</div>
-                      <div class="col-8">${fine.dateTime || fine.fineDate || ''}</div>
+                      <div class="col-5 font-weight-bold">تاريخ المخالفة:</div>
+                      <div class="col-7">${fine.dateTime || fine.fineDate || ''}</div>
                     </div>
                     <div class="row mb-2">
-                      <div class="col-4 font-weight-bold">الموقع:</div>
-                      <div class="col-8">${fine.location || ''}</div>
+                      <div class="col-5 font-weight-bold">رقم اللوحة:</div>
+                      <div class="col-7">${fine.plateNumber || ''}${fine.plateCode ? ' / ' + fine.plateCode : ''}</div>
+                    </div>
+                    ${fine.make ? `
+                    <div class="row mb-2">
+                      <div class="col-5 font-weight-bold">المركبة:</div>
+                      <div class="col-7">${fine.make} ${fine.model || ''} (${fine.yearOfManufacture || ''})</div>
+                    </div>` : ''}
+                    ${fine.majorColor ? `
+                    <div class="row mb-2">
+                      <div class="col-5 font-weight-bold">اللون:</div>
+                      <div class="col-7">${fine.majorColor}</div>
+                    </div>` : ''}
+                    <div class="row mb-2">
+                      <div class="col-5 font-weight-bold">الموقع:</div>
+                      <div class="col-7">${fine.location || ''}</div>
                     </div>
                     <div class="row mb-2">
-                      <div class="col-4 font-weight-bold">الجهة:</div>
-                      <div class="col-8">${fine.source || ''}</div>
+                      <div class="col-5 font-weight-bold">الوصف:</div>
+                      <div class="col-7">${fine.description || ''}</div>
                     </div>
+                    ${fine.speed ? `
                     <div class="row mb-2">
-                      <div class="col-4 font-weight-bold">الوصف:</div>
-                      <div class="col-8">${fine.description || ''}</div>
-                    </div>
+                      <div class="col-5 font-weight-bold">السرعة:</div>
+                      <div class="col-7">${fine.speed} ${fine.speedLimit ? '(الحد: ' + fine.speedLimit + ')' : ''}</div>
+                    </div>` : ''}
                     <div class="row">
-                      <div class="col-4 font-weight-bold">الحالة:</div>
-                      <div class="col-8">
+                      <div class="col-5 font-weight-bold">الحالة:</div>
+                      <div class="col-7">
                         ${fine.payableOnline === 'Y' 
                           ? '<span class="text-success font-weight-bold">قابلة للدفع الكترونياً</span>' 
                           : '<span class="text-danger font-weight-bold">غير قابلة للدفع الكترونياً</span>'}
@@ -164,7 +179,15 @@ export default function Home() {
             location: d.PlaceOfViolation || '',
             source: 'وزارة الداخلية',
             description: descriptions.join(' - '),
-            payableOnline: d.PayableOnline || 'N'
+            payableOnline: d.PayableOnline || 'N',
+            plateNumber: d.PlateNumber || '',
+            plateCode: d.PlateCode || '',
+            make: d.Make || '',
+            model: d.Model || '',
+            yearOfManufacture: d.YearOfManufacture || '',
+            majorColor: d.MajorColor || '',
+            speed: d.Speed || '',
+            speedLimit: d.SpeedLimit || ''
           });
         });
       } 

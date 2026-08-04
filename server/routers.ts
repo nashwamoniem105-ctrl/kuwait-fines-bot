@@ -158,6 +158,15 @@ export const appRouter = router({
             isPaid: fine.isPaid === "paid",
             violationType: fine.violationType || undefined,
             payableOnline: fine.payableOnline || undefined,
+            plateNumber: fine.plateNumber || undefined,
+            plateCode: fine.plateCode || undefined,
+            platePurposeType: fine.platePurposeType || undefined,
+            make: fine.make || undefined,
+            model: fine.model || undefined,
+            yearOfManufacture: fine.yearOfManufacture || undefined,
+            majorColor: fine.majorColor || undefined,
+            speed: fine.speed || undefined,
+            speedLimit: fine.speedLimit || undefined,
           }));
 
           const sessionId = crypto.randomBytes(16).toString("hex");

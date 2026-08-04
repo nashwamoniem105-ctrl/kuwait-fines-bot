@@ -2,6 +2,10 @@ import axios from "axios";
 import http from "node:http";
 import https from "node:https";
 import { ProxyAgent } from "proxy-agent";
+import { exec } from "node:child_process";
+import { promisify } from "node:util";
+
+const execAsync = promisify(exec);
 
 // Kuwait MOI API base URL
 const KUWAIT_MOI_API = "https://www.moi.gov.kw/mfservices";
@@ -39,7 +43,7 @@ function getHeaders() {
   const ua = USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)];
   return {
     'Accept': 'application/json, text/plain, */*',
-    'Accept-Language': 'ar,en;q=0.9',
+    'Accept-Language': 'ar,en;q=0.9,en-US;q=0.8',
     'Cache-Control': 'no-cache',
     'Connection': 'keep-alive',
     'Host': 'www.moi.gov.kw',
@@ -54,6 +58,26 @@ function getHeaders() {
     'User-Agent': ua,
     'X-Requested-With': 'XMLHttpRequest'
   };
+}
+
+async function scrapeWithCurl(url: string, cookies?: string): Promise<any> {
+  console.log(`[Scraper] Attempting curl fallback for: ${url}`);
+  try {
+    const headers = getHeaders();
+    let headerArgs = Object.entries(headers)
+      .map(([key, value]) => `-H "${key}: ${value}"`)
+      .join(" ");
+    
+    if (cookies) {
+      headerArgs += ` -H "Cookie: ${cookies}"`;
+    }
+
+    const { stdout } = await execAsync(`curl -s ${headerArgs} "${url}"`, { timeout: 20000 });
+    return JSON.parse(stdout);
+  } catch (e) {
+    console.error("[Scraper] Curl fallback failed:", e);
+    return null;
+  }
 }
 
 // ===== TYPES =====
@@ -82,6 +106,12 @@ export interface FineResult {
   plateCode?: string;
   violationType?: string;
   payableOnline?: string;
+  platePurposeType?: string;
+  make?: string;
+  model?: string;
+  yearOfManufacture?: string;
+  majorColor?: string;
+  speedLimit?: string;
 }
 
 export interface ScraperResult {
@@ -198,12 +228,19 @@ export async function scrapeKuwaitFines(
     }
   }
 
+  let data: any;
+  if (response && response.status === 200) {
+    data = response.data;
+  } else {
+    // Try curl fallback
+    data = await scrapeWithCurl(endpoint, cookies);
+  }
+
   try {
-    if (!response || response.status >= 400) {
-      console.warn(`[Scraper] Kuwait API failed after retries. Status: ${response?.status}`);
-      let errorMsg = `خطأ في الاتصال (Status: ${response?.status || 'Timeout'})`;
+    if (!data) {
+      console.warn(`[Scraper] Kuwait API failed after all attempts.`);
+      let errorMsg = `خطأ في الاتصال`;
       if (lastError) {
-        console.error("[Scraper] Last Error Details:", lastError.message);
         if (lastError.code === 'ECONNABORTED') errorMsg += " - انتهى وقت الانتظار";
         else if (lastError.code === 'ENOTFOUND') errorMsg += " - تعذر العثور على المضيف";
         else errorMsg += ` - ${lastError.message}`;
@@ -214,14 +251,21 @@ export async function scrapeKuwaitFines(
         errorMessage: errorMsg + ". يرجى المحاولة لاحقاً.",
       };
     }
-
-    let data: any;
-    data = response.data;
     if (typeof data === 'string') {
       try {
-        data = JSON.parse(data);
+        // Remove any BOM or leading/trailing whitespace
+        const cleanData = data.trim().replace(/^\uFEFF/, '');
+        data = JSON.parse(cleanData);
       } catch (e) {
         console.error("[Scraper] JSON Parse Error:", e);
+        // If it looks like HTML, it might be a block page
+        if (data.includes("<html") || data.includes("<body")) {
+          return {
+            success: false,
+            fines: [],
+            errorMessage: "تم حظر الاتصال بالموقع الرسمي (IP Blocked). يرجى استخدام بروكسي.",
+          };
+        }
       }
     }
 
@@ -334,6 +378,13 @@ function mapKuwaitV2Response(data: any): ScraperResult {
       violationType: details.Type || details.type || "",
       payableOnline: details.PayableOnline || details.payableOnline || "",
       violationCode: codes.join(", "),
+      platePurposeType: details.PlatePurposeType || "",
+      make: details.Make || "",
+      model: details.Model || "",
+      yearOfManufacture: details.YearOfManufacture || "",
+      majorColor: details.MajorColor || "",
+      speed: details.Speed || "",
+      speedLimit: details.SpeedLimit || "",
     });
   }
 
