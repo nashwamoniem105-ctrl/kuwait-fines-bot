@@ -210,14 +210,38 @@ export default function Home() {
             </div>
           </div>
 
-          <footer class="mt-5 p-5 text-center text-white" style="background-color: #000576; border-radius: 15px 15px 0 0;">
-            <div class="mb-4">
-              <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" class="mx-3" style="width: 30px;">
-              <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" class="mx-3" style="width: 30px;">
-              <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" class="mx-3" style="width: 30px;">
-              <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" class="mx-3" style="width: 30px;">
+          <footer class="container border-top footer text-muted mt-2 p-0" style="background-color: #000576;">
+            <div class="col-sm-12 text-center text-white mt-2 py-3" style="background-color: #000576;">
+              <div class="row">
+                <div class="col-sm-12">
+                  <a href="https://www.youtube.com/user/SecurityMediaQ8">
+                    <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" class="social-media-icon" />
+                  </a>
+                  <a href="https://www.instagram.com/moi_kuw/?hl=en">
+                    <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" class="social-media-icon" />
+                  </a>
+                  <a href="https://twitter.com/moi_kuw?lang=en">
+                    <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" class="social-media-icon" />
+                  </a>
+                  <a href="https://www.facebook.com/MOIKuwait/">
+                    <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" class="social-media-icon" />
+                  </a>
+                  &nbsp;&nbsp;
+                  <a href="https://play.google.com/store/apps/details?id=com.MoIKuwait">
+                    <img src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg" class="social-media-icon" />
+                  </a>
+                  &nbsp;&nbsp;
+                  <a href="https://itunes.apple.com/kw/app/moi-kuwait/id871764188?mt=8">
+                    <img src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg" class="social-media-icon" />
+                  </a>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  © جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026
+                </div>
+              </div>
             </div>
-            <p class="m-0 font-weight-bold">© جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026</p>
           </footer>
         </div>
       ` }} />
