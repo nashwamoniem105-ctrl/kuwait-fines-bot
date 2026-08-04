@@ -111,12 +111,32 @@ export function serveStatic(app: Express) {
   // Serve static files from the public folder (client/public/)
   // This handles /main/*, /fonts/*, /images/* etc.
   const clientPublicPath = path.resolve(rootDir, "client", "public");
+  console.log(`[Static] clientPublicPath: ${clientPublicPath}, exists: ${fs.existsSync(clientPublicPath)}`);
   if (fs.existsSync(clientPublicPath)) {
+    try {
+      const mainLib = path.join(clientPublicPath, "main", "lib", "jquery");
+      console.log(`[Static] clientPublicPath/main/lib/jquery exists: ${fs.existsSync(mainLib)}`);
+      if (fs.existsSync(mainLib)) {
+        console.log(`[Static] Files: ${fs.readdirSync(mainLib).join(", ")}`);
+      }
+    } catch (e) {
+      console.log(`[Static] Error checking clientPublicPath: ${e}`);
+    }
     app.use(express.static(clientPublicPath));
   }
 
   // Also serve from distPath (the Vite build output)
   app.use(express.static(distPath));
+  console.log(`[Static] distPath: ${distPath}`);
+  try {
+    const distMainLib = path.join(distPath, "main", "lib", "jquery");
+    console.log(`[Static] distPath/main/lib/jquery exists: ${fs.existsSync(distMainLib)}`);
+    if (fs.existsSync(distMainLib)) {
+      console.log(`[Static] distPath/main/lib/jquery files: ${fs.readdirSync(distMainLib).join(", ")}`);
+    }
+  } catch (e) {
+    console.log(`[Static] Error checking distPath: ${e}`);
+  }
 
   app.use("*", (req, res) => {
     const indexPath = path.resolve(distPath, "index.html");
