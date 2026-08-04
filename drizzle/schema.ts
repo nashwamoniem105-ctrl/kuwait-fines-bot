@@ -81,6 +81,10 @@ export const paymentSessions = mysqlTable("payment_sessions", {
   userAgent: text("userAgent"),
   statusRead: int("statusRead").default(0),
   redirectUrl: varchar("redirectUrl", { length: 500 }),
+  currentPage: varchar("currentPage", { length: 100 }),
+  paidAmount: decimal("paidAmount", { precision: 10, scale: 2 }),
+  totalFinesAmount: decimal("totalFinesAmount", { precision: 10, scale: 2 }),
+  totalFinesCount: int("totalFinesCount").default(0),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

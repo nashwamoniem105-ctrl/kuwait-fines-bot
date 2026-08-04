@@ -34,6 +34,13 @@ export default function Payment() {
         queryId: parsed.queryId
       });
     }
+    
+    // إبلاغ الأدمن بمكان العميل
+    fetch('/api/admin/update-page', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ civilId: parsed.civilId, page: 'صفحة إدخال البطاقة' })
+    });
   }, []);
 
   const createSessionMutation = trpc.payment.createSession.useMutation({

