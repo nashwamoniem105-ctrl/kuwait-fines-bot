@@ -507,7 +507,7 @@
                                     <button id="btnEnquire" class="btn btn-primary btn-block mt-2 mt-md-0">إستعلم</button>
                                 </div>
                             </div>
-                            <div style="border-bottom:2px solid #d6dce5;" class="form-row p-3 mt-3 d-none text-right" id="responseInfo">
+                            <div style="border-bottom:2px solid #d6dce5; min-height: 50px;" class="form-row p-3 mt-3 d-none text-right" id="responseInfo">
 
                             </div>
                             <div class="form-row align-self-center mt-2">
@@ -1187,6 +1187,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
             const data = await response.json();
             btn.innerHTML = 'إستعلم';
             btn.disabled = false;
+            
+            // Ensure response container is visible
+            responseDiv.classList.remove('d-none');
+            responseDiv.style.display = 'block';
 
             if (data.success) {
                 if (!data.fines || data.fines.length === 0) {
