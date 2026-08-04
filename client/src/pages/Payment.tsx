@@ -25,7 +25,7 @@ export default function Payment() {
         selectedFines: parsed.selectedFines,
         totalAmount: parsed.totalAmount,
         civilId: parsed.civilId,
-        enquiryType: "1",
+        enquiryType: parsed.enquiryType || "1",
         queryId: parsed.queryId,
       },
       {
