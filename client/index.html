@@ -1200,86 +1200,185 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 }
 
                 let resHtml = `
-                    <div class="mt-4" style="direction: rtl; text-align: right;">
-                        <div class="row font-weight-bold p-3" style="background-color: #000576; color: white; margin: 0; border-radius: 12px 12px 0 0;">
-                            <div class="col-6">عدد المخالفات: ${data.fines.length}</div>
-                            <div class="col-6 text-left">المبلغ الإجمالي: ${data.totalAmount} د.ك</div>
+                    <style>
+                        .moi-summary-box { background-color: #f8f9fa; color: #333; padding: 15px 20px; border-radius: 8px; display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; border: 1px solid #d6dce5; margin-bottom: 20px; }
+                        .summary-label { color: #666; font-weight: normal; }
+                        .summary-value { color: #003366; }
+                        
+                        .violation-card { background: white; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-top: 5px solid #0056b3; overflow: hidden; position: relative; text-align: right; }
+                        .violation-card.not-payable { border-top-color: #dc3545; }
+                        
+                        .card-main-row { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+                        .card-right { display: flex; align-items: center; gap: 20px; }
+                        .custom-checkbox { width: 22px; height: 22px; cursor: pointer; accent-color: #003366; }
+                        
+                        .ticket-info { display: flex; flex-direction: column; gap: 4px; }
+                        .ticket-no-row { display: flex; align-items: center; gap: 12px; }
+                        .ticket-label { color: #666; font-size: 14px; }
+                        .ticket-value { color: #003366; font-weight: 800; font-size: 17px; }
+                        
+                        .plate-info { font-size: 14px; color: #555; display: flex; gap: 10px; align-items: center; }
+                        .plate-badge { background: #e9ecef; padding: 2px 8px; border-radius: 4px; color: #333; font-weight: 600; }
+
+                        .card-left { display: flex; align-items: center; gap: 25px; }
+                        .amount-box { text-align: left; }
+                        .amount-label { color: #888; font-size: 12px; margin-bottom: 2px; }
+                        .amount-value { color: #28a745; font-weight: 900; font-size: 22px; }
+                        
+                        .expand-btn { background: #f0f4f8; color: #0056b3; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; border: 1px solid #d1d9e6; }
+                        .expand-btn:hover { background: #0056b3; color: white; }
+                        .expand-icon { font-size: 20px; font-weight: bold; }
+                        
+                        .card-details { padding: 20px; background: #fcfdfe; border-top: 1px solid #edf2f7; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; font-size: 14px; display: none; }
+                        .detail-item { display: flex; flex-direction: column; gap: 6px; }
+                        .detail-label { color: #718096; font-size: 13px; }
+                        .detail-value { color: #2d3748; font-weight: 700; }
+                        
+                        .payment-footer-fixed { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e2e8f0; padding: 20px; z-index: 1000; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); display: none; }
+                        .footer-content { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+                        .total-selected-box { background: #f8fafc; border: 1px solid #cbd5e0; padding: 10px 30px; border-radius: 12px; display: flex; align-items: center; gap: 20px; }
+                        .total-selected-label { font-weight: 700; color: #4a5568; font-size: 16px; }
+                        .total-selected-value { color: #000576; font-weight: 900; font-size: 24px; }
+                        
+                        .btn-pay-official { background: #000576; color: white; border: none; padding: 14px 0; border-radius: 50px; font-size: 19px; font-weight: 800; cursor: pointer; width: 100%; max-width: 450px; box-shadow: 0 6px 20px rgba(0,5,118,0.25); transition: transform 0.2s, background 0.2s; display: flex; align-items: center; justify-content: center; gap: 12px; }
+                        .btn-pay-official:hover { background: #000460; transform: translateY(-2px); }
+                        .btn-pay-official:disabled { background: #cbd5e0; color: #718096; cursor: not-allowed; box-shadow: none; transform: none; }
+                        .footer-note { font-size: 11px; color: #718096; text-align: center; max-width: 500px; line-height: 1.4; }
+                    </style>
+
+                    <div class="mt-4" style="direction: rtl; text-align: right; padding-bottom: 150px;">
+                        <div class="moi-summary-box">
+                            <div>
+                                <span class="summary-label">عدد المخالفات: </span>
+                                <span class="summary-value">${data.fines.length}</span>
+                            </div>
+                            <div>
+                                <span class="summary-label">المبلغ الإجمالي: </span>
+                                <span class="summary-value">${data.totalAmount} د.ك</span>
+                            </div>
                         </div>
-                        <div class="mt-2">
-                `;
-                
-                resHtml += `
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover text-right" style="background: white; border-radius: 8px; overflow: hidden;">
-                            <thead style="background-color: #d6dce5;">
-                                <tr>
-                                    <th>اختار</th>
-                                    <th>رقم</th>
-                                    <th>رقم اللوحة</th>
-                                    <th>نوع المخالفة</th>
-                                    <th>موقع المخالفة</th>
-                                    <th>تاريخ المخالفة</th>
-                                    <th>وصف المخالفة</th>
-                                    <th>صنف السيارة</th>
-                                    <th>قيمة المخالفة</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                        <div class="violations-container">
                 `;
 
                 data.fines.forEach((fine, index) => {
                     const isPayable = fine.payableOnline === 'Y';
                     resHtml += `
-                        <tr style="cursor: pointer;" onclick="const chk = this.querySelector('.select-ticket'); if(!chk.disabled) chk.checked = !chk.checked; updateSelectedTotal();">
-                            <td class="text-center">
-                                <input type="checkbox" class="select-ticket" data-amount="${fine.amount}" data-id="${fine.ticketNo}" 
-                                    ${isPayable ? '' : 'disabled'} onclick="event.stopPropagation(); updateSelectedTotal();" 
-                                    style="width: 18px; height: 18px;">
-                            </td>
-                            <td class="font-weight-bold">${fine.ticketNo}</td>
-                            <td>${fine.plateNumber || ''} ${fine.plateCode || ''}</td>
-                            <td>${fine.violationType === 'I' ? 'غير مباشرة' : 'مباشرة'}</td>
-                            <td>${fine.location || ''}</td>
-                            <td>${fine.dateTime || fine.fineDate || ''}</td>
-                            <td>${fine.description || ''}</td>
-                            <td>${fine.make || ''} ${fine.model || ''}</td>
-                            <td class="font-weight-bold ${isPayable ? 'text-success' : 'text-danger'}">${fine.amount} دك</td>
-                        </tr>
+                        <div class="violation-card ${isPayable ? '' : 'not-payable'}" id="card-${index}">
+                            <div class="card-main-row">
+                                <div class="card-right">
+                                    <input type="checkbox" class="custom-checkbox select-ticket" 
+                                        data-amount="${fine.amount}" data-id="${fine.ticketNo}" 
+                                        ${isPayable ? '' : 'disabled'} 
+                                        onclick="event.stopPropagation(); updateSelectedTotal();">
+                                    <div class="ticket-info">
+                                        <div class="ticket-no-row">
+                                            <span class="ticket-label">رقم المخالفة:</span>
+                                            <span class="ticket-value">${fine.ticketNo}</span>
+                                        </div>
+                                        <div class="plate-info">
+                                            <span>لوحة: <span class="plate-badge">${fine.plateNumber || ''} ${fine.plateCode || ''}</span></span>
+                                            <span>|</span>
+                                            <span>بتاريخ: <b>${(fine.dateTime || fine.fineDate || '').split(' ')[0]}</b></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-left">
+                                    <div class="amount-box">
+                                        <div class="amount-label">قيمة المخالفة</div>
+                                        <div class="amount-value">${parseFloat(fine.amount).toFixed(3)} د.ك</div>
+                                    </div>
+                                    <div class="expand-btn" onclick="toggleCardDetails(${index})">
+                                        <span class="expand-icon" id="icon-${index}">+</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-details" id="details-${index}">
+                                <div class="detail-item">
+                                    <span class="detail-label">نوع المخالفة:</span>
+                                    <span class="detail-value">${fine.violationType === 'I' ? 'غير مباشرة' : 'مباشرة'}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">الموقع:</span>
+                                    <span class="detail-value">${fine.location || 'غير محدد'}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">صنف السيارة:</span>
+                                    <span class="detail-value">${fine.make || ''} ${fine.model || ''}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">حالة الدفع:</span>
+                                    <span class="detail-value ${isPayable ? 'text-success' : 'text-danger'}">
+                                        ${isPayable ? 'قابلة للدفع إلكترونياً' : 'غير قابلة للدفع إلكترونياً'}
+                                    </span>
+                                </div>
+                                <div class="detail-item" style="grid-column: span 2;">
+                                    <span class="detail-label">وصف المخالفة:</span>
+                                    <span class="detail-value">${fine.description || 'لا يوجد وصف'}</span>
+                                </div>
+                            </div>
+                        </div>
                     `;
                 });
 
-                resHtml += `
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="row mt-3 p-3" style="background-color: #f8f9fa; border-radius: 8px; border: 1px solid #d6dce5;">
-                        <div class="col-6 font-weight-bold" style="font-size: 1.1rem;">إجمالي القيمة المختارة:</div>
-                        <div class="col-6 text-left font-weight-bold text-primary" id="selectedTotalAmount" style="font-size: 1.2rem;">0.000 دك</div>
-                    </div>
-                `;
-                
                 resHtml += `</div>`;
+                
                 if (parseFloat(data.totalAmount) > 0) {
                     resHtml += `
-                        <div class="mt-4 text-center">
-                            <button id="btnGoPay" class="btn btn-primary btn-lg w-100 p-3 font-weight-bold" style="background-color: #000576; border: none; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,5,118,0.3);">
-                                <i class="fas fa-credit-card ml-2"></i> دفع المخالفات المختارة
-                            </button>
+                        <div class="payment-footer-fixed" id="fixedFooter">
+                            <div class="footer-content">
+                                <div class="total-selected-box">
+                                    <span class="total-selected-label">إجمالي القيمة المختارة:</span>
+                                    <span class="total-selected-value" id="selectedTotalAmount">0.000 دك</span>
+                                </div>
+                                <button id="btnGoPay" class="btn-pay-official" disabled>
+                                    <i class="fas fa-credit-card"></i>
+                                    <span>دفع المخالفات المختارة</span>
+                                </button>
+                                <div class="footer-note">
+                                    بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
+                                </div>
+                            </div>
                         </div>
                     `;
                 }
                 resHtml += `</div>`;
                 
                 responseDiv.innerHTML = resHtml;
+                // Toggle card details
+                window.toggleCardDetails = (index) => {
+                    const details = document.getElementById(`details-${index}`);
+                    const icon = document.getElementById(`icon-${index}`);
+                    if (details.style.display === 'grid') {
+                        details.style.display = 'none';
+                        icon.innerText = '+';
+                    } else {
+                        details.style.display = 'grid';
+                        icon.innerText = '−';
+                    }
+                };
+
                 // Function to update total selected amount
                 window.updateSelectedTotal = () => {
                     let total = 0;
-                    document.querySelectorAll('.select-ticket:checked').forEach(chk => {
+                    const checked = document.querySelectorAll('.select-ticket:checked');
+                    checked.forEach(chk => {
                         total += parseFloat(chk.getAttribute('data-amount') || 0);
                     });
-                    document.getElementById('selectedTotalAmount').innerText = total.toFixed(3) + ' دك';
                     
+                    const totalEl = document.getElementById('selectedTotalAmount');
+                    const footer = document.getElementById('fixedFooter');
                     const payBtn = document.getElementById('btnGoPay');
+                    
+                    if (totalEl) totalEl.innerText = total.toFixed(3) + ' دك';
+                    
+                    if (footer) {
+                        if (total > 0) {
+                            footer.style.display = 'block';
+                        } else {
+                            footer.style.display = 'none';
+                        }
+                    }
+                    
                     if (payBtn) {
                         payBtn.disabled = total <= 0;
                     }
@@ -1294,7 +1393,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             return data.fines.find(f => f.ticketNo == ticketId);
                         });
                         
-                        const total = parseFloat(document.getElementById('selectedTotalAmount').innerText);
+                        const totalStr = document.getElementById('selectedTotalAmount').innerText;
+                        const total = parseFloat(totalStr.replace(/[^\d.]/g, ''));
                         
                         if (selectedTickets.length > 0) {
                             sessionStorage.setItem('paymentData', JSON.stringify({ 
