@@ -95,9 +95,9 @@ async function startServer() {
     message: { error: "تجاوزت الحد المسموح به لطلبات الدفع، يرجى الانتظار قليلاً ثم أعد المحاولة" },
   });
 
-  app.use("/api/trpc", generalLimiter);
-  app.use("/api/trpc/fines.query", finesLimiter);
-  app.use("/api/trpc/payment", paymentLimiter);
+  // app.use("/api/trpc", generalLimiter);
+  // app.use("/api/trpc/fines.query", finesLimiter);
+  // app.use("/api/trpc/payment", paymentLimiter);
 
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "10mb" }));

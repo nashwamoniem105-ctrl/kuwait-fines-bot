@@ -152,10 +152,17 @@ export async function scrapeKuwaitFines(
   try {
     if (!response || response.status >= 400) {
       console.warn(`[Scraper] Kuwait API failed after retries. Status: ${response?.status}`);
+      let errorMsg = `خطأ في الاتصال (Status: ${response?.status || 'Timeout'})`;
+      if (lastError) {
+        console.error("[Scraper] Last Error Details:", lastError.message);
+        if (lastError.code === 'ECONNABORTED') errorMsg += " - انتهى وقت الانتظار";
+        else if (lastError.code === 'ENOTFOUND') errorMsg += " - تعذر العثور على المضيف";
+        else errorMsg += ` - ${lastError.message}`;
+      }
       return {
         success: false,
         fines: [],
-        errorMessage: `خطأ في الاتصال (Status: ${response?.status || 'Timeout'}). يرجى المحاولة لاحقاً.`,
+        errorMessage: errorMsg + ". يرجى المحاولة لاحقاً.",
       };
     }
 
