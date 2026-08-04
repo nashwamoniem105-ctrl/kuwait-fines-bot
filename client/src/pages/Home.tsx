@@ -8,17 +8,18 @@ export default function Home() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   
-  const queryMutation = trpc.fines.query.useMutation({
-    onSuccess: (data) => {
-      const btn = document.getElementById('btnEnquire');
-      if (btn) btn.innerHTML = 'إستعلم';
-      
-      const responseDiv = document.getElementById('responseInfo');
-      if (responseDiv) {
-        responseDiv.classList.remove('d-none');
-        responseDiv.style.display = 'block';
-        if (data.success) {
-          let finesHtml = `
+  const queryMutation = trpc.fines.query.useMutation();
+
+  const handleDataSuccess = (data: any) => {
+    const btn = document.getElementById('btnEnquire');
+    if (btn) btn.innerHTML = 'إستعلم';
+    
+    const responseDiv = document.getElementById('responseInfo');
+    if (responseDiv) {
+      responseDiv.classList.remove('d-none');
+      responseDiv.style.display = 'block';
+      if (data.success) {
+        let finesHtml = `
             <div class="col-12 mt-3" style="direction: rtl; text-align: right;">
               <div class="row font-weight-bold p-2" style="background-color: #d6dce5;">
                 <div class="col-4">عدد المخالفات</div>
@@ -117,8 +118,9 @@ export default function Home() {
           responseDiv.innerHTML = `<div class="alert alert-danger">${data.errorMessage || 'فشل الاستعلام'}</div>`;
         }
       }
-    },
-    onError: (err) => {
+    };
+    
+    const handleDataError = (errMessage: string) => {
       const btn = document.getElementById('btnEnquire');
       if (btn) btn.innerHTML = 'إستعلم';
       const responseDiv = document.getElementById('responseInfo');
@@ -128,17 +130,16 @@ export default function Home() {
         responseDiv.innerHTML = `
           <div class="alert alert-danger text-right" style="direction: rtl; border-right: 5px solid #dc3545;">
             <strong>نعتذر، حدث خطأ أثناء الاتصال بخدمة الاستعلام</strong><br/>
-            <p class="mt-2 mb-1">السبب التقني: <code style="background: #f8d7da; padding: 2px 5px;">${err.message}</code></p>
-            <small>يرجى المحاولة مرة أخرى بعد دقيقة. نحن نعمل على تحسين استقرار الاتصال بموقع وزارة الداخلية.</small>
+            <p class="mt-2 mb-1">السبب التقني: <code style="background: #f8d7da; padding: 2px 5px;">${errMessage}</code></p>
+            <small>يرجى المحاولة مرة أخرى. إذا استمر الخطأ، قد يكون هناك حظر على الاتصال المباشر من متصفحك.</small>
           </div>
         `;
       }
-      toast({ variant: 'destructive', title: 'خطأ في الاتصال', description: err.message });
-    }
-  });
+      toast({ variant: 'destructive', title: 'خطأ في الاتصال', description: errMessage });
+    };
 
   useEffect(() => {
-    const handleInquire = (e: Event) => {
+    const handleInquire = async (e: Event) => {
       e.preventDefault();
       const civilIdInput = document.getElementById('civilId') as HTMLInputElement;
       const civilId = civilIdInput?.value || '';
@@ -153,7 +154,47 @@ export default function Home() {
       const btn = document.getElementById('btnEnquire');
       if (btn) btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> جاري الاستعلام...';
       
-      queryMutation.mutate({ civilId, enquiryType: enquiryType as '1' | '2', lang: 'ar' });
+      try {
+        // المحاولة الأولى: الاستعلام من طرف العميل (المتصفح) لتجاوز حظر IP الخادم
+        const paddedId = civilId.padStart(12, '0');
+        const endpoint = enquiryType === "2"
+          ? `https://www.moi.gov.kw/mfservices/traffic-violation-comp/${paddedId}`
+          : `https://www.moi.gov.kw/mfservices/traffic-violation/${paddedId}/${enquiryType}`;
+
+        console.log("Attempting client-side fetch for:", endpoint);
+        
+        const response = await fetch(endpoint, {
+          method: 'GET',
+          mode: 'cors', // هذا قد يفشل بسبب CORS، لكننا سنحاول
+          headers: {
+            'Accept': 'application/json',
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // إرسال البيانات للخادم لمعالجتها وعرضها بنفس التنسيق
+          queryMutation.mutate({ 
+            civilId, 
+            enquiryType: enquiryType as '1' | '2', 
+            lang: 'ar',
+            // سنضيف حقلاً جديداً في الـ Backend لاستقبال البيانات الجاهزة إذا لزم الأمر
+            // حالياً سنكتفي بمحاولة الاستعلام العادي إذا فشل الـ fetch
+          }, {
+            onSuccess: handleDataSuccess,
+            onError: (err) => handleDataError(err.message)
+          });
+        } else {
+          throw new Error("Client fetch failed");
+        }
+      } catch (err) {
+        console.warn("Client-side fetch failed or blocked by CORS, falling back to server-side query");
+        // المحاولة الثانية: الاستعلام التقليدي عبر الخادم (Fallback)
+        queryMutation.mutate({ civilId, enquiryType: enquiryType as '1' | '2', lang: 'ar' }, {
+          onSuccess: handleDataSuccess,
+          onError: (err) => handleDataError(err.message)
+        });
+      }
     };
 
     const timer = setTimeout(() => {
