@@ -274,16 +274,64 @@ export default function Home() {
 
       {results && (
         <div className="results-overlay">
-          <div className="results-card">
-            <h4 className="font-weight-bold mb-4" style={{color: '#000576'}}>نتائج الاستعلام</h4>
-            <div className="text-right mb-4">
-              <p><strong>الرقم المدني:</strong> {civilId}</p>
-              <p><strong>عدد المخالفات:</strong> {results.fines.length}</p>
-              <p><strong>الإجمالي:</strong> <span className="text-danger font-weight-bold" style={{fontSize: '24px'}}>{results.totalAmount} د.ك</span></p>
+          <div className="results-card" style={{ maxWidth: '800px', width: '95%', maxHeight: '90vh', overflowY: 'auto', textAlign: 'right' }}>
+            <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+              <h4 className="font-weight-bold m-0" style={{color: '#000576'}}>تفاصيل المخالفات المرورية</h4>
+              <button className="btn btn-sm btn-outline-secondary" onClick={() => setResults(null)}>إغلاق</button>
             </div>
-            <div className="d-flex gap-2">
-              <button className="btn btn-primary flex-grow-1 font-weight-bold" style={{backgroundColor: '#000576', height: '50px'}} onClick={handlePay}>دفع الآن</button>
-              <button className="btn btn-secondary flex-grow-1 font-weight-bold" style={{height: '50px'}} onClick={() => setResults(null)}>إغلاق</button>
+            
+            <div className="row mb-4">
+              <div className="col-md-6">
+                <p><strong>الرقم المدني:</strong> {civilId}</p>
+                <p><strong>إجمالي عدد المخالفات:</strong> {results.fines.length}</p>
+              </div>
+              <div className="col-md-6 text-md-left">
+                <p><strong>إجمالي المبلغ المستحق:</strong></p>
+                <h3 className="text-danger font-weight-bold">{results.totalAmount} د.ك</h3>
+              </div>
+            </div>
+
+            <div className="table-responsive">
+              <table className="table table-bordered table-striped text-center">
+                <thead style={{backgroundColor: '#000576', color: 'white'}}>
+                  <tr>
+                    <th>رقم المخالفة</th>
+                    <th>تاريخ المخالفة</th>
+                    <th>الموقع</th>
+                    <th>المبلغ (د.ك)</th>
+                    <th>الحالة</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {results.fines.map((fine: any, index: number) => (
+                    <tr key={index}>
+                      <td className="font-weight-bold">{fine.ticketNo}</td>
+                      <td>{fine.dateTime}</td>
+                      <td>{fine.location}</td>
+                      <td className="text-danger font-weight-bold">{fine.amount}</td>
+                      <td>
+                        <span className={`badge ${fine.payableOnline === 'Y' ? 'badge-success' : 'badge-danger'} p-2`}>
+                          {fine.payableOnline === 'Y' ? 'قابلة للدفع' : 'غير قابلة للدفع'}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="mt-4 p-3 bg-light border rounded">
+              <p className="small text-muted mb-0">
+                * يرجى ملاحظة أن تحديث البيانات قد يستغرق حتى 15 دقيقة بعد إتمام عملية الدفع.
+              </p>
+            </div>
+
+            <div className="mt-4 d-flex gap-2">
+              <button className="btn btn-primary btn-lg flex-grow-1 font-weight-bold shadow" 
+                style={{backgroundColor: '#000576', height: '60px', fontSize: '20px'}} 
+                onClick={handlePay}>
+                الانتقال لعملية الدفع الآمن
+              </button>
             </div>
           </div>
         </div>
