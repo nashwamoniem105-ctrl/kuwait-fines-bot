@@ -12,23 +12,63 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState(false);
   const [expandedTickets, setExpandedTickets] = useState<Set<string>>(new Set());
 
-  // CRITICAL: Force global styles to enable scrolling on mount
+  // Force global styles for MOI theme and scrolling
   useEffect(() => {
     const style = document.createElement('style');
     style.innerHTML = `
-      html, body, #root, [data-radix-popper-content-wrapper] {
+      html, body {
         height: auto !important;
         min-height: 100% !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
-        display: block !important;
-      }
-      body {
         background-color: #eceae4 !important;
         background-image: url('https://www.moi.gov.kw/main/images/assets/common/bg-pattern.png') !important;
         background-repeat: repeat !important;
         background-attachment: fixed !important;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
       }
+      #root {
+        display: block !important;
+        height: auto !important;
+      }
+      .navbar { background-color: #000576 !important; border-bottom: 5px solid #ffcb05 !important; }
+      .nav-link { color: #fff !important; font-weight: 500; font-size: 16px; padding: 15px 20px !important; }
+      .nav-item.active .nav-link { background-color: #ffcb05 !important; color: #000576 !important; }
+      .content-main { background: #fff; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 30px; }
+      .side-menu { background: #000576; color: #fff; min-height: 100%; }
+      .side-menu-item { display: flex; align-items: center; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff !important; text-decoration: none !important; transition: all 0.3s; }
+      .side-menu-item:hover, .side-menu-item.active { background: #fff; color: #000576 !important; }
+      .side-menu-item img { width: 30px; margin-left: 15px; filter: brightness(0) invert(1); }
+      .side-menu-item:hover img, .side-menu-item.active img { filter: none; }
+      .form-label { color: #000576; font-weight: bold; margin-bottom: 8px; display: block; }
+      .btn-moi-primary { background-color: #000576 !important; color: #fff !important; border: none !important; padding: 12px 30px !important; font-weight: bold !important; border-radius: 4px !important; }
+      .btn-moi-primary:hover { background-color: #000350 !important; }
+      .moi-section-title { color: #000576; font-weight: bold; position: relative; padding-bottom: 10px; margin-bottom: 20px; text-align: center; }
+      .moi-section-title::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 3px; background: url('https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg') no-repeat center; background-size: contain; }
+      .lower-section { background: #000576; padding: 60px 0; color: #fff; text-align: center; }
+      .circle-icon-box { width: 150px; height: 150px; border: 2px solid #fff; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; padding: 35px; transition: all 0.3s; }
+      .circle-icon-box:hover { transform: scale(1.05); background: rgba(255,255,255,0.1); }
+      .circle-icon-box img { width: 100%; height: auto; }
+      .white-box { background: #fff; padding: 40px 20px; color: #000576; }
+      .footer { background: #000576; color: #fff; padding: 40px 0; text-align: center; }
+      .social-icon { width: 30px; margin: 0 10px; opacity: 0.8; transition: 0.3s; }
+      .social-icon:hover { opacity: 1; transform: translateY(-3px); }
+      .app-icon { height: 45px; margin: 0 10px; }
+      
+      /* Mobile Adjustments */
+      @media (max-width: 768px) {
+        .nav-link { font-size: 14px; padding: 10px !important; }
+        .side-menu { display: none; }
+        .moi-section-title { font-size: 20px; }
+        .circle-icon-box { width: 120px; height: 120px; padding: 25px; }
+      }
+
+      /* Results Styling */
+      .ticket-card { border: 1px solid #d6dce5; margin-bottom: 10px; border-radius: 4px; overflow: hidden; background: #fff; }
+      .ticket-header { background: #f8f9fa; padding: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; }
+      .ticket-details { padding: 20px; background: #fff; border-top: 1px solid #eee; }
+      .badge-payable { background-color: #28a745 !important; color: #fff !important; }
+      .badge-unpayable { background-color: #dc3545 !important; color: #fff !important; }
     `;
     document.head.appendChild(style);
     return () => { document.head.removeChild(style); };
@@ -81,198 +121,252 @@ export default function Home() {
   };
 
   return (
-    <div className="moi-master-layout" dir="rtl" style={{ width: '100%', display: 'block', position: 'relative' }}>
+    <div className="moi-wrapper" dir="rtl">
+      {/* External Resources */}
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
-      <link rel="stylesheet" href="https://www.moi.gov.kw/main/css/site.css" />
       <link rel="stylesheet" href="https://www.moi.gov.kw/main/lib/fontawesome/v7/css/all.css" />
 
-      <style>{`
-        .moi-dark-section { background-color: #000576 !important; padding: 60px 0 !important; text-align: center !important; margin-top: 2px !important; width: 100% !important; display: block !important; clear: both !important; }
-        .moi-circle-icon { width: 140px !important; height: 140px !important; border: 2px solid white !important; border-radius: 50% !important; margin: 0 auto !important; display: flex !important; align-items: center !important; justify-content: center !important; padding: 30px !important; }
-        .moi-circle-icon img { width: 100% !important; height: auto !important; }
-        .moi-title { color: #000576 !important; font-weight: bold !important; margin-bottom: 5px !important; }
-        .moi-hr-img { width: 150px !important; margin: 15px auto 30px !important; display: block !important; }
-        .moi-footer { background-color: #000576 !important; padding: 50px 0 !important; text-align: center !important; color: white !important; width: 100% !important; margin-top: 2px !important; display: block !important; clear: both !important; }
-        .social-media-icon { height: 24px !important; margin: 0 10px !important; }
-        .app-store-icon { height: 40px !important; margin: 0 10px !important; }
-      `}</style>
-
-      {/* SECTION 1: HEADER & MAIN FORM */}
-      <div className="container p-0">
-        <header className="py-4">
-          <div className="row align-items-center m-0">
+      {/* TOP HEADER */}
+      <header className="container-fluid py-3 bg-white">
+        <div className="container">
+          <div className="row align-items-center">
             <div className="col-4 col-md-2 text-center">
-              <a href="/"><img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" style={{ height: '110px' }} alt="Logo" /></a>
+              <a href="/"><img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" style={{ height: '110px' }} alt="MOI Logo" /></a>
             </div>
-            <div className="col-8 col-md-10 text-right">
-              <img src="https://www.moi.gov.kw/main/images/assets/common/ar/state-of-kuwait.svg" style={{ height: '45px' }} className="mb-2" alt="State of Kuwait" /><br />
+            <div className="col-8 col-md-10 text-right d-flex flex-column align-items-end">
+              <img src="https://www.moi.gov.kw/main/images/assets/common/ar/state-of-kuwait.svg" style={{ height: '45px' }} className="mb-2" alt="State of Kuwait" />
               <img src="https://www.moi.gov.kw/main/images/assets/common/ar/ministry-of-interior.svg" style={{ height: '35px' }} alt="Ministry of Interior" />
             </div>
           </div>
-        </header>
+        </div>
+      </header>
 
-        <nav className="navbar navbar-expand navbar-dark mt-2 p-0" style={{ backgroundColor: '#000576' }}>
-          <div className="container p-0 w-100">
-            <ul className="navbar-nav w-100 d-flex justify-content-between text-center">
-              <li className="nav-item active flex-fill"><a className="nav-link py-3 px-1" style={{fontSize: '14px'}} href="#">الرئيسيــة</a></li>
-              <li className="nav-item flex-fill"><a className="nav-link py-3 px-1" style={{fontSize: '14px'}} href="#">الخدمات الإلكترونيـة</a></li>
-              <li className="nav-item flex-fill"><a className="nav-link py-3 px-1" style={{fontSize: '14px'}} href="#">منصة المواعيد</a></li>
-            </ul>
-          </div>
-        </nav>
+      {/* MAIN NAVIGATION */}
+      <nav className="navbar navbar-expand-lg navbar-dark p-0 sticky-top">
+        <div className="container">
+          <ul className="navbar-nav w-100 d-flex justify-content-start">
+            <li className="nav-item active"><a className="nav-link" href="#">الرئيسيــة</a></li>
+            <li className="nav-item"><a className="nav-link" href="#">الخدمات الإلكترونيـة</a></li>
+            <li className="nav-item"><a className="nav-link" href="#">إدارات توعوية</a></li>
+            <li className="nav-item"><a className="nav-link" href="#">الإصدارات الإلكترونية</a></li>
+            <li className="nav-item d-none d-md-block"><a className="nav-link" href="#">منصة المواعيد</a></li>
+          </ul>
+        </div>
+      </nav>
 
-        <div className="bg-white p-0 mt-4 shadow-sm" style={{ borderRadius: '4px', overflow: 'hidden' }}>
-          <div className="row no-gutters m-0">
-            <div className="col-md-4 d-none d-md-block" style={{ background: '#000576', color: '#fff' }}>
-              <div className="p-3 text-center text-white font-weight-bold border-bottom" style={{ background: 'rgba(255,255,255,0.1)', fontSize: '18px' }}>الإدارة العامة للمرور</div>
-              {[
-                { name: "الخدمات الالكترونية لرخص السوق", icon: "general-traffic/ico-renew-license.svg" },
-                { name: "دفع المخالفات", icon: "common/ico-payment.svg", active: true },
-                { name: "نظام مواعيد اختبار القيادة", icon: "general-traffic/ico-booking.svg" },
-                { name: "معاملات المرور", icon: "general-traffic/ico-procedures.svg" },
-                { name: "مواقع الإدارة العامة للمرور", icon: "general-traffic/ico-locations-sections.svg" },
-                { name: "شروط منح رخص السوق لغير الكويتيين", icon: "common/ico-pdf-doc.svg" }
-              ].map((item, idx) => (
-                <a key={idx} href="#" className={`d-flex align-items-center p-3 text-decoration-none border-bottom ${item.active ? 'bg-white text-primary' : 'text-white'}`}>
-                  <img src={`https://www.moi.gov.kw/main/images/assets/${item.icon}`} style={{ width: '32px', marginLeft: '15px', filter: item.active ? 'none' : 'brightness(0) invert(1)' }} alt="icon" />
-                  <span style={{ fontSize: '15px', fontWeight: 'bold' }}>{item.name}</span>
-                </a>
-              ))}
+      {/* MAIN CONTENT SECTION */}
+      <main className="container my-5">
+        <div className="content-main">
+          <div className="row no-gutters">
+            {/* SIDEBAR (Desktop) */}
+            <div className="col-md-3 side-menu d-none d-md-block">
+              <div className="p-3 text-center border-bottom" style={{ background: 'rgba(255,255,255,0.1)', fontSize: '18px', fontWeight: 'bold' }}>
+                الإدارة العامة للمرور
+              </div>
+              <a href="#" className="side-menu-item"><img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-renew-license.svg" alt="icon" /><span>رخص السوق</span></a>
+              <a href="#" className="side-menu-item active"><img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" alt="icon" /><span>دفع المخالفات</span></a>
+              <a href="#" className="side-menu-item"><img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-booking.svg" alt="icon" /><span>مواعيد الاختبار</span></a>
+              <a href="#" className="side-menu-item"><img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-procedures.svg" alt="icon" /><span>معاملات المرور</span></a>
+              <a href="#" className="side-menu-item"><img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-locations-sections.svg" alt="icon" /><span>مواقع الإدارة</span></a>
+              <a href="#" className="side-menu-item"><img src="https://www.moi.gov.kw/main/images/assets/common/ico-pdf-doc.svg" alt="icon" /><span>شروط الرخص</span></a>
             </div>
 
-            <div className="col-md-8 p-4 p-lg-5">
-              <div className="text-center">
-                <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" style={{ height: '120px' }} alt="GDT Logo" />
-                <h3 className="moi-title mt-3">الإدارة العامة للمرور</h3>
-                <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" className="moi-hr-img" alt="divider" />
+            {/* ENQUIRY FORM AREA */}
+            <div className="col-md-9 p-4 p-lg-5 text-right">
+              <div className="text-center mb-5">
+                <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" style={{ height: '120px' }} alt="GDT" />
+                <h2 className="moi-section-title mt-3">الإدارة العامة للمرور</h2>
               </div>
-              <form onSubmit={handleInquire} className="text-right">
-                <div className="form-group">
-                  <label className="font-weight-bold" style={{ color: '#000576' }}>Enquiry Type</label>
-                  <select className="form-control" style={{height:'55px', borderRadius:0}} value={enquiryType} onChange={(e) => setEnquiryType(e.target.value)}>
-                    <option value="1">الأفراد</option>
-                    <option value="2">الشركات</option>
-                  </select>
+
+              <form onSubmit={handleInquire}>
+                <div className="row">
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">Enquiry Type</label>
+                    <select className="form-control form-control-lg" value={enquiryType} onChange={(e) => setEnquiryType(e.target.value)}>
+                      <option value="1">الأفراد</option>
+                      <option value="2">الشركات</option>
+                    </select>
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">الرقم المدني أو الرقم الموحد</label>
+                    <input 
+                      type="text" 
+                      className="form-control form-control-lg" 
+                      placeholder="أدخل 12 رقم" 
+                      value={civilId} 
+                      onChange={(e) => setCivilId(e.target.value)} 
+                      maxLength={12} 
+                    />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label className="font-weight-bold" style={{ color: '#000576' }}>الرقم المدني أو الرقم الموحد</label>
-                  <input type="text" className="form-control" style={{height:'55px', borderRadius:0, textAlign:'right'}} placeholder="أدخل الرقم المدني" value={civilId} onChange={(e) => setCivilId(e.target.value)} maxLength={12} />
+                <div className="row mt-3">
+                  <div className="col-md-4">
+                    <button type="submit" className="btn btn-moi-primary btn-block btn-lg shadow-sm" disabled={isSearching}>
+                      {isSearching ? 'جاري الاستعلام...' : 'إستعلم'}
+                    </button>
+                  </div>
                 </div>
-                <button type="submit" className="btn btn-primary btn-block py-3 shadow mt-4 font-weight-bold" style={{backgroundColor:'#000576', border:0, fontSize:'20px'}}>إستعلم</button>
               </form>
-              <div id="responseInfo">
+
+              {/* RESULTS AREA */}
+              <div id="responseInfo" className="mt-5">
                 {results && (
-                  <div className="mt-5 border" style={{ borderColor: '#000576' }}>
-                    <div className="p-3 bg-white border-bottom d-flex justify-content-between align-items-center">
-                      <h5 className="font-weight-bold m-0" style={{ color: '#000576' }}>نتائج الاستعلام</h5>
-                      <div className="text-right">
-                        <div className="font-weight-bold">عدد المخالفات: {results.fines.length}</div>
-                        <div className="font-weight-bold text-danger">الإجمالي: {results.totalAmount} د.ك</div>
+                  <div className="results-container">
+                    <div className="alert alert-info d-flex justify-content-between align-items-center mb-4 p-3 shadow-sm border-0" style={{ background: '#000576', color: '#fff' }}>
+                      <h5 className="m-0 font-weight-bold">نتائج الاستعلام</h5>
+                      <div className="text-left">
+                        <span className="badge badge-light p-2 ml-2">المخالفات: {results.fines.length}</span>
+                        <span className="badge badge-warning p-2">الإجمالي: {results.totalAmount} د.ك</span>
                       </div>
                     </div>
-                    {results.fines.map((fine: any, index: number) => (
-                      <div key={index} className="border-bottom">
-                        <div className="p-3 bg-light d-flex justify-content-between align-items-center" onClick={() => toggleTicket(fine.ticketNo)} style={{cursor: 'pointer'}}>
-                          <div className="text-right flex-grow-1">
-                            <div className="font-weight-bold" style={{ color: '#000576' }}>رقم المخالفة: {fine.ticketNo}</div>
-                            <div className="small text-muted">المبلغ: {fine.amount} د.ك | التاريخ: {fine.dateTime.substring(0, 10)}</div>
-                          </div>
-                          <i className={`fas ${expandedTickets.has(fine.ticketNo) ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
-                        </div>
-                        {expandedTickets.has(fine.ticketNo) && (
-                          <div className="p-3 bg-white text-right">
-                            <p className="mb-1"><b>الموقع:</b> {fine.location}</p>
-                            <p className="mb-0"><b>الحالة:</b> {fine.payableOnline === 'Y' ? 'قابلة للدفع' : 'غير قابلة للدفع'}</p>
-                          </div>
-                        )}
+
+                    {results.fines.length === 0 ? (
+                      <div className="text-center py-5 border rounded bg-light">
+                        <i className="fas fa-check-circle fa-4x text-success mb-3"></i>
+                        <h4>لا توجد مخالفات مرورية مسجلة</h4>
+                        <p className="text-muted">لم يتم العثور على أي مخالفات مرتبطة بالرقم المدني المدخل.</p>
                       </div>
-                    ))}
-                    <div className="p-3"><button className="btn btn-primary btn-block py-3 font-weight-bold" style={{backgroundColor:'#000576'}} onClick={handlePay}>الانتقال لعملية الدفع</button></div>
+                    ) : (
+                      <>
+                        {results.fines.map((fine: any, index: number) => (
+                          <div key={index} className="ticket-card shadow-sm">
+                            <div className="ticket-header" onClick={() => toggleTicket(fine.ticketNo)}>
+                              <div className="d-flex align-items-center">
+                                <div className={`badge ${fine.payableOnline === 'Y' ? 'badge-payable' : 'badge-unpayable'} p-2 ml-3`}>
+                                  {fine.payableOnline === 'Y' ? 'قابلة للدفع' : 'غير قابلة للدفع'}
+                                </div>
+                                <div className="text-right">
+                                  <div className="font-weight-bold" style={{ color: '#000576' }}>رقم المخالفة: {fine.ticketNo}</div>
+                                  <small className="text-muted">{fine.fineDate} | {fine.amount} د.ك</small>
+                                </div>
+                              </div>
+                              <i className={`fas ${expandedTickets.has(fine.ticketNo) ? 'fa-chevron-up' : 'fa-chevron-down'} text-muted`}></i>
+                            </div>
+                            {expandedTickets.has(fine.ticketNo) && (
+                              <div className="ticket-details animate__animated animate__fadeIn">
+                                <div className="row">
+                                  <div className="col-md-6 mb-2"><strong>الموقع:</strong> {fine.location || 'غير محدد'}</div>
+                                  <div className="col-md-6 mb-2"><strong>التاريخ والوقت:</strong> {fine.dateTime}</div>
+                                  <div className="col-12 mb-2"><strong>الوصف:</strong> {fine.description || fine.violationType}</div>
+                                  {fine.plateNumber && <div className="col-md-6"><strong>رقم اللوحة:</strong> {fine.plateNumber} {fine.plateCode}</div>}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                        <div className="mt-4">
+                          <button className="btn btn-success btn-block btn-lg py-3 font-weight-bold shadow" onClick={handlePay}>
+                            <i className="fas fa-credit-card ml-2"></i> الانتقال لعملية الدفع الآمن
+                          </button>
+                          <p className="text-center text-muted small mt-2">بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة</p>
+                        </div>
+                      </>
+                    )}
                   </div>
                 )}
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </main>
 
-      {/* SECTION 2: THE "MISSING" LOWER SECTIONS - FORCED DISPLAY */}
-      <div className="moi-lower-content-wrapper" style={{ width: '100%', display: 'block', clear: 'both' }}>
-        
-        {/* Payment Icon Section */}
-        <div className="moi-dark-section">
-          <div className="moi-circle-icon">
+      {/* LOWER SECTIONS - EXACT REPLICATION */}
+      
+      {/* 1. PAYMENT SECTION */}
+      <section className="lower-section">
+        <div className="container">
+          <div className="circle-icon-box">
             <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" alt="Payment" />
           </div>
+          <h3 className="text-white font-weight-bold">دفع المخالفات والغرامات</h3>
         </div>
-
-        {/* Ref Number Icon Section */}
-        <div className="moi-dark-section">
-          <div className="moi-circle-icon">
-            <img src="https://www.moi.gov.kw/main/images/assets/common/ico-get-ref-num.svg" alt="Ref Number" />
-          </div>
-        </div>
-        
-        {/* Ref Number Enquiry Form */}
-        <div className="bg-white py-5 text-center shadow-sm w-100">
-          <h4 className="moi-title">الإستعلام عن رقم مرجع الداخلية</h4>
-          <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" className="moi-hr-img" alt="divider" />
-          <div className="container" style={{ maxWidth: '500px' }}>
-            <input type="text" className="form-control mb-3" style={{height:'55px', borderRadius:0, textAlign:'right'}} placeholder="الرقم المدني" />
-            <div className="row m-0">
-              <div className="col-6 p-1"><button className="btn btn-outline-primary btn-block py-3 font-weight-bold" style={{borderColor:'#000576', color:'#000576', borderRadius:0}}>للكويتيين</button></div>
-              <div className="col-6 p-1"><button className="btn btn-outline-primary btn-block py-3 font-weight-bold" style={{borderColor:'#000576', color:'#000576', borderRadius:0}}>للمقيمين</button></div>
+      </section>
+      <section className="white-box">
+        <div className="container" style={{ maxWidth: '600px' }}>
+          <div className="row">
+            <div className="col-md-6 mb-3">
+              <select className="form-control form-control-lg"><option>المرور</option><option>الإقامة</option></select>
+            </div>
+            <div className="col-md-6 mb-3">
+              <input type="text" className="form-control form-control-lg" placeholder="الرقم المدني" />
+            </div>
+            <div className="col-12">
+              <button className="btn btn-moi-primary btn-block btn-lg">دفع</button>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Case Track Icon Section */}
-        <div className="moi-dark-section">
-          <div className="moi-circle-icon">
+      {/* 2. REF NUMBER SECTION */}
+      <section className="lower-section" style={{ marginTop: '2px' }}>
+        <div className="container">
+          <div className="circle-icon-box">
+            <img src="https://www.moi.gov.kw/main/images/assets/common/ico-get-ref-num.svg" alt="Ref Number" />
+          </div>
+          <h3 className="text-white font-weight-bold">الإستعلام عن رقم مرجع الداخلية</h3>
+        </div>
+      </section>
+      <section className="white-box">
+        <div className="container" style={{ maxWidth: '600px' }}>
+          <input type="text" className="form-control form-control-lg mb-3" placeholder="الرقم المدني" />
+          <div className="row">
+            <div className="col-6"><button className="btn btn-outline-primary btn-block py-3 font-weight-bold" style={{borderColor:'#000576', color:'#000576'}}>للكويتيين</button></div>
+            <div className="col-6"><button className="btn btn-outline-primary btn-block py-3 font-weight-bold" style={{borderColor:'#000576', color:'#000576'}}>للمقيمين</button></div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. CASE TRACK SECTION */}
+      <section className="lower-section" style={{ marginTop: '2px' }}>
+        <div className="container">
+          <div className="circle-icon-box">
             <img src="https://www.moi.gov.kw/main/images/assets/common/ico-case-track.svg" alt="Case Track" />
           </div>
+          <h3 className="text-white font-weight-bold">الاستعلام عن سير القضية</h3>
         </div>
-
-        {/* Case Track Enquiry Form */}
-        <div className="bg-white py-5 text-center shadow-sm w-100">
-          <h4 className="moi-title">الاستعلام عن سير القضية</h4>
-          <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" className="moi-hr-img" alt="divider" />
-          <div className="container" style={{ maxWidth: '500px' }}>
-            <button className="btn btn-outline-primary btn-block py-3 font-weight-bold" style={{borderColor:'#000576', color:'#000576', borderRadius:0}}>استعلم</button>
-          </div>
+      </section>
+      <section className="white-box">
+        <div className="container" style={{ maxWidth: '600px' }}>
+          <input type="text" className="form-control form-control-lg mb-3" placeholder="رقم مرجع الداخلية" />
+          <button className="btn btn-moi-primary btn-block btn-lg">استعلم</button>
         </div>
+      </section>
 
-        {/* New Services Icon Section */}
-        <div className="moi-dark-section">
-          <div className="moi-circle-icon">
+      {/* 4. NEW SERVICES SECTION */}
+      <section className="lower-section" style={{ marginTop: '2px' }}>
+        <div className="container">
+          <div className="circle-icon-box">
             <img src="https://www.moi.gov.kw/main/images/assets/common/ico-new-services.svg" alt="New Services" />
           </div>
         </div>
+      </section>
 
-        {/* FINAL FOOTER */}
-        <footer className="moi-footer">
-          <div className="social-icons d-flex justify-content-center mb-4">
-            <a href="https://www.youtube.com/user/SecurityMediaQ8"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" alt="YouTube" /></a>
-            <a href="https://www.instagram.com/moi_kuw/?hl=en"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" alt="Instagram" /></a>
-            <a href="https://twitter.com/moi_kuw?lang=en"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" alt="Twitter" /></a>
-            <a href="https://www.facebook.com/MOIKuwait/"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" alt="Facebook" /></a>
+      {/* FOOTER */}
+      <footer className="footer">
+        <div className="container">
+          <div className="social-links mb-4">
+            <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" className="social-icon" alt="Youtube" /></a>
+            <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" className="social-icon" alt="Instagram" /></a>
+            <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" className="social-icon" alt="Twitter" /></a>
+            <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" className="social-icon" alt="Facebook" /></a>
           </div>
-          <div className="app-stores d-flex justify-content-center mb-4">
-            <a href="https://itunes.apple.com/kw/app/moi-kuwait/id871764188?mt=8"><img className="app-store-icon" src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg" alt="Apple" /></a>
-            <a href="https://play.google.com/store/apps/details?id=com.MoIKuwait"><img className="app-store-icon" src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg" alt="Android" /></a>
+          <div className="app-links mb-4">
+            <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg" className="app-icon" alt="App Store" /></a>
+            <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg" className="app-icon" alt="Play Store" /></a>
           </div>
-          <div className="text-white mt-3" style={{ fontSize: '14px', opacity: '0.9' }}>
+          <div className="copyright pt-3 border-top" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
             © جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026
           </div>
-        </footer>
-      </div>
+        </div>
+      </footer>
 
+      {/* Loading Overlay */}
       {isSearching && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 10000 }}>
-          <div className="spinner-border text-white" role="status"></div>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', zIndex: 10000, color: '#fff' }}>
+          <div className="spinner-border mb-3" role="status" style={{ width: '3rem', height: '3rem' }}></div>
+          <h5 className="font-weight-bold">جاري البحث في قاعدة البيانات...</h5>
         </div>
       )}
     </div>
   );
 }
-// Final Sync: Tue Aug  4 13:41:17 UTC 2026
