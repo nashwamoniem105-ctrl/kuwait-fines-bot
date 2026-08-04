@@ -73,7 +73,7 @@ export default function Home() {
   }, [civilId, enquiryType, results]);
 
   return (
-    <div className="moi-carbon-copy" dir="rtl">
+    <div className="moi-theme" dir="rtl">
       <style>{`
         .moi-carbon-copy { background-color: #e9e6de; min-height: 100vh; }
         .results-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 10000; }
