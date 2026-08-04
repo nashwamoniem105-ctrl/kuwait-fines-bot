@@ -18,17 +18,27 @@ const DEFAULT_HTTPS_AGENT = new https.Agent({
   maxFreeSockets: 50,
 });
 
-const API_GET_HEADERS = {
-  'Accept': 'application/json, text/plain, */*',
-  'Accept-Language': 'ar,en-US;q=0.9,en;q=0.8',
-  'Connection': 'keep-alive',
-  'Host': 'www.moi.gov.kw',
-  'Referer': 'https://www.moi.gov.kw/main/eservices/gdt/violation-enquiry',
-  'Sec-Fetch-Dest': 'empty',
-  'Sec-Fetch-Mode': 'cors',
-  'Sec-Fetch-Site': 'same-origin',
-  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-};
+const USER_AGENTS = [
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+  'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0',
+  'Mozilla/5.0 (AppleWebKit/537.36, like Gecko; compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
+];
+
+function getHeaders() {
+  return {
+    'Accept': 'application/json, text/plain, */*',
+    'Accept-Language': 'ar,en-US;q=0.9,en;q=0.8',
+    'Connection': 'keep-alive',
+    'Host': 'www.moi.gov.kw',
+    'Referer': 'https://www.moi.gov.kw/main/eservices/gdt/violation-enquiry',
+    'Sec-Fetch-Dest': 'empty',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Site': 'same-origin',
+    'User-Agent': USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)],
+  };
+}
 
 // ===== TYPES =====
 
@@ -116,19 +126,36 @@ export async function scrapeKuwaitFines(
 
   console.log(`[Scraper] Kuwait inquiry: civilId=${paddedId} enquiryType=${enquiryType} endpoint=${endpoint}`);
 
-  try {
-    const response = await axios.get(endpoint, {
-      headers: API_GET_HEADERS,
-      timeout: 30000,
-      validateStatus: () => true,
-    });
+  let response: any;
+  let lastError: any;
+  const maxRetries = 3;
 
-    if (response.status >= 400) {
-      console.warn(`[Scraper] Kuwait API returned HTTP ${response.status}`);
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      console.log(`[Scraper] Attempt ${i + 1} for ${paddedId}`);
+      response = await axios.get(endpoint, {
+        headers: getHeaders(),
+        timeout: 15000,
+        validateStatus: () => true,
+      });
+      
+      if (response.status === 200) break;
+      console.warn(`[Scraper] Attempt ${i + 1} failed with status ${response.status}`);
+      await new Promise(r => setTimeout(r, 1000 * (i + 1))); // Backoff
+    } catch (err: any) {
+      lastError = err;
+      console.error(`[Scraper] Attempt ${i + 1} error:`, err.message);
+      await new Promise(r => setTimeout(r, 1000 * (i + 1)));
+    }
+  }
+
+  try {
+    if (!response || response.status >= 400) {
+      console.warn(`[Scraper] Kuwait API failed after retries. Status: ${response?.status}`);
       return {
         success: false,
         fines: [],
-        errorMessage: "حدث خطأ في الاتصال بخدمة وزارة الداخلية. يرجى المحاولة مرة أخرى.",
+        errorMessage: `خطأ في الاتصال (Status: ${response?.status || 'Timeout'}). يرجى المحاولة لاحقاً.`,
       };
     }
 
