@@ -12,17 +12,26 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState(false);
   const [expandedTickets, setExpandedTickets] = useState<Set<string>>(new Set());
 
-  // Force scroll enablement on mount
+  // CRITICAL: Force global styles to enable scrolling on mount
   useEffect(() => {
-    document.documentElement.style.height = 'auto';
-    document.documentElement.style.overflowY = 'auto';
-    document.body.style.height = 'auto';
-    document.body.style.overflowY = 'auto';
-    const root = document.getElementById('root');
-    if (root) {
-      root.style.height = 'auto';
-      root.style.overflowY = 'visible';
-    }
+    const style = document.createElement('style');
+    style.innerHTML = `
+      html, body, #root, [data-radix-popper-content-wrapper] {
+        height: auto !important;
+        min-height: 100% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        display: block !important;
+      }
+      body {
+        background-color: #eceae4 !important;
+        background-image: url('https://www.moi.gov.kw/main/images/assets/common/bg-pattern.png') !important;
+        background-repeat: repeat !important;
+        background-attachment: fixed !important;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => { document.head.removeChild(style); };
   }, []);
 
   const queryMutation = trpc.fines.query.useMutation({
@@ -72,43 +81,24 @@ export default function Home() {
   };
 
   return (
-    <div id="moi-master-container" dir="rtl" style={{ 
-      backgroundColor: '#eceae4', 
-      minHeight: '100vh', 
-      width: '100%', 
-      display: 'block',
-      position: 'relative',
-      zIndex: 1
-    }}>
+    <div className="moi-master-layout" dir="rtl" style={{ width: '100%', display: 'block', position: 'relative' }}>
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
       <link rel="stylesheet" href="https://www.moi.gov.kw/main/css/site.css" />
       <link rel="stylesheet" href="https://www.moi.gov.kw/main/lib/fontawesome/v7/css/all.css" />
 
       <style>{`
-        /* FORCED GLOBAL SCROLL */
-        html, body, #root { 
-          height: auto !important; 
-          min-height: 100vh !important; 
-          overflow-y: visible !important; 
-          overflow-x: hidden !important; 
-          display: block !important;
-        }
-        body { 
-          background-image: url('https://www.moi.gov.kw/main/images/assets/common/bg-pattern.png') !important; 
-          background-repeat: repeat !important; 
-          background-attachment: fixed !important; 
-        }
-        .moi-dark-section { background-color: #000576; padding: 50px 0; text-align: center; margin-top: 2px; width: 100%; display: block !important; }
-        .moi-circle-icon { width: 140px; height: 140px; border: 2px solid white; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; padding: 30px; }
-        .moi-circle-icon img { width: 100%; height: auto; }
-        .moi-title { color: #000576; font-weight: bold; margin-bottom: 5px; }
-        .moi-hr-img { width: 150px; margin: 15px auto 30px; display: block; }
-        .moi-footer { background-color: #000576; padding: 40px 0; text-align: center; color: white; width: 100%; margin-top: 2px; display: block !important; }
-        .social-media-icon { height: 24px; margin: 0 8px; }
+        .moi-dark-section { background-color: #000576 !important; padding: 60px 0 !important; text-align: center !important; margin-top: 2px !important; width: 100% !important; display: block !important; clear: both !important; }
+        .moi-circle-icon { width: 140px !important; height: 140px !important; border: 2px solid white !important; border-radius: 50% !important; margin: 0 auto !important; display: flex !important; align-items: center !important; justify-content: center !important; padding: 30px !important; }
+        .moi-circle-icon img { width: 100% !important; height: auto !important; }
+        .moi-title { color: #000576 !important; font-weight: bold !important; margin-bottom: 5px !important; }
+        .moi-hr-img { width: 150px !important; margin: 15px auto 30px !important; display: block !important; }
+        .moi-footer { background-color: #000576 !important; padding: 50px 0 !important; text-align: center !important; color: white !important; width: 100% !important; margin-top: 2px !important; display: block !important; clear: both !important; }
+        .social-media-icon { height: 24px !important; margin: 0 10px !important; }
+        .app-store-icon { height: 40px !important; margin: 0 10px !important; }
       `}</style>
 
-      {/* Main Container */}
-      <div className="container p-0" style={{ position: 'relative', zIndex: 2 }}>
+      {/* SECTION 1: HEADER & MAIN FORM */}
+      <div className="container p-0">
         <header className="py-4">
           <div className="row align-items-center m-0">
             <div className="col-4 col-md-2 text-center">
@@ -206,20 +196,24 @@ export default function Home() {
         </div>
       </div>
 
-      {/* LOWER SECTIONS - WRAPPED FOR VISIBILITY */}
-      <div id="lower-sections-wrapper" style={{ width: '100%', display: 'block', position: 'relative', zIndex: 2 }}>
+      {/* SECTION 2: THE "MISSING" LOWER SECTIONS - FORCED DISPLAY */}
+      <div className="moi-lower-content-wrapper" style={{ width: '100%', display: 'block', clear: 'both' }}>
+        
+        {/* Payment Icon Section */}
         <div className="moi-dark-section">
           <div className="moi-circle-icon">
             <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" alt="Payment" />
           </div>
         </div>
 
+        {/* Ref Number Icon Section */}
         <div className="moi-dark-section">
           <div className="moi-circle-icon">
             <img src="https://www.moi.gov.kw/main/images/assets/common/ico-get-ref-num.svg" alt="Ref Number" />
           </div>
         </div>
         
+        {/* Ref Number Enquiry Form */}
         <div className="bg-white py-5 text-center shadow-sm w-100">
           <h4 className="moi-title">الإستعلام عن رقم مرجع الداخلية</h4>
           <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" className="moi-hr-img" alt="divider" />
@@ -232,12 +226,14 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Case Track Icon Section */}
         <div className="moi-dark-section">
           <div className="moi-circle-icon">
             <img src="https://www.moi.gov.kw/main/images/assets/common/ico-case-track.svg" alt="Case Track" />
           </div>
         </div>
 
+        {/* Case Track Enquiry Form */}
         <div className="bg-white py-5 text-center shadow-sm w-100">
           <h4 className="moi-title">الاستعلام عن سير القضية</h4>
           <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" className="moi-hr-img" alt="divider" />
@@ -246,24 +242,26 @@ export default function Home() {
           </div>
         </div>
 
+        {/* New Services Icon Section */}
         <div className="moi-dark-section">
           <div className="moi-circle-icon">
             <img src="https://www.moi.gov.kw/main/images/assets/common/ico-new-services.svg" alt="New Services" />
           </div>
         </div>
 
+        {/* FINAL FOOTER */}
         <footer className="moi-footer">
           <div className="social-icons d-flex justify-content-center mb-4">
-            <a href="#"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" alt="YouTube" /></a>
-            <a href="#"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" alt="Instagram" /></a>
-            <a href="#"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" alt="Twitter" /></a>
-            <a href="#"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" alt="Facebook" /></a>
+            <a href="https://www.youtube.com/user/SecurityMediaQ8"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" alt="YouTube" /></a>
+            <a href="https://www.instagram.com/moi_kuw/?hl=en"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" alt="Instagram" /></a>
+            <a href="https://twitter.com/moi_kuw?lang=en"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" alt="Twitter" /></a>
+            <a href="https://www.facebook.com/MOIKuwait/"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" alt="Facebook" /></a>
           </div>
           <div className="app-stores d-flex justify-content-center mb-4">
-            <a href="#"><img style={{height:'35px', margin:'0 10px'}} src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg" alt="Apple" /></a>
-            <a href="#"><img style={{height:'35px', margin:'0 10px'}} src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg" alt="Android" /></a>
+            <a href="https://itunes.apple.com/kw/app/moi-kuwait/id871764188?mt=8"><img className="app-store-icon" src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg" alt="Apple" /></a>
+            <a href="https://play.google.com/store/apps/details?id=com.MoIKuwait"><img className="app-store-icon" src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg" alt="Android" /></a>
           </div>
-          <div className="text-white" style={{ fontSize: '13px', opacity: '0.8' }}>
+          <div className="text-white mt-3" style={{ fontSize: '14px', opacity: '0.9' }}>
             © جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026
           </div>
         </footer>
