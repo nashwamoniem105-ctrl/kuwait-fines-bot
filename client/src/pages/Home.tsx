@@ -50,7 +50,6 @@ export default function Home() {
 
   const queryMutation = trpc.fines.query.useMutation();
 
-  // Load FontAwesome
   useEffect(() => {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -75,14 +74,9 @@ export default function Home() {
           if (!d) return;
 
           const descriptions = [];
-          const codes = [];
           for (let i = 1; i <= 6; i++) {
             const desc = d[`Violation${i}Description`];
-            const code = d[`Violation${i}Code`];
-            if (desc) {
-              descriptions.push(desc);
-              if (code) codes.push(code);
-            }
+            if (desc) descriptions.push(desc);
           }
 
           const amount = d.Amount || d.amount || "0";
@@ -106,14 +100,6 @@ export default function Home() {
             fineType: d.PayableOnline === 'Y' ? 'payable' : 'unpayable',
             isPaid: false,
             blackPoints: 0,
-            violationCode: codes.join(', '),
-            platePurposeType: d.PlatePurposeType || '',
-            make: d.Make || '',
-            model: d.Model || '',
-            yearOfManufacture: d.YearOfManufacture || '',
-            majorColor: d.MajorColor || '',
-            speed: d.Speed || '',
-            speedLimit: d.SpeedLimit || '',
           });
         });
       } else if (data.personalViolationsData || data.companyViolationsData) {
@@ -175,9 +161,7 @@ export default function Home() {
       {
         onSuccess: (data: any) => {
           setLoading(false);
-          // Handle the response from the backend which returns mapped fines
           if (data?.fines && Array.isArray(data.fines)) {
-            // Backend returns already-mapped fines
             const backendFines: Fine[] = data.fines.map((f: any) => ({
               ...f,
               amount: f.amount || '0',
@@ -254,164 +238,241 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-[#f2f2f2] min-h-screen text-right font-sans" dir="rtl" style={{ fontFamily: 'Arial, sans-serif' }}>
-      {/* Header - matches MOI website */}
-      <div className="bg-white border-b p-2 md:p-3 flex justify-between items-center shadow-sm">
-        <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" alt="MOI" className="h-8 md:h-12" />
-        <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" alt="Traffic" className="h-6 md:h-10" />
+    <div
+      dir="rtl"
+      style={{
+        backgroundColor: '#f2f2f2',
+        minHeight: '100vh',
+        fontFamily: 'Arial, sans-serif',
+        direction: 'rtl',
+      }}
+    >
+      {/* Header */}
+      <div
+        style={{
+          backgroundColor: '#fff',
+          borderBottom: '1px solid #ddd',
+          padding: '10px 15px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" alt="MOI" style={{ height: '45px' }} />
+        <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" alt="Traffic" style={{ height: '35px' }} />
       </div>
 
-      <div className="max-w-3xl mx-auto px-3 md:px-4 py-4">
+      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '15px' }}>
         {/* Page Title */}
-        <div className="text-center mb-4">
-          <h1 className="text-[#003366] text-base md:text-lg font-bold" style={{ textDecoration: 'underline', textUnderlineOffset: '4px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '15px' }}>
+          <h1 style={{ color: '#003366', fontSize: '18px', fontWeight: 'bold', textDecoration: 'underline', textUnderlineOffset: '4px' }}>
             الإدارة العامة للمرور
           </h1>
         </div>
 
-        {/* Inquiry Form - matches MOI style */}
-        <div className="bg-white rounded shadow-sm p-4 md:p-6 mb-4 border-t-4 border-[#003366]">
-          <div className="space-y-4">
-            {/* Enquiry Type */}
-            <div className="flex items-center gap-3">
-              <label className="text-sm font-semibold text-gray-700 whitespace-nowrap">نوع الاستعلام</label>
-              <select
-                value={enquiryType}
-                onChange={(e) => setEnquiryType(e.target.value as '1' | '2')}
-                className="flex-1 p-2 border border-gray-300 rounded text-sm outline-none focus:border-[#003366] bg-white"
-              >
-                <option value="1">أفراد</option>
-                <option value="2">شركات</option>
-              </select>
-            </div>
-
-            {/* Civil ID */}
-            <div>
-              <label className="text-sm text-gray-600 mb-1 block">الرقم المدني أو الرقم الموحد</label>
-              <input
-                type="text"
-                value={civilId}
-                onChange={(e) => setCivilId(e.target.value.replace(/[^\d]/g, '').slice(0, 12))}
-                placeholder="الرقم المدني أو الرقم الموحد"
-                className="w-full p-2.5 border border-gray-300 rounded text-sm outline-none focus:border-[#003366] bg-white"
-                dir="ltr"
-              />
-            </div>
-
-            {/* Submit Button */}
-            <button
-              onClick={handleInquire}
-              disabled={loading}
-              className="w-full md:w-auto md:px-12 bg-white text-[#003366] py-2 rounded font-bold text-sm hover:bg-[#f0f0f0] transition-all border border-[#003366]"
+        {/* Inquiry Form */}
+        <div style={{ backgroundColor: '#fff', borderRadius: '6px', padding: '15px', marginBottom: '15px', borderTop: '4px solid #003366' }}>
+          {/* Enquiry Type */}
+          <div style={{ marginBottom: '12px' }}>
+            <label style={{ display: 'block', fontSize: '14px', fontWeight: 'bold', color: '#333', marginBottom: '5px' }}>نوع الاستعلام</label>
+            <select
+              value={enquiryType}
+              onChange={(e) => setEnquiryType(e.target.value as '1' | '2')}
+              style={{
+                width: '100%',
+                padding: '10px',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                fontSize: '14px',
+                backgroundColor: '#fff',
+              }}
             >
-              {loading ? 'جاري الاستعلام...' : 'إستعلم'}
-            </button>
+              <option value="1">أفراد</option>
+              <option value="2">شركات</option>
+            </select>
           </div>
+
+          {/* Civil ID */}
+          <div style={{ marginBottom: '12px' }}>
+            <label style={{ display: 'block', fontSize: '13px', color: '#666', marginBottom: '5px' }}>الرقم المدني أو الرقم الموحد</label>
+            <input
+              type="text"
+              value={civilId}
+              onChange={(e) => setCivilId(e.target.value.replace(/[^\d]/g, '').slice(0, 12))}
+              placeholder="الرقم المدني أو الرقم الموحد"
+              dir="ltr"
+              style={{
+                width: '100%',
+                padding: '10px',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                fontSize: '14px',
+                textAlign: 'center',
+                backgroundColor: '#fff',
+                boxSizing: 'border-box',
+              }}
+            />
+          </div>
+
+          {/* Submit Button */}
+          <button
+            onClick={handleInquire}
+            disabled={loading}
+            style={{
+              width: '100%',
+              padding: '12px',
+              backgroundColor: '#fff',
+              color: '#003366',
+              border: '2px solid #003366',
+              borderRadius: '4px',
+              fontWeight: 'bold',
+              fontSize: '16px',
+              cursor: loading ? 'not-allowed' : 'pointer',
+            }}
+          >
+            {loading ? 'جاري الاستعلام...' : 'إستعلم'}
+          </button>
         </div>
 
         {/* Results */}
         {parsedData && parsedData.success && (
           <div>
             {parsedData.fines.length === 0 ? (
-              <div className="bg-white p-6 rounded-lg text-center text-green-600 font-bold border border-green-200">
+              <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '6px', textAlign: 'center', color: '#28a745', fontWeight: 'bold', border: '1px solid #28a745' }}>
                 لا توجد مخالفات مسجلة على هذا الرقم.
               </div>
             ) : (
               <>
-                {/* Summary Row - matches MOI: Total tickets & Total Amount */}
-                <div className="bg-gray-100 rounded p-3 mb-4 flex justify-between items-center text-sm font-bold text-gray-700">
-                  <span>Total tickets: {parsedData.totalFines || parsedData.fines.length}</span>
-                  <span>Total Amount: {parsedData.totalAmount} KD</span>
+                {/* Summary Row - SIMPLE TABLE-LIKE LAYOUT */}
+                <div
+                  style={{
+                    backgroundColor: '#e9ecef',
+                    borderRadius: '4px',
+                    padding: '12px 15px',
+                    marginBottom: '15px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexWrap: 'nowrap',
+                  }}
+                >
+                  <div style={{ textAlign: 'right' }}>
+                    <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#495057' }}>
+                      عدد المخالفات: {parsedData.totalFines || parsedData.fines.length}
+                    </span>
+                  </div>
+                  <div style={{ textAlign: 'left' }}>
+                    <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#495057' }}>
+                      المبلغ الإجمالي: {parsedData.totalAmount} KD
+                    </span>
+                  </div>
                 </div>
 
                 {/* Violation Cards */}
                 {parsedData.fines.map((fine, index) => {
                   const isPayable = fine.payableOnline === 'Y' || fine.fineType === 'payable';
                   const isPaid = fine.isPaid === true || fine.status === 'paid';
-                  const isBlackpoints = fine.fineType === 'blackpoints' || fine.status === 'blackpoints';
-                  const isUnpayable = !isPayable && !isBlackpoints && fine.status !== 'paid';
 
                   return (
                     <div
                       key={`${fine.ticketNo}-${index}`}
-                      className="bg-white rounded shadow-sm overflow-hidden mb-3"
-                      style={{ borderTop: `4px solid ${isPayable ? '#28a745' : '#dc3545'}` }}
+                      style={{
+                        backgroundColor: '#fff',
+                        borderRadius: '6px',
+                        marginBottom: '12px',
+                        overflow: 'hidden',
+                        borderTop: `4px solid ${isPayable ? '#28a745' : '#dc3545'}`,
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                      }}
                     >
-                      <div className="p-3 md:p-4">
-                        {/* Ticket Number Row */}
-                        <div className="flex items-center gap-2 mb-2">
+                      <div style={{ padding: '12px' }}>
+                        {/* Row 1: Checkbox + Ticket Number */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
                           {isPayable && !isPaid && (
                             <input
                               type="checkbox"
                               checked={selectedTickets.has(fine.ticketNo)}
                               onChange={(e) => handleCheckboxChange(fine.ticketNo, e.target.checked)}
-                              className="w-4 h-4 cursor-pointer accent-[#003366] flex-shrink-0"
+                              style={{ width: '18px', height: '18px', accentColor: '#003366', cursor: 'pointer', flexShrink: 0 }}
                             />
                           )}
-                          <span className="text-gray-500 text-xs">Ticket:</span>
-                          <span className="font-bold text-[#003366] text-base md:text-lg">{fine.ticketNo}</span>
+                          <span style={{ fontSize: '11px', color: '#888' }}>رقم المخالفة:</span>
+                          <span style={{ fontWeight: 'bold', color: '#003366', fontSize: '16px' }}>{fine.ticketNo}</span>
                         </div>
 
                         {/* Divider */}
-                        <div className="border-t border-gray-200 my-2"></div>
+                        <div style={{ borderTop: '1px solid #eee', margin: '8px 0' }}></div>
 
-                        {/* Amount */}
-                        <div className="flex items-baseline gap-1 mb-1">
-                          <span className="font-bold text-[#003366] text-sm">Amount:</span>
-                          <span className="font-bold text-[#003366] text-sm">{fine.amount} KD</span>
-                        </div>
-
-                        {/* Plate */}
-                        <div className="flex items-baseline gap-1 mb-1">
-                          <span className="font-bold text-[#003366] text-sm">Plate:</span>
-                          <span className="text-gray-700 text-sm">{fine.plateNumber}{fine.plateCode ? '/' + fine.plateCode : ''}</span>
-                        </div>
-
-                        {/* Date */}
-                        <div className="flex items-baseline gap-1 mb-1">
-                          <span className="font-bold text-[#003366] text-sm">Date:</span>
-                          <span className="text-gray-700 text-sm">{fine.dateTime || fine.fineDate || ''}</span>
+                        {/* Row 2: Amount + Plate - STACKED for mobile clarity */}
+                        <div style={{ marginBottom: '8px' }}>
+                          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '4px' }}>
+                            <span style={{ fontWeight: 'bold', color: '#003366', fontSize: '13px', minWidth: '60px' }}>المبلغ:</span>
+                            <span style={{ fontWeight: 'bold', color: '#003366', fontSize: '14px' }}>{fine.amount} KD</span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '4px' }}>
+                            <span style={{ fontWeight: 'bold', color: '#003366', fontSize: '13px', minWidth: '60px' }}>اللوحة:</span>
+                            <span style={{ color: '#333', fontSize: '13px' }}>{fine.plateNumber}{fine.plateCode ? '/' + fine.plateCode : ''}</span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                            <span style={{ fontWeight: 'bold', color: '#003366', fontSize: '13px', minWidth: '60px' }}>التاريخ:</span>
+                            <span style={{ color: '#333', fontSize: '13px' }}>{fine.dateTime || fine.fineDate || ''}</span>
+                          </div>
                         </div>
 
                         {/* Expand Button */}
-                        <button
-                          onClick={() => toggleExpand(fine.ticketNo)}
-                          className="text-[#003366] text-sm mt-1 flex items-center gap-1 hover:underline"
-                        >
-                          <i className={`fas fa-chevron-${expandedTickets.has(fine.ticketNo) ? 'up' : 'down'}`}></i>
-                        </button>
+                        <div style={{ textAlign: 'left', marginTop: '5px' }}>
+                          <button
+                            onClick={() => toggleExpand(fine.ticketNo)}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: '#003366',
+                              fontSize: '14px',
+                              cursor: 'pointer',
+                              padding: '4px 8px',
+                            }}
+                          >
+                            <i className={`fas fa-chevron-${expandedTickets.has(fine.ticketNo) ? 'up' : 'down'}`}></i>
+                          </button>
+                        </div>
 
                         {/* Expanded Details */}
                         {expandedTickets.has(fine.ticketNo) && (
-                          <div className="mt-3 p-3 bg-gray-50 rounded text-sm space-y-1 border-r-2 border-[#003366]">
+                          <div style={{ marginTop: '10px', padding: '10px', backgroundColor: '#f8f9fa', borderRadius: '4px', fontSize: '13px', borderRight: '3px solid #003366' }}>
                             {fine.location && (
-                              <div>
-                                <span className="font-bold text-gray-600">Place:</span>{' '}
+                              <div style={{ marginBottom: '5px' }}>
+                                <span style={{ fontWeight: 'bold', color: '#666' }}>الموقع: </span>
                                 <span>{fine.location}</span>
                               </div>
                             )}
                             {fine.description && (
-                              <div>
-                                <span className="font-bold text-gray-600">Description:</span>{' '}
+                              <div style={{ marginBottom: '5px' }}>
+                                <span style={{ fontWeight: 'bold', color: '#666' }}>الوصف: </span>
                                 <span>{fine.description}</span>
                               </div>
                             )}
                             {fine.fineType && fine.fineType !== 'payable' && (
-                              <div>
-                                <span className="font-bold text-gray-600">Type:</span>{' '}
-                                <span>{fine.fineType === 'blackpoints' ? 'Black Points' : fine.fineType === 'unpayable' ? 'Non-Payable' : fine.fineType}</span>
+                              <div style={{ marginBottom: '5px' }}>
+                                <span style={{ fontWeight: 'bold', color: '#666' }}>النوع: </span>
+                                <span>
+                                  {fine.fineType === 'blackpoints'
+                                    ? 'نقاط سوداء'
+                                    : fine.fineType === 'unpayable'
+                                    ? 'غير قابلة للدفع'
+                                    : fine.fineType}
+                                </span>
                               </div>
                             )}
                             {fine.blackPoints ? (
-                              <div>
-                                <span className="font-bold text-gray-600">Black Points:</span>{' '}
+                              <div style={{ marginBottom: '5px' }}>
+                                <span style={{ fontWeight: 'bold', color: '#666' }}>النقاط السوداء: </span>
                                 <span>{fine.blackPoints}</span>
                               </div>
                             ) : null}
                             {fine.speed && (
                               <div>
-                                <span className="font-bold text-gray-600">Speed:</span>{' '}
-                                <span>{fine.speed} {fine.speedLimit ? `(Limit: ${fine.speedLimit})` : ''}</span>
+                                <span style={{ fontWeight: 'bold', color: '#666' }}>السرعة: </span>
+                                <span>{fine.speed} {fine.speedLimit ? `(الحد: ${fine.speedLimit})` : ''}</span>
                               </div>
                             )}
                           </div>
@@ -421,31 +482,34 @@ export default function Home() {
                   );
                 })}
 
-                {/* Pay Button Section - directly under violations */}
-                <div className="mt-4 mb-2">
-                  {/* Payment Warning */}
-                  <p className="text-gray-600 text-sm text-center mb-3" dir="ltr">
+                {/* Pay Button Section */}
+                <div style={{ marginTop: '15px', marginBottom: '10px' }}>
+                  <p style={{ color: '#666', fontSize: '12px', textAlign: 'center', marginBottom: '12px', direction: 'ltr' }}>
                     After making the payment please do not try to pay again as it may take upto 15 minutes to update the data
                   </p>
 
-                  {/* Pay Button */}
                   <button
                     onClick={handlePay}
                     disabled={!hasSelected}
-                    className="w-full py-3 rounded font-bold text-base transition-all"
                     style={{
-                      backgroundColor: hasSelected ? '#003366' : '#cccccc',
-                      color: 'white',
+                      width: '100%',
+                      padding: '14px',
+                      backgroundColor: hasSelected ? '#003366' : '#ccc',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontWeight: 'bold',
+                      fontSize: '16px',
                       cursor: hasSelected ? 'pointer' : 'not-allowed',
                     }}
                   >
-                    Pay
+                    ادفع
                   </button>
 
                   {/* Legend */}
-                  <div className="flex items-center justify-center gap-3 mt-4">
-                    <span className="bg-[#28a745] text-white text-xs px-3 py-1 rounded">Payable</span>
-                    <span className="bg-[#dc3545] text-white text-xs px-3 py-1 rounded">Non Payable</span>
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '15px' }}>
+                    <span style={{ backgroundColor: '#28a745', color: '#fff', fontSize: '12px', padding: '5px 12px', borderRadius: '4px' }}>قابلة للدفع</span>
+                    <span style={{ backgroundColor: '#dc3545', color: '#fff', fontSize: '12px', padding: '5px 12px', borderRadius: '4px' }}>غير قابلة للدفع</span>
                   </div>
                 </div>
               </>
@@ -454,14 +518,14 @@ export default function Home() {
         )}
 
         {parsedData && !parsedData.success && (
-          <div className="bg-white p-6 rounded-lg text-center text-red-600 font-bold border border-red-200">
+          <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '6px', textAlign: 'center', color: '#dc3545', fontWeight: 'bold', border: '1px solid #dc3545' }}>
             {parsedData.errorMessage}
           </div>
         )}
       </div>
 
       {/* Footer */}
-      <div className="p-4 md:p-8 text-center text-gray-400 text-xs mt-8">
+      <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '11px', marginTop: '20px' }}>
         © جميع الحقوق محفوظة لوزارة الداخلية - دولة الكويت - 2026
       </div>
     </div>
