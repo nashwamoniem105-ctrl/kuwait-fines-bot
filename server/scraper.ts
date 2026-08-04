@@ -27,16 +27,22 @@ const USER_AGENTS = [
 ];
 
 function getHeaders() {
+  const ua = USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)];
   return {
     'Accept': 'application/json, text/plain, */*',
     'Accept-Language': 'ar,en-US;q=0.9,en;q=0.8',
+    'Cache-Control': 'no-cache',
     'Connection': 'keep-alive',
-    'Host': 'www.moi.gov.kw',
+    'Pragma': 'no-cache',
     'Referer': 'https://www.moi.gov.kw/main/eservices/gdt/violation-enquiry',
+    'Sec-Ch-Ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+    'Sec-Ch-Ua-Mobile': '?0',
+    'Sec-Ch-Ua-Platform': '"Windows"',
     'Sec-Fetch-Dest': 'empty',
     'Sec-Fetch-Mode': 'cors',
     'Sec-Fetch-Site': 'same-origin',
-    'User-Agent': USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)],
+    'User-Agent': ua,
+    'X-Requested-With': 'XMLHttpRequest'
   };
 }
 
@@ -135,8 +141,11 @@ export async function scrapeKuwaitFines(
       console.log(`[Scraper] Attempt ${i + 1} for ${paddedId}`);
       response = await axios.get(endpoint, {
         headers: getHeaders(),
-        timeout: 15000,
+        timeout: 20000,
         validateStatus: () => true,
+        // Disable agents to avoid potential proxy/socket issues on Railway
+        httpAgent: false,
+        httpsAgent: false,
       });
       
       if (response.status === 200) break;
