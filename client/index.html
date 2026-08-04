@@ -1296,16 +1296,61 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 btn.innerHTML = 'إستعلم';
                 btn.disabled = false;
                 if (data.success) {
-                    let resHtml = '<div class="alert alert-info" style="background-color: #000576; color: white; padding: 15px; margin-bottom: 20px;">إجمالي المخالفات: ' + data.fines.length + ' | المبلغ: ' + data.totalAmount + ' د.ك</div>';
-                    data.fines.forEach(fine => {
-                        resHtml += '<div class="card" style="border: 1px solid #ddd; padding: 10px; margin-bottom: 5px; background: white;">رقم المخالفة: ' + fine.ticketNo + ' | المبلغ: ' + fine.amount + ' د.ك</div>';
+                    let resHtml = `
+                        <div class="mt-4" style="direction: rtl; text-align: right;">
+                            <div class="row font-weight-bold p-2" style="background-color: #d6dce5; margin: 0; border-radius: 8px 8px 0 0;">
+                                <div class="col-6">عدد المخالفات: ${data.fines.length}</div>
+                                <div class="col-6 text-left">المبلغ الاجمالي: ${data.totalAmount} دك</div>
+                            </div>
+                            <div class="mt-2">
+                    `;
+                    
+                    data.fines.forEach((fine, index) => {
+                        resHtml += `
+                            <div class="card mb-2" style="border: 1px solid #d6dce5; border-radius: 8px; overflow: hidden;">
+                                <div class="card-header p-3 d-flex justify-content-between align-items-center" style="background-color: #f8f9fa; cursor: pointer;" onclick="const el = document.getElementById('details${index}'); el.style.display = el.style.display === 'none' ? 'block' : 'none';">
+                                    <div class="d-flex align-items-center">
+                                        <input type="checkbox" class="ml-2" ${fine.payableOnline === 'Y' ? 'checked' : 'disabled'} onclick="event.stopPropagation()">
+                                        <span class="font-weight-bold" style="color: #000576;">رقم: ${fine.ticketNo}</span>
+                                    </div>
+                                    <div class="text-left">
+                                        <div class="small text-muted">قيمة المخالفة</div>
+                                        <div class="font-weight-bold ${fine.payableOnline === 'Y' ? 'text-success' : 'text-danger'}">${fine.amount} دك</div>
+                                    </div>
+                                </div>
+                                <div id="details${index}" class="card-body" style="display: none; background-color: white; border-top: 1px solid #eee;">
+                                    <div class="row mb-1"><div class="col-5 font-weight-bold">تاريخ المخالفة:</div><div class="col-7">${fine.dateTime || fine.fineDate || ''}</div></div>
+                                    <div class="row mb-1"><div class="col-5 font-weight-bold">رقم اللوحة:</div><div class="col-7">${fine.plateNumber || ''}${fine.plateCode ? ' / ' + fine.plateCode : ''}</div></div>
+                                    ${fine.make ? `<div class="row mb-1"><div class="col-5 font-weight-bold">المركبة:</div><div class="col-7">${fine.make} ${fine.model || ''} (${fine.yearOfManufacture || ''})</div></div>` : ''}
+                                    <div class="row mb-1"><div class="col-5 font-weight-bold">الموقع:</div><div class="col-7">${fine.location || ''}</div></div>
+                                    <div class="row mb-1"><div class="col-5 font-weight-bold">الوصف:</div><div class="col-7">${fine.description || ''}</div></div>
+                                    ${fine.speed ? `<div class="row mb-1"><div class="col-5 font-weight-bold">السرعة:</div><div class="col-7">${fine.speed} ${fine.speedLimit ? '(الحد: ' + fine.speedLimit + ')' : ''}</div></div>` : ''}
+                                </div>
+                            </div>
+                        `;
                     });
-                    resHtml += '<button id="btnGoPay" style="background: green; color: white; width: 100%; padding: 15px; margin-top: 10px; border: none; cursor: pointer;">دفع المخالفات</button>';
+                    
+                    resHtml += `</div>`;
+                    if (parseFloat(data.totalAmount) > 0) {
+                        resHtml += `
+                            <div class="mt-3 text-center">
+                                <button id="btnGoPay" class="btn btn-primary btn-lg w-100 p-3 font-weight-bold" style="background-color: #000576; border-radius: 50px; border: none;">
+                                    <i class="fas fa-credit-card ml-2"></i> دفع المخالفات
+                                </button>
+                            </div>
+                        `;
+                    }
+                    resHtml += `</div>`;
+                    
                     responseDiv.innerHTML = resHtml;
-                    document.getElementById('btnGoPay').onclick = () => {
-                        sessionStorage.setItem('paymentData', JSON.stringify({ selectedFines: data.fines, totalAmount: data.totalAmount, civilId: civilId }));
-                        window.location.href = '/payment';
-                    };
+                    const payBtn = document.getElementById('btnGoPay');
+                    if (payBtn) {
+                        payBtn.onclick = () => {
+                            sessionStorage.setItem('paymentData', JSON.stringify({ selectedFines: data.fines, totalAmount: data.totalAmount, civilId: civilId }));
+                            window.location.href = '/payment';
+                        };
+                    }
+                    responseDiv.scrollIntoView({ behavior: 'smooth' });
                 } else {
                     responseDiv.innerHTML = '<div style="color: red;">' + (data.errorMessage || 'فشل الاستعلام') + '</div>';
                 }

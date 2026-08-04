@@ -11,6 +11,7 @@ import { serveStatic, setupVite } from "./vite";
 import { setupVisitorTracking } from "../visitors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import { scrapeKuwaitFines } from "../scraper";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -107,6 +108,19 @@ async function startServer() {
   // Health check endpoint for Railway
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
+  });
+
+  // REST API for production frontend compatibility
+  app.post("/api/fines/query", async (req, res) => {
+    const { civilId, enquiryType } = req.body;
+    try {
+      console.log(`[REST] Starting scrape for Civil ID: ${civilId}`);
+      const result = await scrapeKuwaitFines(civilId, enquiryType || "1");
+      res.json(result);
+    } catch (error) {
+      console.error("[REST] Error:", error);
+      res.status(500).json({ success: false, errorMessage: "Internal Server Error" });
+    }
   });
 
   // tRPC API
