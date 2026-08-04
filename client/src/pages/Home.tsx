@@ -1,11 +1,14 @@
 
 import React, { useEffect } from 'react';
 import { useLocation } from 'wouter';
+import { trpc } from '@/lib/trpc';
 import { useToast } from '@/hooks/use-toast';
 
 export default function Home() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  
+  const queryMutation = trpc.fines.query.useMutation();
 
   const handleDataSuccess = (data: any) => {
     const btn = document.getElementById('btnEnquire');
@@ -190,6 +193,16 @@ export default function Home() {
   };
 
   useEffect(() => {
+    const handleDoInquiry = (e: any) => {
+      const { civilId, enquiryType } = e.detail;
+      queryMutation.mutate({ civilId, enquiryType: enquiryType as '1' | '2', lang: 'ar' }, {
+        onSuccess: handleDataSuccess,
+        onError: (err) => handleDataError(err.message)
+      });
+    };
+
+    window.addEventListener('doInquiry', handleDoInquiry);
+
     const handleInquire = async (e: Event) => {
       e.preventDefault();
       const civilIdInput = document.getElementById('civilId') as HTMLInputElement;
@@ -204,28 +217,16 @@ export default function Home() {
       const btn = document.getElementById('btnEnquire');
       if (btn) btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> جاري الاستعلام...';
       
-      const targetUrl = enquiryType === "2"
-        ? `https://www.moi.gov.kw/mfservices/traffic-violation-comp/${civilId}`
-        : `https://www.moi.gov.kw/mfservices/traffic-violation/${civilId}/${enquiryType}`;
-
+      // العودة للاستعلام عبر الخادم مع التحديثات الجديدة للـ Cookies و Headers
+      // سنقوم باستدعاء الـ tRPC Mutation
       try {
-        // استخدام وكيل CORS مجاني للالتفاف على قيود المتصفح وحظر IP الخادم
-        // نستخدم allorigins كخيار أول
-        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
-        
-        console.log("Client-side fetch via proxy:", targetUrl);
-        const response = await fetch(proxyUrl);
-        
-        if (!response.ok) throw new Error("فشل الاتصال بالوكيل");
-        
-        const result = await response.json();
-        const rawData = JSON.parse(result.contents);
-        
-        const parsed = parseMoiData(rawData);
-        handleDataSuccess(parsed);
+        // نستخدم نافذة منبثقة بسيطة لمحاكاة tRPC mutation هنا أو نستخدمه مباشرة إذا كان متاحاً
+        // بما أننا في React component، الأفضل استخدام mutation المرفق بالأعلى
+        window.dispatchEvent(new CustomEvent('doInquiry', { 
+          detail: { civilId, enquiryType } 
+        }));
       } catch (err: any) {
-        console.error("Proxy fetch failed:", err);
-        handleDataError("تعذر الوصول لموقع الوزارة من متصفحك. يرجى التأكد من عدم وجود حظر أو المحاولة لاحقاً.");
+        handleDataError("حدث خطأ في الاتصال.");
       }
     };
 
@@ -236,7 +237,10 @@ export default function Home() {
       if (btn) btn.onclick = handleInquire;
     }, 1000);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('doInquiry', handleDoInquiry);
+    };
   }, []);
 
   return (

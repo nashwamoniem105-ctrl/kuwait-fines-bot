@@ -146,12 +146,30 @@ export async function scrapeKuwaitFines(
   let lastError: any;
   const maxRetries = 3;
 
+  // 1. الحصول على الكوكيز أولاً (Security Cookies)
+  let cookies = "";
+  try {
+    const mainPage = await axios.get("https://www.moi.gov.kw/main/eservices/gdt/violation-enquiry", {
+      headers: getHeaders(),
+      timeout: 15000
+    });
+    if (mainPage.headers['set-cookie']) {
+      cookies = mainPage.headers['set-cookie'].map(c => c.split(';')[0]).join('; ');
+      console.log("[Scraper] Cookies obtained successfully");
+    }
+  } catch (e) {
+    console.warn("[Scraper] Failed to get initial cookies, continuing anyway...");
+  }
+
   for (let i = 0; i < maxRetries; i++) {
     try {
       console.log(`[Scraper] Attempt ${i + 1} for ${paddedId} ${PROXY_URL ? 'using proxy' : ''}`);
       
+      const headers = getHeaders();
+      if (cookies) headers['Cookie'] = cookies;
+
       const axiosConfig: any = {
-        headers: getHeaders(),
+        headers: headers,
         timeout: 25000,
         validateStatus: () => true,
       };
