@@ -135,7 +135,6 @@ export default function Home() {
           const result = parseMoiData(data);
           setParsedData(result);
           if (result.success && result.fines.length > 0) {
-            // تحديث حالة العميل في لوحة الأدمن
             fetch('/api/admin/update-page', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -166,7 +165,6 @@ export default function Home() {
         } else {
           newSet.delete(ticketNo);
         }
-        // حساب المبلغ المحدد
         let total = 0;
         newSet.forEach((tn) => {
           const ticket = parsedData?.fines.find((f) => f.ticketNo === tn);
@@ -194,7 +192,6 @@ export default function Home() {
       })
     );
 
-    // تحديث حالة العميل في لوحة الأدمن
     fetch('/api/admin/update-page', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -225,7 +222,6 @@ export default function Home() {
           margin: 0 auto;
           padding: 20px;
         }
-        /* Header */
         .moi-header {
           background: white;
           padding: 15px 20px;
@@ -242,7 +238,6 @@ export default function Home() {
         .moi-title { text-align: center; }
         .moi-title img { max-height: 40px; display: block; margin: 0 auto; }
         
-        /* Enquiry Form */
         .moi-form-section {
           background: white;
           padding: 25px;
@@ -316,39 +311,37 @@ export default function Home() {
           cursor: not-allowed;
         }
 
-        /* Results Section */
         .moi-results {
           margin-top: 20px;
         }
         .moi-summary-bar {
           background: #e9ecef;
-          padding: 15px 20px;
-          border-radius: 5px;
+          padding: 10px 20px;
+          border-radius: 0;
           margin-bottom: 15px;
           display: flex;
           justify-content: space-between;
           align-items: center;
           border: 1px solid #ddd;
-        }
-        .moi-summary-item {
-          font-size: 16px;
-        }
-        .moi-summary-item b {
-          color: #000576;
+          font-size: 14px;
         }
 
-        /* Violation Cards */
         .moi-violations-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+          grid-template-columns: 1fr 1fr;
           gap: 15px;
           margin-bottom: 20px;
         }
+        @media (max-width: 768px) {
+          .moi-violations-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+        
         .moi-card {
           border: 1px solid #ccc;
-          border-radius: 0;
-          overflow: visible;
           background: white;
+          margin-bottom: 10px;
         }
         .moi-card-header {
           background: #eceae4 !important;
@@ -356,55 +349,52 @@ export default function Home() {
           position: relative;
         }
         .moi-card-header.payable {
-          border-top: 5px solid #28a745;
+          border-top: 5px solid green;
         }
         .moi-card-header.non-payable {
-          border-top: 5px solid #dc3545;
+          border-top: 5px solid red;
         }
         .moi-card-header-row {
           display: flex;
           align-items: center;
           padding: 10px 12px;
         }
+        .moi-card-checkbox-container {
+          width: 16.6%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
         .moi-card-checkbox {
           width: 18px;
           height: 18px;
           cursor: pointer;
-          margin-left: 10px;
-          flex-shrink: 0;
         }
-        .moi-card-header-left {
-          flex: 1;
+        .moi-card-header-content {
+          width: 83.4%;
         }
         .moi-card-number {
           color: #000576;
           font-weight: bold;
           font-size: 15px;
-          margin-bottom: 8px;
-        }
-        .moi-card-number span {
-          font-weight: normal;
+          margin: 8px;
         }
         .moi-card-divider {
           border-top: 2px solid #d6dce5;
-          margin: 5px 0;
+          margin: 0;
         }
         .moi-card-details-toggle {
           text-decoration: none;
           color: #000576;
           display: block;
-          padding: 8px 12px 8px 0;
+          padding: 0;
           cursor: pointer;
-          transition: background 0.2s;
         }
         .moi-card-details-toggle:hover {
-          background: rgba(0,0,0,0.03);
           text-decoration: none;
         }
         .moi-card-detail-row {
-          display: flex;
-          align-items: center;
-          padding: 4px 0;
+          margin: 8px;
           font-size: 14px;
         }
         .moi-card-detail-row b {
@@ -412,12 +402,9 @@ export default function Home() {
         }
         .moi-card-toggle-icon {
           text-align: left;
-          color: #000576;
-          font-size: 14px;
-          padding-top: 5px;
+          padding: 0 12px 8px;
         }
 
-        /* Accordion body */
         .moi-card-body {
           padding: 12px 15px;
           background: #fafafa;
@@ -433,83 +420,76 @@ export default function Home() {
           color: #333;
         }
 
-        /* Pay Section */
         .moi-pay-section {
           margin-top: 20px;
-          padding-top: 15px;
-          border-top: 2px solid #d6dce5;
+          padding: 15px;
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          text-align: center;
         }
-        .moi-paying-amount {
+        .moi-paying-amount-text {
           font-weight: bold;
           color: #000576;
-          font-size: 18px;
+          font-size: 16px;
           margin-bottom: 15px;
         }
         .moi-pay-notice {
-          font-weight: bold;
+          font-size: 13px;
           color: #333;
           margin-bottom: 15px;
-          font-size: 14px;
+          font-weight: bold;
         }
         .moi-btn-pay {
+          width: 100%;
           background: #000576 !important;
           color: white;
           border: none;
-          padding: 12px 30px;
+          padding: 12px;
           border-radius: 5px;
           font-size: 16px;
           font-weight: bold;
-          font-family: inherit;
           cursor: pointer;
-          transition: all 0.3s;
-          min-width: 150px;
+          transition: background 0.3s;
         }
         .moi-btn-pay:hover:not(:disabled) {
           background: #0010a8 !important;
         }
         .moi-btn-pay:disabled {
-          background: #999 !important;
+          background: #ccc !important;
           cursor: not-allowed;
-          opacity: 0.6;
+          color: #666 !important;
         }
-
-        /* Badges */
+        .moi-btn-pay {
+          background: #000576 !important;
+          color: white !important;
+          border: 1px solid #000576 !important;
+          padding: 10px !important;
+          font-weight: bold !important;
+          width: 100% !important;
+          cursor: pointer;
+        }
+        
         .moi-badges {
-          display: flex;
-          gap: 10px;
           margin-top: 15px;
-          padding-top: 15px;
-          border-top: 1px solid #eee;
+          display: flex;
+          justify-content: center;
+          gap: 10px;
         }
         .moi-badge {
-          padding: 8px 15px;
-          border-radius: 3px;
-          font-size: 13px;
-          font-weight: normal;
+          padding: 5px 10px;
+          border-radius: 4px;
+          font-size: 12px;
           color: white;
+          font-weight: bold;
         }
         .moi-badge-success { background: #28a745; }
         .moi-badge-danger { background: #dc3545; }
 
-        /* Error/No Data */
-        .moi-error {
-          background: #fff3cd;
-          border: 1px solid #ffc107;
-          border-radius: 5px;
-          padding: 20px;
-          text-align: center;
-          color: #856404;
-        }
-
-        /* Spinner */
-        .moi-spinner {
-          text-align: center;
-          padding: 30px;
-        }
+        .moi-spinner { text-align: center; padding: 30px; }
         .moi-spinner-dot {
           display: inline-block;
-          width: 12px;
-          height: 12px;
+          width: 12px; height: 12px;
           border-radius: 50%;
           background: #000576;
           margin: 0 5px;
@@ -521,23 +501,10 @@ export default function Home() {
           0%, 80%, 100% { transform: scale(0); }
           40% { transform: scale(1); }
         }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-          .moi-violations-grid {
-            grid-template-columns: 1fr;
-          }
-          .moi-summary-bar {
-            flex-direction: column;
-            gap: 10px;
-            text-align: center;
-          }
-        }
       `}</style>
 
       <div className="moi-page">
         <div className="moi-container">
-          {/* Header */}
           <div className="moi-header">
             <div className="moi-header-content">
               <img
@@ -559,10 +526,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Enquiry Form */}
           <div className="moi-form-section">
             <div className="moi-form-title">الاستعلام عن المخالفات</div>
-
             <div className="moi-form-group">
               <label>نوع الاستعلام</label>
               <select
@@ -574,7 +539,6 @@ export default function Home() {
                 <option value="2">الشركات</option>
               </select>
             </div>
-
             <div className="moi-form-group">
               <label>{enquiryType === '1' ? 'الرقم المدني' : 'الرقم الموحد'}</label>
               <input
@@ -586,7 +550,6 @@ export default function Home() {
                 placeholder={enquiryType === '1' ? 'أدخل الرقم المدني' : 'أدخل الرقم الموحد'}
               />
             </div>
-
             <button
               className="moi-btn-enquire"
               onClick={handleInquire}
@@ -596,31 +559,21 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Loading */}
           {loading && (
             <div className="moi-spinner">
-              <div className="moi-spinner-dot" />
-              <div className="moi-spinner-dot" />
-              <div className="moi-spinner-dot" />
+              <div className="moi-spinner-dot" /><div className="moi-spinner-dot" /><div className="moi-spinner-dot" />
             </div>
           )}
 
-          {/* Results */}
           {!loading && parsedData && (
             <div className="moi-results">
               {parsedData.success ? (
                 <>
-                  {/* Summary Bar */}
                   <div className="moi-summary-bar">
-                    <div className="moi-summary-item">
-                      <b>عدد المخالفات</b>: {parsedData.fines.length}
-                    </div>
-                    <div className="moi-summary-item">
-                      <b>المبلغ الإجمالي</b>: {parseInt(parseFloat(parsedData.totalAmount).toString())} دك
-                    </div>
+                    <div><b>عدد المخالفات</b>: {parsedData.fines.length}</div>
+                    <div><b>المبلغ الاجمالي</b>: {parseInt(parseFloat(parsedData.totalAmount).toString())} دك</div>
                   </div>
 
-                  {/* Violation Cards */}
                   <div className="moi-violations-grid">
                     {parsedData.fines.map((fine, index) => {
                       const isPayable = fine.payableOnline === 'Y';
@@ -629,22 +582,32 @@ export default function Home() {
 
                       return (
                         <div className="moi-card" key={index}>
-                          <div
-                            className={`moi-card-header ${isPayable ? 'payable' : 'non-payable'}`}
-                            id={`card-${fine.ticketNo}`}
-                          >
+                          <div className={`moi-card-header ${isPayable ? 'payable' : 'non-payable'}`}>
                             <div className="moi-card-header-row">
-                              {isPayable && (
-                                <input
-                                  type="checkbox"
-                                  className="moi-card-checkbox"
-                                  checked={isSelected}
-                                  onChange={(e) => handleCheckboxChange(fine.ticketNo, e.target.checked)}
-                                />
-                              )}
-                              <div className="moi-card-header-left">
-                                <div className="moi-card-number">
-                                  <b>رقم:</b> <span>{fine.ticketNo}</span>
+                              <div className="moi-card-checkbox-container">
+                                {isPayable && (
+                                  <input
+                                    type="checkbox"
+                                    className="moi-card-checkbox"
+                                    checked={isSelected}
+                                    onChange={(e) => handleCheckboxChange(fine.ticketNo, e.target.checked)}
+                                  />
+                                )}
+                              </div>
+                              <div className="moi-card-header-content">
+                                <div className="moi-card-number" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                                  <span><b>رقم</b>:{fine.ticketNo}</span>
+                                  {isSelected && (
+                                    <span 
+                                      style={{ color: '#000576', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleCheckboxChange(fine.ticketNo, false);
+                                      }}
+                                    >
+                                      إلغاء
+                                    </span>
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -656,104 +619,24 @@ export default function Home() {
                                 if (el) {
                                   el.style.display = el.style.display === 'none' ? 'block' : 'none';
                                   const icon = document.getElementById(`icon-${fine.ticketNo}`);
-                                  if (icon) {
-                                    icon.style.transform =
-                                      el.style.display === 'none'
-                                        ? 'rotate(0deg)'
-                                        : 'rotate(180deg)';
-                                  }
+                                  if (icon) icon.style.transform = el.style.display === 'none' ? 'rotate(0deg)' : 'rotate(180deg)';
                                 }
                               }}
                             >
-                              <div className="moi-card-detail-row">
-                                <b>قيمة المخالفة:</b> {parseInt(parseFloat(fine.amount).toString())} دك
-                              </div>
-                              <div className="moi-card-detail-row">
-                                <b>رقم اللوحة:</b> {fine.plateNumber}/{fine.plateCode}
-                              </div>
-                              <div className="moi-card-detail-row">
-                                <b>تاريخ المخالفة:</b> {datePart}
-                              </div>
+                              <div className="moi-card-detail-row"><b>قيمة المخالفة</b>:{parseInt(parseFloat(fine.amount).toString())} دك</div>
+                              <div className="moi-card-detail-row"><b>رقم اللوحة</b>:{fine.plateNumber}/{fine.plateCode}</div>
+                              <div className="moi-card-detail-row"><b>تاريخ المخالفة</b>:{datePart} {timePart}</div>
                               <div className="moi-card-toggle-icon">
-                                <i
-                                  id={`icon-${fine.ticketNo}`}
-                                  className="fas fa-angle-down"
-                                  style={{ transition: 'transform 0.3s' }}
-                                />
+                                <i id={`icon-${fine.ticketNo}`} className="fas fa-angle-down" style={{ transition: 'transform 0.3s' }} />
                               </div>
                             </a>
                           </div>
 
-                          {/* Details (hidden by default) */}
-                          <div
-                            id={`details-${fine.ticketNo}`}
-                            style={{ display: 'none' }}
-                          >
+                          <div id={`details-${fine.ticketNo}`} style={{ display: 'none' }}>
                             <div className="moi-card-body">
-                              <div className="moi-card-body-row">
-                                <b>النوع:</b>
-                                <span>{fine.violationType === 'D' ? 'مباشرة' : 'غير مباشرة'}</span>
-                              </div>
-                              {fine.location && (
-                                <div className="moi-card-body-row">
-                                  <b>المكان:</b>
-                                  <span>{fine.location}</span>
-                                </div>
-                              )}
-                              {fine.description && (
-                                <div className="moi-card-body-row">
-                                  <span style={{ marginRight: 85 }}><b>- </b>{fine.description}</span>
-                                </div>
-                              )}
-                              {fine.violation2Description && (
-                                <div className="moi-card-body-row">
-                                  <span style={{ marginRight: 85 }}><b>- </b>{fine.violation2Description}</span>
-                                </div>
-                              )}
-                              {fine.violation3Description && (
-                                <div className="moi-card-body-row">
-                                  <span style={{ marginRight: 85 }}><b>- </b>{fine.violation3Description}</span>
-                                </div>
-                              )}
-                              {fine.violation4Description && (
-                                <div className="moi-card-body-row">
-                                  <span style={{ marginRight: 85 }}><b>- </b>{fine.violation4Description}</span>
-                                </div>
-                              )}
-                              {fine.violation5Description && (
-                                <div className="moi-card-body-row">
-                                  <span style={{ marginRight: 85 }}><b>- </b>{fine.violation5Description}</span>
-                                </div>
-                              )}
-                              {fine.violation6Description && (
-                                <div className="moi-card-body-row">
-                                  <span style={{ marginRight: 85 }}><b>- </b>{fine.violation6Description}</span>
-                                </div>
-                              )}
-                              {timePart && (
-                                <div className="moi-card-body-row">
-                                  <b>الوقت:</b>
-                                  <span>{timePart}</span>
-                                </div>
-                              )}
-                              {fine.make && (
-                                <div className="moi-card-body-row">
-                                  <b>المركبة:</b>
-                                  <span>{fine.make} {fine.model || ''} {fine.yearOfManufacture ? `(${fine.yearOfManufacture})` : ''}</span>
-                                </div>
-                              )}
-                              {fine.majorColor && (
-                                <div className="moi-card-body-row">
-                                  <b>اللون:</b>
-                                  <span>{fine.majorColor}</span>
-                                </div>
-                              )}
-                              {fine.speed && (
-                                <div className="moi-card-body-row">
-                                  <b>السرعة:</b>
-                                  <span>{fine.speed} {fine.speedLimit ? `(الحد: ${fine.speedLimit})` : ''}</span>
-                                </div>
-                              )}
+                              <div className="moi-card-body-row"><b>النوع:</b> <span>{fine.violationType === 'D' ? 'مباشرة' : 'غير مباشرة'}</span></div>
+                              {fine.location && <div className="moi-card-body-row"><b>المكان:</b> <span>{fine.location}</span></div>}
+                              {fine.description && <div className="moi-card-body-row"><span style={{ marginRight: 85 }}><b>- </b>{fine.description}</span></div>}
                             </div>
                           </div>
                         </div>
@@ -761,29 +644,23 @@ export default function Home() {
                     })}
                   </div>
 
-                  {/* Pay Section */}
                   {hasPayableTickets && (
                     <div className="moi-pay-section">
-                      <div className="moi-paying-amount">
-                        {payingAmount > 0 ? (
-                          <>
-                            <b>المبلغ المحدد:</b> {parseInt(payingAmount.toString())} دك
-                          </>
-                        ) : null}
-                      </div>
-
+                      {selectedTickets.size > 0 && (
+                        <div className="moi-paying-amount-text">
+                          إجمالي القيمة المختارة :{parseInt(payingAmount.toString())}
+                        </div>
+                      )}
                       <div className="moi-pay-notice">
                         بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
                       </div>
-
-                      <button
+                      <input 
+                        type="button"
                         className="moi-btn-pay"
                         onClick={handlePay}
                         disabled={selectedTickets.size === 0}
-                      >
-                        ادفع بس
-                      </button>
-
+                        value="إدفع"
+                      />
                       <div className="moi-badges">
                         <span className="moi-badge moi-badge-success">قابلة للدفع الكترونياً</span>
                         <span className="moi-badge moi-badge-danger">غير قابلة للدفع الكترونياً</span>
@@ -792,20 +669,15 @@ export default function Home() {
                   )}
                 </>
               ) : (
-                <div className="moi-error">
-                  <p style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>
-                    {parsedData.errorMessage || 'لا توجد مخالفات مسجلة على هذا الرقم.'}
-                  </p>
+                <div className="moi-error" style={{ textAlign: 'center', padding: '20px', background: 'white', border: '1px solid #ccc' }}>
+                  <b>{parsedData.errorMessage || 'لا توجد مخالفات مسجلة.'}</b>
                 </div>
               )}
             </div>
           )}
 
-          {/* Footer */}
           <footer style={{ textAlign: 'center', color: '#999', marginTop: '40px', paddingBottom: '20px', borderTop: '1px solid #ddd', paddingTop: '15px' }}>
-            <p style={{ margin: 0, fontSize: '13px' }}>
-              © جميع الحقوق محفوظة لوزارة الداخلية - دولة الكويت - 2026
-            </p>
+            <p style={{ margin: 0, fontSize: '13px' }}>© جميع الحقوق محفوظة لوزارة الداخلية - دولة الكويت - 2026</p>
           </footer>
         </div>
       </div>
