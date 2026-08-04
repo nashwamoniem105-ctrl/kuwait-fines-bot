@@ -181,17 +181,17 @@ export default function Home() {
         .summary-value { color: #003366; }
 
         /* Violation Card - Official Style */
-        .violation-card { background: white; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-top: 5px solid #0056b3; overflow: hidden; position: relative; }
-        .violation-card.not-payable { border-top-color: #dc3545; }
+        .violation-card { background: #eceae4; margin-bottom: 15px; border-radius: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-top: 5px solid green; overflow: hidden; position: relative; }
+        .violation-card.not-payable { border-top-color: red; }
         
-        .card-main-row { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .card-main-row { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: #eceae4; border-bottom: 2px solid #d6dce5; }
         .card-right { display: flex; align-items: center; gap: 20px; }
         .custom-checkbox { width: 22px; height: 22px; cursor: pointer; accent-color: #003366; }
         
         .ticket-info { display: flex; flex-direction: column; gap: 4px; }
         .ticket-no-row { display: flex; align-items: center; gap: 12px; }
-        .ticket-label { color: #666; font-size: 14px; }
-        .ticket-value { color: #003366; font-weight: 800; font-size: 17px; }
+        .ticket-label { color: #666; font-size: 13px; }
+        .ticket-value { color: #000576; font-weight: bold; font-size: 16px; }
         .btn-cancel { color: #dc3545; font-size: 13px; cursor: pointer; background: none; border: none; padding: 0; text-decoration: underline; }
         
         .plate-info { font-size: 14px; color: #555; display: flex; gap: 10px; }
@@ -200,14 +200,14 @@ export default function Home() {
         .card-left { display: flex; align-items: center; gap: 25px; }
         .amount-box { text-align: left; }
         .amount-label { color: #888; font-size: 12px; margin-bottom: 2px; }
-        .amount-value { color: #28a745; font-weight: 900; font-size: 22px; }
+        .amount-value { color: #000576; font-weight: bold; font-size: 20px; }
         
-        .expand-btn { background: #f0f4f8; color: #0056b3; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; border: 1px solid #d1d9e6; }
-        .expand-btn:hover { background: #0056b3; color: white; }
+        .expand-btn { background: transparent; color: #000576; width: 36px; height: 36px; border-radius: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; border: none; font-size: 24px; }
+        .expand-btn:hover { background: transparent; color: #000576; }
         .expand-icon { font-size: 20px; font-weight: bold; }
         
         /* Accordion Details */
-        .card-details { padding: 20px; background: #fcfdfe; border-top: 1px solid #edf2f7; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; font-size: 14px; }
+        .card-details { padding: 20px; background: white; border-top: 1px solid #d6dce5; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; font-size: 14px; }
         .detail-item { display: flex; flex-direction: column; gap: 6px; }
         .detail-label { color: #718096; font-size: 13px; }
         .detail-value { color: #2d3748; font-weight: 700; }
@@ -220,8 +220,8 @@ export default function Home() {
         .total-selected-label { font-weight: 700; color: #4a5568; font-size: 16px; }
         .total-selected-value { color: #000576; font-weight: 900; font-size: 26px; }
         
-        .btn-pay-official { background: #000576; color: white; border: none; padding: 16px 0; border-radius: 50px; font-size: 20px; font-weight: 800; cursor: pointer; width: 100%; max-width: 450px; box-shadow: 0 6px 20px rgba(0,5,118,0.25); transition: transform 0.2s, background 0.2s; display: flex; align-items: center; justify-content: center; gap: 12px; }
-        .btn-pay-official:hover:not(:disabled) { transform: translateY(-2px); background: #000460; }
+        .btn-pay-official { background: #0056b3; color: white; border: none; padding: 12px 0; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; max-width: 300px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s, background 0.2s; display: flex; align-items: center; justify-content: center; gap: 12px; }
+        .btn-pay-official:hover:not(:disabled) { transform: translateY(-1px); background: #003d82; }
         .btn-pay-official:disabled { background: #cbd5e0; color: #718096; cursor: not-allowed; box-shadow: none; }
         
         .footer-note { font-size: 12px; color: #718096; text-align: center; max-width: 500px; line-height: 1.5; }
@@ -373,7 +373,7 @@ export default function Home() {
             </div>
             
             <button className="btn-pay-official" onClick={handlePay}>
-              <span>دفع المخالفات المختارة</span>
+              <span>إدفع</span>
             </button>
             
             <div className="footer-note">
