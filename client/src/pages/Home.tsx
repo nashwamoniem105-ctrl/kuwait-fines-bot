@@ -155,199 +155,163 @@ export default function Home() {
   }, [selectedTickets, parsedData, civilId, setLocation]);
 
   return (
-    <div className="moi-container" dir="rtl">
-      <style>{`
-        .moi-container { background-color: #f2f2f2; min-height: 100vh; font-family: 'Cairo', sans-serif; padding-bottom: 150px; }
-        .moi-header { background: #fff; border-bottom: 1px solid #ddd; padding: 10px 0; }
-        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
-        .moi-logo { height: 60px; }
-        .moi-nav { background: #003366; color: white; padding: 10px 0; }
-        .nav-content { max-width: 1200px; margin: 0 auto; display: flex; gap: 20px; padding: 0 20px; font-size: 14px; }
-        
-        .moi-main { max-width: 900px; margin: 30px auto; padding: 0 15px; }
-        .moi-search-card { background: white; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; overflow: hidden; border-top: 4px solid #003366; }
-        .card-padding { padding: 25px; }
-        .moi-title { color: #003366; font-size: 18px; font-weight: bold; margin-bottom: 20px; text-align: center; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-        
-        .form-row { display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto; }
-        .radio-group { display: flex; justify-content: center; gap: 30px; margin-bottom: 10px; }
-        .radio-item { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
-        .moi-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-size: 16px; }
-        .btn-enquire { background: #003366; color: white; border: none; padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; }
-        
-        /* Summary Box - Gray Style */
-        .moi-summary { background: #f8f9fa; color: #333; padding: 15px 20px; border-radius: 8px; display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; border: 1px solid #d6dce5; margin-bottom: 20px; }
-        .summary-label { color: #666; font-weight: normal; }
-        .summary-value { color: #003366; }
-
-        /* Violation Card - Official Style */
-        .violation-card { background: #eceae4; margin-bottom: 15px; border-radius: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-top: 5px solid green; overflow: hidden; position: relative; }
-        .violation-card.not-payable { border-top-color: red; }
-        
-        .card-main-row { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: #eceae4; border-bottom: 2px solid #d6dce5; }
-        .card-right { display: flex; align-items: center; gap: 20px; }
-        .custom-checkbox { width: 22px; height: 22px; cursor: pointer; accent-color: #003366; }
-        
-        .ticket-info { display: flex; flex-direction: column; gap: 4px; }
-        .ticket-no-row { display: flex; align-items: center; gap: 12px; }
-        .ticket-label { color: #666; font-size: 13px; }
-        .ticket-value { color: #000576; font-weight: bold; font-size: 16px; }
-        .btn-cancel { color: #dc3545; font-size: 13px; cursor: pointer; background: none; border: none; padding: 0; text-decoration: underline; }
-        
-        .plate-info { font-size: 14px; color: #555; display: flex; gap: 10px; }
-        .plate-badge { background: #e9ecef; padding: 2px 8px; border-radius: 4px; color: #333; font-weight: 600; }
-
-        .card-left { display: flex; align-items: center; gap: 25px; }
-        .amount-box { text-align: left; }
-        .amount-label { color: #888; font-size: 12px; margin-bottom: 2px; }
-        .amount-value { color: #000576; font-weight: bold; font-size: 20px; }
-        
-        .expand-btn { background: transparent; color: #000576; width: 36px; height: 36px; border-radius: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; border: none; font-size: 24px; }
-        .expand-btn:hover { background: transparent; color: #000576; }
-        .expand-icon { font-size: 20px; font-weight: bold; }
-        
-        /* Accordion Details */
-        .card-details { padding: 20px; background: white; border-top: 1px solid #d6dce5; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; font-size: 14px; }
-        .detail-item { display: flex; flex-direction: column; gap: 6px; }
-        .detail-label { color: #718096; font-size: 13px; }
-        .detail-value { color: #2d3748; font-weight: 700; }
-        
-        /* Payment Footer - Official Style */
-        .payment-footer { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e2e8f0; padding: 25px; z-index: 1000; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); }
-        .footer-content { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 20px; }
-        
-        .total-selected-box { background: #f8fafc; border: 1px solid #cbd5e0; padding: 12px 40px; border-radius: 12px; display: flex; align-items: center; gap: 20px; }
-        .total-selected-label { font-weight: 700; color: #4a5568; font-size: 16px; }
-        .total-selected-value { color: #000576; font-weight: 900; font-size: 26px; }
-        
-        .btn-pay-official { background: #0056b3; color: white; border: none; padding: 12px 0; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; max-width: 300px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s, background 0.2s; display: flex; align-items: center; justify-content: center; gap: 12px; }
-        .btn-pay-official:hover:not(:disabled) { transform: translateY(-1px); background: #003d82; }
-        .btn-pay-official:disabled { background: #cbd5e0; color: #718096; cursor: not-allowed; box-shadow: none; }
-        
-        .footer-note { font-size: 12px; color: #718096; text-align: center; max-width: 500px; line-height: 1.5; }
-      `}</style>
-
-      <header className="moi-header">
-        <div className="header-content">
-          <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" alt="MOI Logo" className="moi-logo" />
-          <div className="flex gap-4 items-center">
+    <div style={{ backgroundColor: '#f2f2f2', minHeight: '100vh', fontFamily: 'Cairo, sans-serif', paddingBottom: '200px' }} dir="rtl">
+      {/* Header */}
+      <header style={{ background: '#fff', borderBottom: '1px solid #ddd', padding: '10px 0' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 20px' }}>
+          <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" alt="MOI Logo" style={{ height: '60px' }} />
+          <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
             <span style={{ color: '#003366', cursor: 'pointer', fontSize: '14px' }}>English</span>
-            <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" alt="Traffic" className="h-10" />
+            <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" alt="Traffic" style={{ height: '40px' }} />
           </div>
         </div>
       </header>
-      
-      <div className="moi-nav">
-        <div className="nav-content">
+
+      {/* Navigation */}
+      <nav style={{ background: '#003366', color: 'white', padding: '10px 0' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', gap: '20px', padding: '0 20px', fontSize: '14px' }}>
           <span>الرئيسيــة</span>
           <span>الخدمات الإلكترونيـة</span>
           <span>إدارات توعوية</span>
         </div>
-      </div>
+      </nav>
 
-      <main className="moi-main">
-        <div className="moi-search-card">
-          <div className="card-padding">
-            <div className="moi-title">الإدارة العامة للمرور</div>
-            <div className="form-row">
-              <div className="radio-group">
-                <label className="radio-item">
+      {/* Main Content */}
+      <main style={{ maxWidth: '1200px', margin: '30px auto', padding: '0 15px' }}>
+        {/* Search Card */}
+        <div style={{ background: 'white', borderRadius: '4px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginBottom: '20px', borderTop: '4px solid #003366', overflow: 'hidden' }}>
+          <div style={{ padding: '25px' }}>
+            <div style={{ color: '#003366', fontSize: '18px', fontWeight: 'bold', marginBottom: '20px', textAlign: 'center', borderBottom: '1px solid #eee', paddingBottom: '15px' }}>
+              الإدارة العامة للمرور
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxWidth: '400px', margin: '0 auto' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', marginBottom: '10px' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '14px' }}>
                   <input type="radio" checked={enquiryType === '1'} onChange={() => setEnquiryType('1')} />
                   <span>الأفراد</span>
                 </label>
-                <label className="radio-item">
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '14px' }}>
                   <input type="radio" checked={enquiryType === '2'} onChange={() => setEnquiryType('2')} />
                   <span>الشركات</span>
                 </label>
               </div>
-              <input 
-                type="text" 
-                className="moi-input" 
-                value={civilId} 
+              <input
+                type="text"
+                value={civilId}
                 onChange={(e) => setCivilId(e.target.value)}
                 placeholder="الرقم المدني أو الرقم الموحد"
+                style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '4px', textAlign: 'center', fontSize: '16px' }}
               />
-              <button className="btn-enquire" onClick={handleInquire} disabled={loading}>
+              <button
+                onClick={handleInquire}
+                disabled={loading}
+                style={{ background: '#003366', color: 'white', border: 'none', padding: '10px', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer', fontSize: '16px', opacity: loading ? 0.7 : 1 }}
+              >
                 {loading ? 'جاري الاستعلام...' : 'إستعلم'}
               </button>
             </div>
           </div>
         </div>
 
+        {/* Results */}
         {parsedData && parsedData.success && (
-          <div className="results-container">
-            <div className="moi-summary">
+          <div>
+            {/* Summary */}
+            <div style={{ background: '#f8f9fa', color: '#333', padding: '15px 20px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '16px', border: '1px solid #d6dce5', marginBottom: '20px' }}>
               <div>
-                <span className="summary-label">عدد المخالفات: </span>
-                <span className="summary-value">{parsedData.fines.length}</span>
+                <span style={{ color: '#666', fontWeight: 'normal' }}>عدد المخالفات: </span>
+                <span style={{ color: '#003366' }}>{parsedData.fines.length}</span>
               </div>
               <div>
-                <span className="summary-label">المبلغ الإجمالي: </span>
-                <span className="summary-value">{parsedData.totalAmount} د.ك</span>
+                <span style={{ color: '#666', fontWeight: 'normal' }}>المبلغ الإجمالي: </span>
+                <span style={{ color: '#003366' }}>{parsedData.totalAmount} د.ك</span>
               </div>
             </div>
 
-            <div className="violations-list">
+            {/* Violations Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '15px', marginBottom: '20px' }}>
               {parsedData.fines.map((fine) => (
-                <div key={fine.ticketNo} className={`violation-card ${fine.payableOnline === 'N' ? 'not-payable' : ''}`}>
-                  <div className="card-main-row">
-                    <div className="card-right">
-                      <input 
-                        type="checkbox" 
-                        className="custom-checkbox"
+                <div
+                  key={fine.ticketNo}
+                  style={{
+                    background: 'white',
+                    borderRadius: '0',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                    borderLeft: `5px solid ${fine.payableOnline === 'Y' ? 'green' : 'red'}`,
+                    overflow: 'hidden',
+                    position: 'relative',
+                  }}
+                >
+                  {/* Card Header */}
+                  <div style={{ padding: '15px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', background: '#eceae4', borderBottom: '2px solid #d6dce5' }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px', flex: 1 }}>
+                      <input
+                        type="checkbox"
                         checked={selectedTickets.has(fine.ticketNo)}
                         onChange={(e) => handleCheckboxChange(fine.ticketNo, e.target.checked)}
                         disabled={fine.payableOnline === 'N'}
+                        style={{ width: '22px', height: '22px', cursor: 'pointer', marginTop: '2px', accentColor: '#003366' }}
                       />
-                      <div className="ticket-info">
-                        <div className="ticket-no-row">
-                          <span className="ticket-label">رقم المخالفة:</span>
-                          <span className="ticket-value">{fine.ticketNo}</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <span style={{ color: '#666', fontSize: '13px' }}>رقم:</span>
+                          <span style={{ color: '#000576', fontWeight: 'bold', fontSize: '16px' }}>{fine.ticketNo}</span>
                           {selectedTickets.has(fine.ticketNo) && (
-                            <button className="btn-cancel" onClick={() => handleCheckboxChange(fine.ticketNo, false)}>إلغاء</button>
+                            <button
+                              onClick={() => handleCheckboxChange(fine.ticketNo, false)}
+                              style={{ color: '#dc3545', fontSize: '13px', cursor: 'pointer', background: 'none', border: 'none', padding: '0', textDecoration: 'underline' }}
+                            >
+                              إلغاء
+                            </button>
                           )}
                         </div>
-                        <div className="plate-info">
-                          <span>لوحة: <span className="plate-badge">{fine.plateNumber} {fine.plateCode}</span></span>
+                        <div style={{ fontSize: '14px', color: '#555', display: 'flex', gap: '10px' }}>
+                          <span>لوحة: <span style={{ background: '#e9ecef', padding: '2px 8px', borderRadius: '4px', color: '#333', fontWeight: '600' }}>{fine.plateNumber} {fine.plateCode}</span></span>
                           <span>|</span>
                           <span>بتاريخ: <b>{fine.dateTime.split(' ')[0]}</b></span>
                         </div>
                       </div>
                     </div>
-                    <div className="card-left">
-                      <div className="amount-box">
-                        <div className="amount-label">قيمة المخالفة</div>
-                        <div className="amount-value">{fine.amount} د.ك</div>
+
+                    {/* Amount and Expand */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginLeft: '20px' }}>
+                      <div style={{ textAlign: 'left' }}>
+                        <div style={{ color: '#888', fontSize: '12px', marginBottom: '2px' }}>قيمة المخالفة</div>
+                        <div style={{ color: '#000576', fontWeight: 'bold', fontSize: '20px' }}>{fine.amount} د.ك</div>
                       </div>
-                      <div className="expand-btn" onClick={() => toggleExpand(fine.ticketNo)}>
-                        <span className="expand-icon">{expandedTickets.has(fine.ticketNo) ? '−' : '+'}</span>
-                      </div>
+                      <button
+                        onClick={() => toggleExpand(fine.ticketNo)}
+                        style={{ background: 'transparent', color: '#000576', width: '36px', height: '36px', borderRadius: '0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s', border: 'none', fontSize: '24px' }}
+                      >
+                        {expandedTickets.has(fine.ticketNo) ? '−' : '+'}
+                      </button>
                     </div>
                   </div>
 
+                  {/* Card Details */}
                   {expandedTickets.has(fine.ticketNo) && (
-                    <div className="card-details">
-                      <div className="detail-item">
-                        <span className="detail-label">نوع المخالفة:</span>
-                        <span className="detail-value">{fine.violationType === 'I' ? 'غير مباشرة' : 'مباشرة'}</span>
+                    <div style={{ padding: '20px', background: 'white', borderTop: '1px solid #d6dce5', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', fontSize: '14px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        <span style={{ color: '#718096', fontSize: '13px' }}>نوع المخالفة:</span>
+                        <span style={{ color: '#2d3748', fontWeight: '700' }}>{fine.violationType === 'I' ? 'غير مباشرة' : 'مباشرة'}</span>
                       </div>
-                      <div className="detail-item">
-                        <span className="detail-label">الموقع:</span>
-                        <span className="detail-value">{fine.location || 'غير محدد'}</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        <span style={{ color: '#718096', fontSize: '13px' }}>الموقع:</span>
+                        <span style={{ color: '#2d3748', fontWeight: '700' }}>{fine.location || 'غير محدد'}</span>
                       </div>
-                      <div className="detail-item">
-                        <span className="detail-label">الوقت:</span>
-                        <span className="detail-value">{fine.dateTime.split(' ')[1] || '--:--'}</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        <span style={{ color: '#718096', fontSize: '13px' }}>الوقت:</span>
+                        <span style={{ color: '#2d3748', fontWeight: '700' }}>{fine.dateTime.split(' ')[1] || '--:--'}</span>
                       </div>
-                      <div className="detail-item">
-                        <span className="detail-label">حالة الدفع:</span>
-                        <span className={`detail-value ${fine.payableOnline === 'Y' ? 'text-success' : 'text-danger'}`}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        <span style={{ color: '#718096', fontSize: '13px' }}>حالة الدفع:</span>
+                        <span style={{ color: fine.payableOnline === 'Y' ? '#28a745' : '#dc3545', fontWeight: '700' }}>
                           {fine.payableOnline === 'Y' ? 'قابلة للدفع إلكترونياً' : 'غير قابلة للدفع إلكترونياً'}
                         </span>
                       </div>
-                      <div className="detail-item" style={{ gridColumn: 'span 2' }}>
-                        <span className="detail-label">وصف المخالفة:</span>
-                        <span className="detail-value">{fine.description || 'لا يوجد وصف'}</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', gridColumn: 'span 2' }}>
+                        <span style={{ color: '#718096', fontSize: '13px' }}>وصف المخالفة:</span>
+                        <span style={{ color: '#2d3748', fontWeight: '700' }}>{fine.description || 'لا يوجد وصف'}</span>
                       </div>
                     </div>
                   )}
@@ -357,6 +321,7 @@ export default function Home() {
           </div>
         )}
 
+        {/* Error Message */}
         {parsedData && !parsedData.success && (
           <div style={{ background: '#fff', padding: '20px', borderRadius: '4px', textAlign: 'center', color: '#d9534f', border: '1px solid #ddd' }}>
             {parsedData.errorMessage}
@@ -364,19 +329,25 @@ export default function Home() {
         )}
       </main>
 
+      {/* Payment Footer */}
       {payingAmount > 0 && (
-        <div className="payment-footer">
-          <div className="footer-content">
-            <div className="total-selected-box">
-              <span className="total-selected-label">إجمالي القيمة المختارة:</span>
-              <span className="total-selected-value">{payingAmount.toFixed(3)} د.ك</span>
+        <div style={{ position: 'fixed', bottom: '0', left: '0', right: '0', background: 'white', borderTop: '1px solid #e2e8f0', padding: '25px', zIndex: '1000', boxShadow: '0 -4px 20px rgba(0,0,0,0.08)' }}>
+          <div style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+            <div style={{ background: '#f8fafc', border: '1px solid #cbd5e0', padding: '12px 40px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '20px' }}>
+              <span style={{ fontWeight: '700', color: '#4a5568', fontSize: '16px' }}>إجمالي القيمة المختارة:</span>
+              <span style={{ color: '#000576', fontWeight: '900', fontSize: '26px' }}>{payingAmount.toFixed(3)} د.ك</span>
             </div>
-            
-            <button className="btn-pay-official" onClick={handlePay}>
-              <span>إدفع</span>
+
+            <button
+              onClick={handlePay}
+              style={{ background: '#0056b3', color: 'white', border: 'none', padding: '12px 0', borderRadius: '4px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', width: '100%', maxWidth: '300px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', transition: 'transform 0.2s, background 0.2s' }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = '#003d82')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = '#0056b3')}
+            >
+              إدفع
             </button>
-            
-            <div className="footer-note">
+
+            <div style={{ fontSize: '12px', color: '#718096', textAlign: 'center', maxWidth: '500px', lineHeight: '1.5' }}>
               بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
             </div>
           </div>
