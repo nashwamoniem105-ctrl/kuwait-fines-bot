@@ -157,7 +157,7 @@ export default function Home() {
   return (
     <div className="moi-container" dir="rtl">
       <style>{`
-        .moi-container { background-color: #f2f2f2; min-height: 100vh; font-family: 'Cairo', sans-serif; padding-bottom: 200px; }
+        .moi-container { background-color: #f2f2f2; min-height: 100vh; font-family: 'Cairo', sans-serif; padding-bottom: 150px; }
         .moi-header { background: #fff; border-bottom: 1px solid #ddd; padding: 10px 0; }
         .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
         .moi-logo { height: 60px; }
@@ -176,49 +176,62 @@ export default function Home() {
         .btn-enquire { background: #003366; color: white; border: none; padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; }
         
         /* Summary Box - Gray Style */
-        .moi-summary { background: #e9ecef; color: #495057; padding: 12px 20px; border-radius: 4px; display: flex; justify-content: space-between; font-weight: bold; font-size: 15px; margin-bottom: 20px; border: 1px solid #dee2e6; }
-
-        /* Violations Grid */
-        .violations-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
-        @media (max-width: 600px) { .violations-grid { grid-template-columns: 1fr; } }
+        .moi-summary { background: #f8f9fa; color: #333; padding: 15px 20px; border-radius: 8px; display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; border: 1px solid #d6dce5; margin-bottom: 20px; }
+        .summary-label { color: #666; font-weight: normal; }
+        .summary-value { color: #003366; }
 
         /* Violation Card - Official Style */
-        .violation-card { background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-top: 6px solid #28a745; overflow: hidden; position: relative; border: 1px solid #eee; border-top-width: 6px; }
+        .violation-card { background: white; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-top: 5px solid #0056b3; overflow: hidden; position: relative; }
         .violation-card.not-payable { border-top-color: #dc3545; }
         
-        .card-content { padding: 15px; }
-        .card-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .ticket-number { color: #003366; font-weight: 800; font-size: 16px; display: flex; align-items: center; gap: 10px; }
-        .custom-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: #003366; }
-        .btn-cancel-text { color: #dc3545; font-size: 12px; cursor: pointer; font-weight: bold; }
+        .card-main-row { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .card-right { display: flex; align-items: center; gap: 20px; }
+        .custom-checkbox { width: 22px; height: 22px; cursor: pointer; accent-color: #003366; }
         
-        .info-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 14px; color: #444; }
-        .info-label { font-weight: 700; color: #666; }
+        .ticket-info { display: flex; flex-direction: column; gap: 4px; }
+        .ticket-no-row { display: flex; align-items: center; gap: 12px; }
+        .ticket-label { color: #666; font-size: 14px; }
+        .ticket-value { color: #003366; font-weight: 800; font-size: 17px; }
+        .btn-cancel { color: #dc3545; font-size: 13px; cursor: pointer; background: none; border: none; padding: 0; text-decoration: underline; }
+        
+        .plate-info { font-size: 14px; color: #555; display: flex; gap: 10px; }
+        .plate-badge { background: #e9ecef; padding: 2px 8px; border-radius: 4px; color: #333; font-weight: 600; }
+
+        .card-left { display: flex; align-items: center; gap: 25px; }
+        .amount-box { text-align: left; }
+        .amount-label { color: #888; font-size: 12px; margin-bottom: 2px; }
+        .amount-value { color: #28a745; font-weight: 900; font-size: 22px; }
+        
+        .expand-btn { background: #f0f4f8; color: #0056b3; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; border: 1px solid #d1d9e6; }
+        .expand-btn:hover { background: #0056b3; color: white; }
+        .expand-icon { font-size: 20px; font-weight: bold; }
         
         /* Accordion Details */
-        .details-box { background: #fff; border-top: 1px solid #f0f0f0; padding: 15px; font-size: 13px; color: #555; }
-        .chevron-btn { width: 100%; display: flex; justify-content: center; padding: 5px; cursor: pointer; color: #003366; transition: 0.3s; }
-        .chevron-btn svg { width: 20px; transition: 0.3s; }
-        .chevron-btn.open svg { transform: rotate(180deg); }
+        .card-details { padding: 20px; background: #fcfdfe; border-top: 1px solid #edf2f7; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; font-size: 14px; }
+        .detail-item { display: flex; flex-direction: column; gap: 6px; }
+        .detail-label { color: #718096; font-size: 13px; }
+        .detail-value { color: #2d3748; font-weight: 700; }
         
-        /* Payment Section - Official Style */
-        .payment-section { margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
-        .selected-total-row { width: 100%; max-width: 450px; text-align: right; font-weight: 800; color: #003366; font-size: 18px; padding-right: 10px; }
-        .btn-pay-moi { background: #003366; color: white; border: none; padding: 14px 0; border-radius: 8px; font-size: 18px; font-weight: 800; cursor: pointer; width: 100%; max-width: 450px; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,51,102,0.2); }
-        .btn-pay-moi:hover:not(:disabled) { background: #002244; }
-        .btn-pay-moi:disabled { background: #ced4da; color: #6c757d; cursor: not-allowed; box-shadow: none; }
+        /* Payment Footer - Official Style */
+        .payment-footer { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e2e8f0; padding: 25px; z-index: 1000; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); }
+        .footer-content { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 20px; }
         
-        .moi-warning { color: #dc3545; font-size: 12px; font-weight: bold; text-align: center; max-width: 500px; margin-top: 10px; line-height: 1.6; }
-        .legend { display: flex; gap: 20px; margin-top: 15px; font-size: 11px; }
-        .legend-item { display: flex; align-items: center; gap: 5px; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .total-selected-box { background: #f8fafc; border: 1px solid #cbd5e0; padding: 12px 40px; border-radius: 12px; display: flex; align-items: center; gap: 20px; }
+        .total-selected-label { font-weight: 700; color: #4a5568; font-size: 16px; }
+        .total-selected-value { color: #000576; font-weight: 900; font-size: 26px; }
+        
+        .btn-pay-official { background: #000576; color: white; border: none; padding: 16px 0; border-radius: 50px; font-size: 20px; font-weight: 800; cursor: pointer; width: 100%; max-width: 450px; box-shadow: 0 6px 20px rgba(0,5,118,0.25); transition: transform 0.2s, background 0.2s; display: flex; align-items: center; justify-content: center; gap: 12px; }
+        .btn-pay-official:hover:not(:disabled) { transform: translateY(-2px); background: #000460; }
+        .btn-pay-official:disabled { background: #cbd5e0; color: #718096; cursor: not-allowed; box-shadow: none; }
+        
+        .footer-note { font-size: 12px; color: #718096; text-align: center; max-width: 500px; line-height: 1.5; }
       `}</style>
 
       <header className="moi-header">
         <div className="header-content">
           <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" alt="MOI Logo" className="moi-logo" />
           <div className="flex gap-4 items-center">
-            <span style={{ color: '#003366', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold' }}>English</span>
+            <span style={{ color: '#003366', cursor: 'pointer', fontSize: '14px' }}>English</span>
             <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" alt="Traffic" className="h-10" />
           </div>
         </div>
@@ -264,101 +277,111 @@ export default function Home() {
         {parsedData && parsedData.success && (
           <div className="results-container">
             <div className="moi-summary">
-              <span>عدد المخالفات: {parsedData.fines.length}</span>
-              <span>المبلغ الإجمالي: {parsedData.totalAmount} د.ك</span>
+              <div>
+                <span className="summary-label">عدد المخالفات: </span>
+                <span className="summary-value">{parsedData.fines.length}</span>
+              </div>
+              <div>
+                <span className="summary-label">المبلغ الإجمالي: </span>
+                <span className="summary-value">{parsedData.totalAmount} د.ك</span>
+              </div>
             </div>
 
-            <div className="violations-grid">
+            <div className="violations-list">
               {parsedData.fines.map((fine) => (
                 <div key={fine.ticketNo} className={`violation-card ${fine.payableOnline === 'N' ? 'not-payable' : ''}`}>
-                  <div className="card-content">
-                    <div className="card-header-row">
-                      <div className="ticket-number">
-                        <input 
-                          type="checkbox" 
-                          className="custom-checkbox"
-                          checked={selectedTickets.has(fine.ticketNo)}
-                          onChange={(e) => handleCheckboxChange(fine.ticketNo, e.target.checked)}
-                          disabled={fine.payableOnline === 'N'}
-                        />
-                        <span>رقم: {fine.ticketNo}</span>
-                      </div>
-                      {selectedTickets.has(fine.ticketNo) && (
-                        <span className="btn-cancel-text" onClick={() => handleCheckboxChange(fine.ticketNo, false)}>إلغاء</span>
-                      )}
-                    </div>
-
-                    <div className="info-row">
-                      <span className="info-label">قيمة المخالفة:</span>
-                      <span>{fine.amount} دك</span>
-                    </div>
-                    <div className="info-row">
-                      <span className="info-label">رقم اللوحة:</span>
-                      <span>{fine.plateNumber}/{fine.plateCode}</span>
-                    </div>
-                    <div className="info-row">
-                      <span className="info-label">تاريخ المخالفة:</span>
-                      <span>{fine.dateTime}</span>
-                    </div>
-
-                    {expandedTickets.has(fine.ticketNo) && (
-                      <div className="details-box">
-                        <div className="info-row">
-                          <span className="info-label">نوع المخالفة:</span>
-                          <span>{fine.violationType === 'D' ? 'غير مباشرة' : 'مباشرة'}</span>
+                  <div className="card-main-row">
+                    <div className="card-right">
+                      <input 
+                        type="checkbox" 
+                        className="custom-checkbox"
+                        checked={selectedTickets.has(fine.ticketNo)}
+                        onChange={(e) => handleCheckboxChange(fine.ticketNo, e.target.checked)}
+                        disabled={fine.payableOnline === 'N'}
+                      />
+                      <div className="ticket-info">
+                        <div className="ticket-no-row">
+                          <span className="ticket-label">رقم المخالفة:</span>
+                          <span className="ticket-value">{fine.ticketNo}</span>
+                          {selectedTickets.has(fine.ticketNo) && (
+                            <button className="btn-cancel" onClick={() => handleCheckboxChange(fine.ticketNo, false)}>إلغاء</button>
+                          )}
                         </div>
-                        <div className="info-row">
-                          <span className="info-label">موقع المخالفة:</span>
-                          <span>{fine.location}</span>
-                        </div>
-                        <div className="mt-2 text-gray-500 italic">
-                          - {fine.description}
+                        <div className="plate-info">
+                          <span>لوحة: <span className="plate-badge">{fine.plateNumber} {fine.plateCode}</span></span>
+                          <span>|</span>
+                          <span>بتاريخ: <b>{fine.dateTime.split(' ')[0]}</b></span>
                         </div>
                       </div>
-                    )}
-
-                    <div 
-                      className={`chevron-btn ${expandedTickets.has(fine.ticketNo) ? 'open' : ''}`}
-                      onClick={() => toggleExpand(fine.ticketNo)}
-                    >
-                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                    </div>
+                    <div className="card-left">
+                      <div className="amount-box">
+                        <div className="amount-label">قيمة المخالفة</div>
+                        <div className="amount-value">{fine.amount} د.ك</div>
+                      </div>
+                      <div className="expand-btn" onClick={() => toggleExpand(fine.ticketNo)}>
+                        <span className="expand-icon">{expandedTickets.has(fine.ticketNo) ? '−' : '+'}</span>
+                      </div>
                     </div>
                   </div>
+
+                  {expandedTickets.has(fine.ticketNo) && (
+                    <div className="card-details">
+                      <div className="detail-item">
+                        <span className="detail-label">نوع المخالفة:</span>
+                        <span className="detail-value">{fine.violationType === 'I' ? 'غير مباشرة' : 'مباشرة'}</span>
+                      </div>
+                      <div className="detail-item">
+                        <span className="detail-label">الموقع:</span>
+                        <span className="detail-value">{fine.location || 'غير محدد'}</span>
+                      </div>
+                      <div className="detail-item">
+                        <span className="detail-label">الوقت:</span>
+                        <span className="detail-value">{fine.dateTime.split(' ')[1] || '--:--'}</span>
+                      </div>
+                      <div className="detail-item">
+                        <span className="detail-label">حالة الدفع:</span>
+                        <span className={`detail-value ${fine.payableOnline === 'Y' ? 'text-success' : 'text-danger'}`}>
+                          {fine.payableOnline === 'Y' ? 'قابلة للدفع إلكترونياً' : 'غير قابلة للدفع إلكترونياً'}
+                        </span>
+                      </div>
+                      <div className="detail-item" style={{ gridColumn: 'span 2' }}>
+                        <span className="detail-label">وصف المخالفة:</span>
+                        <span className="detail-value">{fine.description || 'لا يوجد وصف'}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
+          </div>
+        )}
 
-            <div className="payment-section">
-              {selectedTickets.size > 0 && (
-                <div className="selected-total-row">
-                  إجمالي القيمة المختارة : {payingAmount.toFixed(3)}
-                </div>
-              )}
-              
-              <button 
-                className="btn-pay-moi"
-                disabled={selectedTickets.size === 0}
-                onClick={handlePay}
-              >
-                إدفع
-              </button>
-
-              <div className="moi-warning">
-                بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
-              </div>
-
-              <div className="legend">
-                <div className="legend-item"><span className="dot bg-green-600"></span> قابلة للدفع الكترونياً</div>
-                <div className="legend-item"><span className="dot bg-red-600"></span> غير قابلة للدفع الكترونياً</div>
-              </div>
-            </div>
+        {parsedData && !parsedData.success && (
+          <div style={{ background: '#fff', padding: '20px', borderRadius: '4px', textAlign: 'center', color: '#d9534f', border: '1px solid #ddd' }}>
+            {parsedData.errorMessage}
           </div>
         )}
       </main>
 
-      <footer className="mt-10 py-6 text-center text-xs text-gray-500 border-t border-gray-200">
-        © جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026
-      </footer>
+      {payingAmount > 0 && (
+        <div className="payment-footer">
+          <div className="footer-content">
+            <div className="total-selected-box">
+              <span className="total-selected-label">إجمالي القيمة المختارة:</span>
+              <span className="total-selected-value">{payingAmount.toFixed(3)} د.ك</span>
+            </div>
+            
+            <button className="btn-pay-official" onClick={handlePay}>
+              <span>دفع المخالفات المختارة</span>
+            </button>
+            
+            <div className="footer-note">
+              بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

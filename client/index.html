@@ -7,164 +7,1432 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>General Department of Traffic - Ministry of Interior - Kuwait</title>
     <link rel="icon" type="image/x-icon" href="/main/favicon.ico" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous" />
-    <link rel="stylesheet" href="/main/css/site.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f2f2f2; }
-        .moi-summary-strip { background-color: #e9ecef; color: #495057; padding: 12px 20px; border-radius: 4px; display: flex; justify-content: space-between; font-weight: bold; font-size: 15px; margin-bottom: 20px; border: 1px solid #dee2e6; width: 100%; }
-        .violations-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; width: 100%; }
-        @media (max-width: 600px) { .violations-grid { grid-template-columns: 1fr; } }
-        .violation-card { background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-top: 6px solid #28a745; overflow: hidden; position: relative; border: 1px solid #eee; text-align: right; }
-        .violation-card.not-payable { border-top-color: #dc3545; }
-        .card-body-moi { padding: 15px; }
-        .card-header-moi { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .ticket-no-moi { color: #003366; font-weight: 800; font-size: 16px; display: flex; align-items: center; gap: 10px; }
-        .moi-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: #003366; }
-        .info-row-moi { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 14px; color: #444; }
-        .info-label-moi { font-weight: 700; color: #666; }
-        .details-box-moi { background: #fff; border-top: 1px solid #f0f0f0; padding: 15px; font-size: 13px; color: #555; display: none; }
-        .chevron-btn-moi { width: 100%; display: flex; justify-content: center; padding: 5px; cursor: pointer; color: #003366; transition: 0.3s; }
-        .chevron-btn-moi svg { width: 20px; transition: 0.3s; }
-        .chevron-btn-moi.open svg { transform: rotate(180deg); }
-        .payment-footer-moi { margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 15px; padding-bottom: 50px; }
-        .total-selected-row-moi { width: 100%; max-width: 450px; text-align: right; font-weight: 800; color: #003366; font-size: 18px; padding-right: 10px; display: none; }
-        .btn-pay-official-moi { background: #003366; color: white; border: none; padding: 14px 0; border-radius: 8px; font-size: 18px; font-weight: 800; cursor: pointer; width: 100%; max-width: 450px; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,51,102,0.2); }
-        .btn-pay-official-moi:disabled { background: #ced4da; color: #6c757d; cursor: not-allowed; box-shadow: none; }
-        .moi-warning-text { color: #dc3545; font-size: 12px; font-weight: bold; text-align: center; max-width: 500px; margin-top: 10px; line-height: 1.6; }
-    </style>
+    <script type="text/javascript">
+        <!--
+        window.rsConf = {general: {usePost: true,skipHiddenContent:true }};
+        //-->
+    </script>
+    <script src="https://cdn-na.readspeaker.com/script/56/webReader/webReader.js?pids=wr" type="text/javascript" id="rs_req_Init"></script>
+    
+    
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
+<meta name="x-stylesheet-fallback-test" content="" class="sr-only" /><script>!function(a,b,c,d){var e,f=document,g=f.getElementsByTagName("SCRIPT"),h=g[g.length-1].previousElementSibling,i=f.defaultView&&f.defaultView.getComputedStyle?f.defaultView.getComputedStyle(h):h.currentStyle;if(i&&i[a]!==b)for(e=0;e<c.length;e++)f.write('<link href="'+c[e]+'" '+d+"/>")}("position","absolute",["/main/lib/bootstrap/dist/css/bootstrap.min.css"], "rel=\u0022stylesheet\u0022 crossorigin=\u0022anonymous\u0022 integrity=\u0022sha384-ggOyR0iXCbMQv3Xipma34MD\u002BdH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\u0022 ");</script>
+    
+    <link rel="stylesheet" href="/main/lib/fontawesome/v7/css/all.css" />
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
+    optionally if you need to use a theme, then include the theme CSS file as mentioned below 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/themes/krajee-svg/theme.css" media="all" rel="stylesheet" type="text/css" />-->
+    <link rel="stylesheet" href="/main/css/site.css?v=go_4IccMhw1NChPOSH_W7AbpThLoN7-zMHFe4trNRE0" />
+    
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="container-fluid p-0">
-        <header class="bg-white border-bottom py-3 px-4 flex justify-between items-center d-flex">
-            <img src="/main/images/assets/common/logo-moi.svg" style="height: 80px;" />
-            <div class="ml-auto d-flex align-items-center">
-                <span style="color: #003366; font-weight: bold; cursor: pointer; margin-left: 20px;">English</span>
-                <img src="/main/images/assets/general-traffic/logo-general-traffic.svg" style="height: 50px;" />
-            </div>
-        </header>
-
-        <div class="container mt-5">
-            <div class="card shadow-sm border-0 mb-4" style="border-top: 4px solid #003366 !important;">
-                <div class="card-body p-5">
-                    <h4 class="text-center font-weight-bold mb-4" style="color: #003366; border-bottom: 1px solid #eee; padding-bottom: 15px;">الإدارة العامة للمرور</h4>
-                    <form id="manusEnquireForm" class="text-center mx-auto" style="max-width: 400px;">
-                        <div class="form-group d-flex justify-content-center mb-3">
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="type1" name="enquiryType" class="custom-control-input" value="1" checked>
-                                <label class="custom-control-label" for="type1">الأفراد</label>
-                            </div>
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="type2" name="enquiryType" class="custom-control-input" value="2">
-                                <label class="custom-control-label" for="type2">الشركات</label>
-                            </div>
+    <div class="container">
+        <header>
+            <div class="row">
+                <div class="col-4 col-md-2 col-lg-2 text-center" style="border:0px solid red;">
+                    <a class="navbar-brand m-0" href="/main/">
+                        <img src="/main/images/assets/common/logo-moi.svg" style="height: 120px;" />
+                    </a>
+                </div>
+                <div class="col-1 align-self-center" style="border:0px solid red;">
+                    <div class="row">
+                        <div class="col text-center">
+                            <img src="/main/images/assets/common/ar/state-of-kuwait.svg" class="text-center main-header-title" />
                         </div>
-                        <input type="text" id="civilId" class="form-control text-center mb-3" placeholder="الرقم المدني أو الرقم الموحد" style="height: 50px; font-size: 18px;">
-                        <button type="submit" id="btnEnquire" class="btn btn-block font-weight-bold" style="background: #003366; color: white; height: 50px;">إستعلم</button>
-                    </form>
+                    </div>
+                    <div class="row">
+                        <div class="col text-center">
+                            <img src="/main/images/assets/common/ar/ministry-of-interior.svg" class="mt-2 main-header-title" />
+                        </div>
+                    </div>
                 </div>
             </div>
+            <nav class="navbar navbar-expand-lg navbar-dark border-bottom box-shadow">
+                <div class="container">
+                    <a class="navbar-brand" href="/main"></a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse flex-sm-row-reverse" id="navbarResponsive">
+                        <ul class="navbar-nav flex-grow-1 p-0 clearfix" style="margin:0 auto;vertical-align:top;border:0px solid red;">
+                            <div class="d-flex flex-sm-row flex-column container-navlinks" style="border:0px solid red;overflow:visible;">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/main">
+                                    الرئيسيــة
+                                    <span class="sr-only">(current)</span>
+                                </a>
+                            </li>
 
-            <div id="responseInfo" class="mt-4"></div>
+                            <li class="nav-item" id="eservicesMenu" data-trigger="focus">
+                                <a href="#" id="nav-eServices" class="nav-link" data-target="#eservices" data-toggle="collapse" aria-expanded="false" aria-controls="eservices">
+                                    الخدمات الإلكترونيـة
+                                </a>
+                                <span class="collapse navbar-submenu" id="eservices" data-parent="#navbarResponsive">
+                                    <ul class="nav justify-content-center pt-2 pb-2 pl-3 pr-3" style="border:0px solid red;">
+                                        <li class="nav-item m-0">
+                                            <a href="/main/eservices">
+                                                <img src="/main/images/assets/it-comm/ico-it-communications.svg" alt="Information Systems" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link active" href="/main/eservices">
+                                                <div class="main-menu-text">الإدارة العامة
+لنظم المعلومات</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="/gdt">
+                                                <img src="/main/images/assets/general-traffic/ico-general-traffic.svg" alt="Traffic" class="menu-icon" />
+                                            </a>
+                                            <a href="/gdt" class="nav-link">
+                                                <div class="main-menu-text">الإدارة العامة
+للمرور</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="https://nat.moi.gov.kw/citizenship-passport.nsf/Main?OpenForm&langid=1">
+                                                <img src="/main/images/assets/citizenship-passport/ico-citizenship-passport.svg" alt="Citizenship" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="https://nat.moi.gov.kw/citizenship-passport.nsf/Main?OpenForm&langid=1">
+                                                <div class="main-menu-text">الإدارة العامة
+للجنسية ووثائق السفر</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="/main/eservices/residence">
+                                                <img src="/main/images/assets/residency/ico-residence.svg" alt="Immigration" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="/main/eservices/residence">
+                                                <div class="main-menu-text">الإدارة العامة
+لشؤون  الإقامة</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="/main/eservices/civildefence">
+                                                <img src="/main/images/assets/civil-defence/ico-civil-defence.svg" alt="Civil Defence" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="/main/eservices/civildefence">
+                                                <div class="main-menu-text">الإدارة العامة
+للدفاع المدني</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="/main/eservices/servicecentres">
+                                                <img src="/main/images/assets/service-centres/ico-service-centre.svg" alt="Service Centres" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="/main/eservices/servicecentres">
+                                                <div class="main-menu-text">الإدارة العامة
+لمراكز الخدمة</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="https://nat5.moi.gov.kw/Coast-Guard.nsf/Main?openform&langid=1">
+                                        <img src="/main/images/assets/coast-guard/ico-coast-guard.svg" alt="Coast Guard" class="menu-icon" />
+                                        </a>
+                                            <a class="nav-link" href="https://nat5.moi.gov.kw/Coast-Guard.nsf/Main?openform&langid=1">
+                                        <div class="main-menu-text">الإدارة العامة
+لخفر السواحل</div>
+                                        </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="https://rnt.moi.gov.kw/pas/">
+                                                <img src="/main/images/assets/ico-shoon-quwa.svg" alt="Police Affairs" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="https://rnt.moi.gov.kw/pas/">
+                                                <div class="main-menu-text">الإدارة العامة
+لشؤون قوة الشرطة</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="https://nat4.moi.gov.kw/saad-abdullah-academy.nsf">
+                                                <img src="/main/images/assets/academy/ico-police-academy.svg" alt="Saad Abdullah Police Academy" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="https://nat4.moi.gov.kw/saad-abdullah-academy.nsf">
+                                                <div class="main-menu-text">أكاديمية سعد العبدالله
+للعلوم الأمنية</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="/main/eservices/finance">
+                                                <img src="/main/images/assets/finance/ico-finance.svg" alt="Finance" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="/main/eservices/finance">
+                                                <div class="main-menu-text">الإدارة العامة
+للشؤن المالية</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="https://eservices5.moi.gov.kw/Investigations.nsf">
+                                                <img src="/main/images/assets/investigations/ico-investigations.svg" alt="Investigations" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="https://eservices5.moi.gov.kw/Investigations.nsf">
+                                                <div class="main-menu-text">الإدارة العامة
+ للتحقيقات</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item m-0">
+                                            <a href="/main/sections/training">
+                                                <img src="/main/images/assets/training/ico-training.svg" alt="Training" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="/main/sections/training">
+                                                <div class="main-menu-text">الإدارة العامة
+للتدريب</div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </span>
+                            </li>
+                            <li class="nav-item" id="relatedDepartmentsMenu">
+                                <a href="#" id="nav-relDepts" class="nav-link" data-target="#relatedDepts" data-toggle="collapse" aria-expanded="false" aria-controls="relatedDepts">
+                                    إدارات توعوية
+                                </a>
+                                <span id="relatedDepts" class="collapse navbar-submenu" data-parent="#navbarResponsive">
+                                    <ul class="nav justify-content-center pt-2 pb-2 pl-3 pr-3" style="border:0px solid red;">
+                                        <li class="nav-item m-0">
+                                            <a href="/main/sections/cyber-crime">
+                                                <img src="/main/images/assets/cyber-crime/ico-cyber-crime.svg" alt="Cyber Crime" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="/main/sections/cyber-crime">
+                                                <div class="main-menu-text">إدارة مكافحة 
+الجرائم الإلكترونية</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item m-0">
+                                            <a href="/main/sections/juvenile-protection">
+                                                <img src="/main/images/assets/juvenile-protection/ico-juvenile-protection.svg" alt="Juvenile Protection" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="/main/sections/juvenile-protection">
+                                                <div class="main-menu-text">إدارة حماية الأحداث</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item m-0">
+                                            <a href="/main/sections/anti-drug">
+                                                <img src="/main/images/assets/anti-drug/ico-anti-drug.svg" alt="Anti Drug" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="/main/sections/anti-drug">
+                                                <div class="main-menu-text">الإدارة العامة
+لمكافحة المخدرات</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item m-0">
+                                            <a href="/main/sections/anti-human-trafficking">
+                                                <img src="/main/images/assets/cyber-crime/ico-cyber-crime.svg" alt="Anti Human Trafficking" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="/main/sections/anti-human-trafficking">
+                                                <div class="main-menu-text">إدارة حماية الآداب العامة
+ ومكافحة الإتجار بالأشخاص</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item m-0">
+                                            <a href="/main/sections/security-media">
+                                                <img src="/main/images/assets/security-media/ico-security-media.svg" alt="Security Media Dept" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="/main/sections/security-media">
+                                                <div class="main-menu-text">الإدارة العامة
+ للعلاقات والإعلام الأمني</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item m-0">
+                                            <a href="https://eservices2.moi.gov.kw/Correctional-Facilities.nsf/Main?OpenForm&LangID=1">
+                                                <img src="/main/images/assets/correctional-facilities/icon-correctional-facilities.svg" alt="Correctional Facilities" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="https://eservices2.moi.gov.kw/Correctional-Facilities.nsf/Main?OpenForm&LangID=1">
+                                                <div class="main-menu-text">الإداره العامة
+ للمؤسسات الإصلاحية</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item m-0">
+                                            <a href="/main/sections/security-systems">
+                                                <img src="/main/images/assets/security-systems/ico-security-systems.svg" alt="Security Systems" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="/main/sections/security-systems">
+                                                <div class="main-menu-text">الادارة العامة
+ للأنظمة الأمنية</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item m-0 d-none1">
+                                            <a href="/main/sections/national-security">
+                                                <img src="/main/images/assets/national-security/ico-nat-security.svg" alt="Training" class="menu-icon" />
+                                            </a>
+                                            <a class="nav-link" href="/main/sections/national-security">
+                                                <div class="main-menu-text">كلية الأمن الوطني</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item m-0">
+                                            <a href="https://nat2.moi.gov.kw/GDSRC.nsf">
+                                                <img src="/main/images/assets/research-studies/ico-research.svg" alt="Administrative Affairs Dept." class="menu-icon" />
+                                            </a>
+                                            <a href="https://nat2.moi.gov.kw/GDSRC.nsf">
+                                                <div class="main-menu-text">الإدارة العامة
+لمركز البحوث والدراسات</div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item m-0">
+                                            <a href="/main/sections/human-resources">
+                                                <img src="/main/images/assets/human-resources/ico-hr.svg" alt="Administrative Affairs Dept." class="menu-icon" />
+                                            </a>
+                                            <a href="/main/sections/human-resources">
+                                                <div class="main-menu-text">الإدارة العامة للشئون الإدارية</div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <a href="#" class="nav-link" data-toggle="collapse" aria-expanded="false">
+                                        الإصدارات الإلكترونية
+                                    </a>
+                                    <div class="dropdown-menu text-right" style="background: #e9e6de;padding:0px;">
+                                        <a class="dropdown-item" href="/main/emagazine">
+                                            المجلة الإلكترونية
+                                        </a>
+                                        <a class="dropdown-item" href="/main/news/archive">
+                                            أرشيـف الأخبار
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a class="nav-link" href="https://eservices.moi.gov.kw:45314/verify/qrcode">
+                                    التحقق من الوثائق
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="https://eservices1.moi.gov.kw/moicus.nsf/moicus?openform&LangID=1">
+                                    يهمنا رايك
+                                </a>
+                            </li>
+                            <li class="nav-item" id="navEmergency">
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#emergencyContactModal">
+                                    أرقام الطوارئ
+                                </a>
+                            </li>
+                            <li class="nav-item" id="navMeta">
+                                <div class="dropdown">
+                                    <a href="#" class="nav-link" data-toggle="collapse" aria-expanded="false">
+                                        منصة المواعيد
+                                    </a>
+                                    <div class="dropdown-menu text-right" style="background: #e9e6de;padding:0px;">
+                                        <a class="dropdown-item" href="https://meta.e.gov.kw/">
+                                            منصة 'متى'
+                                        </a>
+                                        <a class="dropdown-item" href="https://nat2.moi.gov.kw/MOIBioEnrol.nsf/initRequest?OpenForm&LangID=1">
+                                            حجز موعد البصمة البيومترية للخليجيين
+                                        </a>
+                                        <a class="dropdown-item" href="https://nat1.moi.gov.kw/MOIeTPAp.nsf/Request?OpenForm&LangID=1">
+                                            حجز مواعيد جوازات السفر المؤقتة والوثائق
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            </div>
+                            <li class="nav-item mt-0 mb-0 mr-auto" style="border:0px solid red;float:left;">
+                                
+
+<div style="border:0px solid white;height:100%;" class="form-group text-center" title="Request culture provider:">
+    <form id="selectLanguage" method="post" class="form-horizontal d-flex " role="form" style="border:0px solid green;height:100%;" action="/main/Home/SetLanguage?returnUrl=%2Fmain%2Feservices%2Fgdt%2Fviolation-enquiry">
+        <div class="col-12 d-flex">
+                <button class="btn btn-lang align-content-center align-self-center text-center">English</button>
+                <input type="hidden" name="culture" value="en" />
+            </div>
+<input name="__RequestVerificationToken" type="hidden" value="CfDJ8BC0QUj6RopNjXFvakHlMJtUZBQfXu9XEk6cPJ6lU_NIZMT_re30bF4u9rXZo37ULb10sg-ZG3vvnxyvAiuokTq2kD7FtleCuPyawq2nalNlOjyU77lBhyGrIamFl0L2X7SOLRYBRBk59uJOOKVRPnI" /></form>
+</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div class="container p-0 m-0 content-main">
+            <div id="readspeaker_button1" class="rs_skip rsbtn rs_preserve">
+                <a rel="nofollow" class="rsbtn_play" title="ReadSpeaker webReader &#x625;&#x633;&#x62A;&#x645;&#x639; &#x625;&#x644;&#x649; &#x647;&#x630;&#x647; &#x627;&#x644;&#x635;&#x641;&#x62D;&#x629;&#x650; &#x645;&#x633;&#x62A;&#x62E;&#x62F;&#x645;&#x627;&#x64B;" href="https://app-na.readspeaker.com/cgi-bin/rsent?customerid=56&amp;lang=ar_ar&amp;voice=Amir&amp;readclass=content-main">
+                    <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text"><span>&#x627;&#x633;&#x62A;&#x645;&#x639; </span></span></span>
+                    <span class="rsbtn_right rsimg rsplay rspart"></span>
+                </a>
+            </div>
+            <main role="main" class="pb-3">
+                <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" />
+<style>
+    .page-item.active .page-link{
+        background-color:#000576;
+        border-color: #000576;
+    }
+</style>
+<div class="row p-0 m-0 content">
+    <div class="col">
+        <div class="row text-justify">
+            <div class="col-sm-4 title">
+                <a href="/main/eservices/gdt">
+                    <img src="/main/images/assets/general-traffic/logo-general-traffic.svg" class="intro-logo m-1" />
+                    &nbsp;الإدارة العامة للمرور
+                </a>
+            </div>
+            <div class="col-sm-8">&nbsp;</div>
+        </div>
+        <div class="row text-center">
+                <div class="col-sm-12 col-md-4 col-lg-4 side-menu text-right">
+        <div class="row mt-2">
+            <div class="col-2 mr-1 ml-1">
+                <a href="https://edl.moi.gov.kw/">
+                    <img src="/main/images/assets/general-traffic/ico-renew-license.svg" class="side-menu-icon" />
+                </a>
+            </div>
+            <div class="col-8 align-self-center">
+                <a href="https://edl.moi.gov.kw/">
+                    الخدمات الالكترونية لرخص السوق
+                </a>
+            </div>
+            <div class="col-1">&nbsp;</div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-2 mr-1 ml-1">
+                <a href="/main/eservices/gdt/violation-enquiry">
+                    <img src="/main/images/assets/common/ico-payment.svg" class="side-menu-icon" />
+                </a>
+            </div>
+            <div class="col-8 align-self-center">
+                <a href="/main/eservices/gdt/violation-enquiry">
+                    دفع المخالفات
+                </a>
+            </div>
+            <div class="col-1">&nbsp;</div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-2 mr-1 ml-1">
+                <a href="#appointmentsMenu" data-toggle="collapse" data-target="#appointmentsMenu" aria-expanded="false" aria-controls="appointmentsMenu">
+                    <img src="/main/images/assets/general-traffic/ico-booking.svg" class="side-menu-icon" />
+                </a>
+            </div>
+            <div class="col-8 align-self-center">
+                <a href="#appointmentsMenu" data-toggle="collapse" data-target="#appointmentsMenu" aria-expanded="false" aria-controls="appointmentsMenu">
+                    نظام مواعيد اختبار القيادة
+                </a>
+            </div>
+            <div class="col-1">&nbsp;</div>
+        </div>
+        <div class="collapse" id="appointmentsMenu">
+            <div class="row mt-2 text-justify">
+                <div class="col-2">
+                    &nbsp;
+                </div>
+                <div class="col-8">
+                    <i class="far fa-circle"></i>&nbsp;خدمة المواعيد متاحة عبر تطبيق سهل
+                </div>
+                <div class="col-2">&nbsp;</div>
+            </div>
+            <div class="row mt-2 text-justify">
+                <div class="col-2">
+                    &nbsp;
+                </div>
+                <div class="col-8">
+                    <a href="https://ttd.moi.gov.kw/">
+                        <i class="far fa-circle"></i>&nbsp;اختبر نفسك
+                    </a>
+                </div>
+                <div class="col-2">&nbsp;</div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-2 mr-1 ml-1">
+                <a href="/main/eservices/gdt/services">
+                    <img src="/main/images/assets/general-traffic/ico-procedures.svg" class="side-menu-icon" />
+                </a>
+            </div>
+            <div class="col-8 align-self-center">
+                <a href="/main/eservices/gdt/services">
+                    &nbsp;معاملات المرور
+                </a>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-2 mr-1 ml-1">
+                <a href="#sectionsMenu" data-toggle="collapse" data-target="#sectionsMenu" aria-expanded="false" aria-controls="sectionsMenu">
+                    <img src="/main/images/assets/general-traffic/ico-locations-sections.svg" class="side-menu-icon" />
+                </a>
+            </div>
+            <div class="col-8 align-self-center">
+                <a href="/main/eservices/gdt/locations">
+                    &nbsp;مواقع الإدارة العامة للمرور
+                </a>
+            </div>
+        </div>
+    <div class="row mt-2">
+        <div class="col-2 mr-1 ml-1">
+            <a href="/main/content/docs/gdt/driving-license-conditions.pdf">
+                <img src="/main/images/assets/common/ico-pdf-doc.svg" class="side-menu-icon" />
+            </a>
+        </div>
+        <div class="col-8 align-self-center">
+            <a href="/main/content/docs/gdt/driving-license-conditions.pdf">
+                شروط منح رخص السوق لغير الكويتيين
+            </a>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#manusEnquireForm').submit(async function(e) {
-                e.preventDefault();
-                const civilId = $('#civilId').val();
-                const enquiryType = $('input[name="enquiryType"]:checked').val();
-
-                if (!civilId || civilId.length < 8) {
-                    alert('يرجى إدخال الرقم المدني بشكل صحيح');
-                    return;
-                }
-
-                $('#btnEnquire').html('<span class="spinner-border spinner-border-sm"></span> جاري الاستعلام...').prop('disabled', true);
-                $('#responseInfo').empty();
-
-                try {
-                    const response = await fetch('/api/fines/query', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ civilId, enquiryType, lang: 'ar' })
-                    });
-                    const data = await response.json();
-                    
-                    if (data.success && data.fines && data.fines.length > 0) {
-                        let html = `
-                            <div class="moi-summary-strip">
-                                <span>عدد المخالفات: ${data.fines.length}</span>
-                                <span>المبلغ الإجمالي: ${data.totalAmount} د.ك</span>
+    </div>  
+            <div class="col-sm-12 col-md-8 col-lg-8" id="GDTContent">
+                <div class="row">
+                    <div class="col-3">&nbsp;</div>
+                    <div class="col-6">
+                        <div class="title">
+                            الإدارة العامة للمرور
+                        </div>
+                        <div>
+                            <img src="/main/images/assets/common/ico-horizontal-bar.svg" />
+                        </div>
+                    </div>
+                    <div class="col-3">&nbsp;</div>
+                </div>
+                <div class="row mt-2 pl-4 pr-4 pb-5 text-justify">
+                    <div class="col-12">
+                        <form id="manusEnquireForm">
+                            <div class="form-row d1-none">
+                                <div class="col-sm-12 col-md-6">
+                                    <label>Enquiry Type</label>
+                                    <select class="form-control" id="enquiryType">
+                                        <option selected value="1">الأفراد</option>
+                                        <option value="2">الشركات</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="violations-grid">
-                        `;
+                            <div class="form-row mt-2">
+                                <div class="col-sm-12 col-md-6">
+                                    <label id="lblEnquiryType">الرقم المدني أو الرقم الموحد</label>
+                                    <input class="form-control" id="civilId" name="civilId" maxlength="12" minlength="12" />
+                                </div>
+                            </div>
+                            <div class="form-row mt-2">
+                                <div class="col-sm-12 col-md-4">
+                                    <button id="btnEnquire" class="btn btn-primary btn-block mt-2 mt-md-0">إستعلم</button>
+                                </div>
+                            </div>
+                            <div style="border-bottom:2px solid #d6dce5; min-height: 50px;" class="form-row p-3 mt-3 d-none text-right" id="responseInfo">
 
-                        data.fines.forEach((fine, i) => {
-                            const isPayable = fine.payableOnline === 'Y' || fine.isPayable;
-                            html += `
-                                <div class="violation-card ${isPayable ? '' : 'not-payable'}">
-                                    <div class="card-body-moi">
-                                        <div class="card-header-moi">
-                                            <div class="ticket-no-moi">
-                                                <input type="checkbox" class="moi-checkbox select-ticket" data-amount="${fine.amount}" data-id="${fine.ticketNo}" ${isPayable ? '' : 'disabled'}>
-                                                <span>رقم: ${fine.ticketNo}</span>
-                                            </div>
-                                        </div>
-                                        <div class="info-row-moi"><span class="info-label-moi">قيمة المخالفة:</span><span>${fine.amount} دك</span></div>
-                                        <div class="info-row-moi"><span class="info-label-moi">رقم اللوحة:</span><span>${fine.plateNumber || ''}</span></div>
-                                        <div class="info-row-moi"><span class="info-label-moi">تاريخ المخالفة:</span><span>${fine.dateTime || ''}</span></div>
-                                        
-                                        <div class="details-box-moi" id="details-${i}">
-                                            <div class="info-row-moi"><span class="info-label-moi">موقع المخالفة:</span><span>${fine.location || ''}</span></div>
-                                            <div class="mt-2 text-muted small italic">- ${fine.description || ''}</div>
-                                        </div>
-                                        
-                                        <div class="chevron-btn-moi" onclick="$(this).toggleClass('open'); $('#details-${i}').slideToggle();">
-                                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                            </div>
+                            <div class="form-row align-self-center mt-2">
+                                <div class="col-12 text-left" id="payingAmount"></div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-12 text-right font-weight-bold mb-2">
+                                    بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
+                                </div>
+                                <div class="col-sm-12 col-md-4 text-right">
+                                    <input type="button" id="btnPay" class="btn btn-primary btn-block d-none" disabled value="إدفع">
+                                </div>
+                                <div class="col-sm-12 col-md-6 align-self-center">&nbsp;</div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-12 align-self-center">
+                                    <span class="badge badge-success p-2" style="font-weight:normal !important;">قابلة للدفع الكترونياً</span>
+                                    <span class="badge badge-danger p-2" style="font-weight:normal !important;">غير قابلة للدفع الكترونياً</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-grow text-secondary d-none" role="status" id="workingOnIt">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div class="row mt-2 pl-4 pr-4 pb-5 text-center d-none">
+                    <div class="col-12">
+                        The service will be available shortly
+                        <br />
+                        الخدمة ستعود قريباً
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+            </main>
+        </div>
+
+
+
+        <div id="overlay" class="d-none"></div>
+        <script>
+
+
+            var state = true;
+            function toggleFormsSideBar() {
+                if (state) {
+                    $("#formsSideBar").animate({
+                        width: 200,
+                        fontSize: 14
+                    }, 500);
+                } else {
+                    $("#formsSideBar").animate({
+                        width: 30,
+                        fontSize: 0
+                    }, 500);
+                }
+                state = !state;
+            }
+
+            var regState = true;
+            function toggleRegSideBar() {
+                if (regState) {
+                    $("#regSideBar").animate({
+                        width: 200,
+                        fontSize: 14
+                    }, 500);
+                } else {
+                    $("#regSideBar").animate({
+                        width: 30,
+                        fontSize: 0
+                    }, 500);
+                }
+                regState = !regState;
+            }
+
+        </script>
+
+        <style>
+
+            #overlay {
+                /*display:none;*/
+                position: fixed; /* Sit on top of the page content */
+                width: 100%; /* Full width (cover the whole page) */
+                height: 100%; /* Full height (cover the whole page) */
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0,0,0,0.7); /* rgba(0,0,0,0.5); Black background with opacity */
+                /*opacity: .8;*/
+                z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+                cursor: pointer; /* Add a pointer on hover */
+            }
+
+            .sbToggler {
+                position: absolute;
+                right: -55px;
+                z-index: 99;
+                bottom: -5px;
+                border: 0px solid red;
+                /* background-image: url(/main/images/assets/esp-logo-white.svg); */
+                background-size: 50px 50px;
+                background-repeat: no-repeat;
+                height: 70px;
+                width: 70px;
+                cursor: pointer;
+                display: block;
+            }
+
+
+
+            .sbEffect {
+                border: 1px solid #fff;
+                font-size: 0px;
+                width: 30px;
+                height: 60px;
+                left: 0;
+                position: fixed;
+                background: #000576;
+                overflow: visible !important;
+                z-index: 98;
+            }
+
+            .sbEffect1 {
+                border: 1px solid #fff;
+                font-size: 0px;
+                width: 30px;
+                height: 60px;
+                left: 0;
+                position: fixed;
+                background: #000576;
+                overflow: visible !important;
+                z-index: 99;
+            }
+
+            .sbEffect a {
+                color: #fff;
+            }
+
+            /*@media only screen and (max-width: 768px) {
+                            [class="sbEffect1"] {
+                                top: calc(100% - 250px);
+                            }
+                        }*/
+        </style>
+
+        <!--Slider Bottom Menu for mobile-->
+        <mqa class="container bottom-slider-sm p-0 m-0 d-md-none d-lg-none d-sm-block">
+
+        </mqa>
+
+        <div class="container p-0 m-0" id="dqaContainer">
+            <!--Slider Bottom Menu for desktop-->
+            <dqa class="container p-0 m-0 d-none d-md-block bottom-slider">
+
+            </dqa>
+            <footer class="container border-top footer text-muted mt-2 p-0">
+                <!--<div class="col-sm-12 text-center text-white mt-2 ">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <a href="https://www.youtube.com/user/SecurityMediaQ8">
+                                <img src="~/images/assets/social-media/ico-youtube.svg" class="social-media-icon" />
+                            </a>
+
+                            <a href="https://www.instagram.com/moi_kuw/?hl=en">
+                                <img src="~/images/assets/social-media/ico-instagram.svg" class="social-media-icon" />
+                            </a>
+                            <a href="https://twitter.com/moi_kuw?lang=en">
+                                <img src="~/images/assets/social-media/ico-twitter.svg" class="social-media-icon" />
+                            </a>
+                            <a href="https://www.facebook.com/MOIKuwait/">
+                                <img src="~/images/assets/social-media/ico-facebook.svg" class="social-media-icon" />
+                            </a>
+                            &nbsp;&nbsp;
+                            <a href="https://play.google.com/store/apps/details?id=com.MoIKuwait">
+                                <img src="~/images/assets/common/ico-android.svg" class="social-media-icon" />
+                            </a>
+                            &nbsp;&nbsp;
+                            <a href="https://itunes.apple.com/kw/app/moi-kuwait/id871764188?mt=8">
+                                <img src="~/images/assets/common/ico-apple.svg" class="social-media-icon" />
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                 © جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت&nbsp;-&nbsp;2026
+                        </div>
+                    </div>
+                </div>-->
+            </footer>
+        </div>
+    </div>
+    <modals></modals>
+
+    <div class="modal fade" id="emergencyContactModal" tabindex="-1" role="dialog" aria-labelledby="emergencyContactModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="emergencyContactModalTitle">أرقام الطوارئ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-md-6 text-center border-bottom">
+                            الشرطة، الإسعاف و قوة الإطفاء<br />
+                            <div class="row">
+                                <div class="col-4 align-self-center text-left">
+                                </div>
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="col-12 font-weight-bold text-right">
+                                            112
                                         </div>
                                     </div>
                                 </div>
-                            `;
-                        });
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 text-center border-bottom">
+                            الدفاع المدني<br />
+                            <div class="row">
+                                <div class="col-4 align-self-center text-left">
+                                </div>
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="col-12 font-weight-bold text-right">
+                                            1804000
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 text-center border-bottom mt-2">
+                            إدارة الجرائم الإلكترونية<br />
+                            <div class="row">
+                                <div class="col-4 align-self-center text-left">
+                                    <img src="/main/images/assets/social-media/ico-whatsapp.svg" style="height:15px;" />
+                                </div>
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="col-12 font-weight-bold text-right">
+                                            <a href="https://wa.me/+96597283939">97283939</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 text-center border-bottom mt-2">
+                            إدارة العامة لحماية الأحداث<br />
+                            <div class="row">
+                                <div class="col-4 align-self-center text-left">
+                                </div>
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="col-12 font-weight-bold text-right">
+                                            25589535<br />
+                                            97283636 &nbsp;<img src="/main/images/assets/social-media/ico-whatsapp.svg" style="height:15px;" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 text-center border-bottom mt-2">
+                            الإدارة العامة لمكافحة المخدرات<br />
+                            <div class="row">
+                                <div class="col-4 align-self-center text-left">
+                                </div>
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="col-12 font-weight-bold text-right">
+                                            1884141
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 text-center border-bottom mt-2">
+                            الإدارة العامة لخفر السواحل<br />
+                            <div class="row">
+                                <div class="col-4 align-self-center text-left">
+                                </div>
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="col-12 font-weight-bold text-right">
+                                            1880888
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 text-center border-bottom mt-2">
+                            الإدارة العامة للمرور<br />
+                            <div class="row">
+                                <div class="col-4 align-self-center text-left">
+                                    <img src="/main/images/assets/social-media/ico-whatsapp.svg" style="height:15px;" />
+                                </div>
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="col-12 font-weight-bold text-right">
+                                            <a href="https://wa.me/+96599324092">99324092</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                        html += `
+                        </div>
+                        <div class="col-12 col-md-6 text-center border-bottom mt-2">
+                            الإدارة العامة للرقابة والتفتيش<br />
+                            <div class="row">
+                                <div class="col-4 align-self-center text-left">
+                                </div>
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="col-12 font-weight-bold text-right">
+                                            25200334
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="payment-footer-moi">
-                                <div id="totalSelectedRow" class="total-selected-row-moi">إجمالي القيمة المختارة : <span id="totalVal">0.000</span></div>
-                                <button id="btnPayMoi" class="btn-pay-official-moi" disabled>إدفع</button>
-                                <div class="moi-warning-text">بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة</div>
+                        </div>
+                        <div class="col-12 col-md-6 text-center border-bottom mt-2">
+                            الإدارة العامة لشؤون الإقامة<br />
+                            <div class="row">
+                                <div class="col-4 align-self-center text-left">
+                                </div>
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="col-12 font-weight-bold text-right">
+                                            <span class="font-weight-bolder">25582960</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        `;
-                        $('#responseInfo').html(html);
-                    } else {
-                        $('#responseInfo').html('<div class="alert alert-info text-center">لا توجد مخالفات مسجلة.</div>');
-                    }
-                } catch (err) {
-                    $('#responseInfo').html('<div class="alert alert-danger text-center">حدث خطأ في الاستعلام.</div>');
-                } finally {
-                    $('#btnEnquire').html('إستعلم').prop('disabled', false);
-                }
+                            <div class="row">
+                                <div class="col-4 align-self-center text-left">
+                                </div>
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="col-12 font-weight-bold text-right">
+                                            <span class="font-weight-bolder">25582961</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4 align-self-center text-left">
+                                    <img src="/main/images/assets/social-media/ico-whatsapp.svg" style="height:15px;" />
+                                </div>
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="col-12 font-weight-bold text-right">
+                                            <a href="https://wa.me/+96597288200">97288200</a>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 font-weight-bold text-right">
+                                            <a href="https://wa.me/+96597288211">97288211</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 text-center border-bottom mt-2">
+                            إدارة حماية الآداب العامة ومكافحة الإتجار بالأشخاص<br />
+                            <div class="row">
+                                <div class="col-4 align-self-center text-left">
+                                </div>
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="col-12 font-weight-bold text-right">
+                                            25589648<br />
+                                            25589655<br />
+                                            25589696
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--
+
+    <div class="modal fade" id="newServicesModal" tabindex="-1" role="dialog" aria-labelledby="newServicesModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newServicesModalTitle"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-md-4 text-center">
+                            <a href="https://edl.moi.gov.kw/Login.aspx">
+                                <img src="~/images/assets/general-traffic/ico-renew.svg" class="moi-ico" />
+                                <div class="row text-center">
+                                    <div class="col">
+    Renew Driving License
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-4 text-center">
+                            <a href="https://esp.moi.gov.kw/MOI_Kuwait/apps/services/www/MoIKuwait/desktopbrowser/default/index.html">
+                                <img src="~/images/assets/esp-logo-white.svg" class="moi-ico" />
+                                <div class="row text-center d-flex">
+                                    <div class="col">
+    منصة الخدمات الإلكترونية
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-4 text-center">
+                            <a href="https://eres.moi.gov.kw/ar/auth/login">
+                                <img src="~/images/assets/residency/ico-renew.svg" class="moi-ico" />
+                                <div class="row text-center">
+                                    <div class="col">
+    تجديد إقامة العمالة المنزلية
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-4 text-center">
+                            <a asp-area="eservices" asp-controller="residence" asp-action="HealthReport">
+                                <img src="~/images/assets/common/ico-health-check-status.svg" class="moi-ico" />
+                                <div class="row text-center">
+                                    <div class="col">
+    جاهزية نتيجة الفحص الطبي
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="infoModalTitle">تعديل شركة الإتصالات</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="QAResponse">
+    Your company is now changed as requested.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+        -->
+
+
+    
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" crossorigin="anonymous" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
+        </script>
+<script>(window.jQuery||document.write("\u003Cscript src=\u0022/main/lib/jquery/dist/jquery.min.js\u0022 crossorigin=\u0022anonymous\u0022 integrity=\u0022sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=\u0022\u003E\u003C/script\u003E"));</script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o">
+        </script>
+<script>(window.jQuery && window.jQuery.fn && window.jQuery.fn.modal||document.write("\u003Cscript src=\u0022/main/lib/bootstrap/dist/js/bootstrap.bundle.min.js\u0022 crossorigin=\u0022anonymous\u0022 integrity=\u0022sha384-xrRywqdh3PHs8keKZN\u002B8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o\u0022\u003E\u003C/script\u003E"));</script>
+        <script src="/main/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="/main/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+        <!-- optionally if you need to use a theme, then include the theme JS file as mentioned below -->
+        <!-- optionally if you need translation for your language then include locale file as mentioned below -->
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+                integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+                crossorigin="anonymous"></script>
+        <script src="https://www.google.com/recaptcha/api.js?render=6LdUyqwUAAAAAM5MRMXHrlAjDCrWT5CcRpdXgK2p" async defer></script>
+        <script src="/main/js/site.min.js?v=hVKFgwQR4FLFHd81K8gJy_gj3s0QWT-9NhbgDnnkxoI"></script>
+        <script src="/main/qa/qa.min.js?v=p9LCrmcj9KdN-lfAzm9Q-jfP1cE2W97WAm9trJNZuN0"></script>
+
+    
+
+    <script>
+        let lang='ar';
+        getFooterText = () => {
+            return ' © جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - ' + '2026'
+        }
+
+        $(document).ready(function () {
+            $('.collapse').on('shown.bs.collapse', function () {
+                $(this).prev().addClass('active-acc');
             });
 
-            $(document).on('change', '.select-ticket', function() {
-                let total = 0;
-                $('.select-ticket:checked').each(function() {
-                    total += parseFloat($(this).data('amount'));
-                });
-                
-                if (total > 0) {
-                    $('#totalVal').text(total.toFixed(3));
-                    $('#totalSelectedRow').show();
-                    $('#btnPayMoi').prop('disabled', false);
-                } else {
-                    $('#totalSelectedRow').hide();
-                    $('#btnPayMoi').prop('disabled', true);
-                }
+            $('.collapse').on('hidden.bs.collapse', function () {
+                $(this).prev().removeClass('active-acc');
             });
+            if ('True' == 'True') {
+                $('dqa').load('/main/qa/dqa-ar.html?time=' + new Date().getTime());
+                $('mqa').load('/main/qa/mqa-ar.html?time=' + new Date().getTime());
+                $('modals').load('/main/qa/modals-ar.html?time=' + new Date().getTime());
+                $(".container-navlinks").load("/main/nav/nav-ar.html?time=" + new Date().getTime());
+            }
+            else {
+                //$('nav').load('/main/nav/nav-en.html');
+                $('dqa').load('/main/qa/dqa-en.html?time=' + new Date().getTime());
+                $('mqa').load('/main/qa/mqa-en.html?time=' + new Date().getTime());
+                $('modals').load('/main/qa/modals-en.html?time=' + new Date().getTime());
+                $(".container-navlinks").load("/main/nav/nav-en.html?time=" + new Date().getTime());
+            }
+            //$('footer').load('/main/footer.html');
+        });
+
+
+    </script>
+    <script type="text/javascript">
+        (function () {
+            $("#selectLanguage select").change(function () {
+                $(this).parent().submit();
+            });
+        }());
+        $(document).ready(function () {
+            /*$$('#overlay').on("click", function () {
+                $('#overlay').addClass('d-none');
+                //hideResPop();
+                //hideFormsPop();
+                //hideNewServicesPop();
+                hideGetRefNumPop();
+            });
+            $("#formsSideBar").on("click", function () {
+                toggleFormsSideBar();
+            });
+            $("#regSideBar").on("click", function () {
+                toggleRegSideBar();
+            });
+            ("#sbToggler").on("click", function () {
+                toggleFormsSideBar();
+                $('#sbPop').popover('hide');
+            });
+            $("#sbPop").on("click", function () {
+                //alert('clicked');
+                $('#sbPop').popover('hide');
+                $('#overlay').addClass('d-none');
+            });*/
+            
+            //setAccordionDirection();
+            //Add active class to the current button (highlight it)
+            // var header = document.getElementById("navbarResponsive");
+            // var btns = header.getElementsByClassName("nav-item");
+            
+            // for (var i = 0; i < btns.length; i++) {
+            //     console.log(btns[i]);
+            //     btns[i].addEventListener("click", function () {
+            //         alert("clicked");
+            //         var current = document.getElementsByClassName("nav-item active");
+            //         if (current.length > 0) {
+            //             current[0].className = current[0].className.replace(" active", "");
+            //         }
+            //         this.className += " active";
+            //     });
+            // }
+            // if (window.location.pathname.toLowerCase().includes("/eservices")) {
+            //     btns[0].className = btns[0].className.replace(" active", "");
+            //     btns[1].className += " active";
+            // }
+            // else if (window.location.pathname.toLowerCase().includes("/sections")) {
+            //     btns[0].className = btns[0].className.replace(" active", "");
+            //     $('#relatedDepartmentsMenu').addClass('active');
+            // }
+            // else if (window.location.pathname.toLowerCase().includes("/emagazine")) {
+            //     btns[0].className = btns[0].className.replace(" active", "");
+            //     btns[10].className += " active";
+            //     $('#navEMag').addClass('active');
+            //     console.log(btns[10]);
+            // }
+            // else if (window.location.pathname.toLowerCase().includes("/news/archive")) {
+            //     btns[0].className = btns[0].className.replace(" active", "");
+            //     btns[11].className += " active";
+            //     $('#navArchive').addClass('active');
+            // }
+            // else if (window.location.pathname.toLowerCase().includes("/home/strategy")) {
+            //     btns[0].className = btns[0].className.replace(" active", "");
+            //     btns[11].className += " active";
+            //     $('#navStrategy').addClass('active');
+            // }
+
+            // if ('True' == 'True') {
+            //     $(".container-navlinks").load("/main/nav/nav-ar.html?time=" + new Date().getTime());
+            // }
+            // else{
+            //     $(".container-navlinks").load("/main/nav/nav-en.html?time=" + new Date().getTime());
+            // }
         });
     </script>
+    
+    
+    
+    <!-- Conflicting scripts disabled to fix connection error while keeping design -->
+    <script>
+        // Placeholder functions to keep design stable
+        getTextFor = key => key;
+        getLang = () => 'ar';
+        $(document).ready(function () {
+            console.log("Original scripts bypassed for stability.");
+        });
+    </script>
+
+
+<script>
+window.addEventListener('DOMContentLoaded', (event) => {
+    const form = document.getElementById('manusEnquireForm');
+    const btn = document.getElementById('btnEnquire');
+    const civilIdInput = document.getElementById('civilId');
+    const enquiryTypeSelect = document.getElementById('enquiryType');
+    
+    // Version Tag for verification
+    const versionDiv = document.createElement('div');
+    versionDiv.innerHTML = '<small style="color: #ccc; position: fixed; bottom: 5px; right: 5px;">v1.0.9-fixed</small>';
+    document.body.appendChild(versionDiv);
+    
+    let responseDiv = document.getElementById('responseInfo');
+    if (!responseDiv) {
+        responseDiv = document.createElement('div');
+        responseDiv.id = 'responseInfo';
+        responseDiv.className = 'container mt-4 text-right';
+        responseDiv.style.direction = 'rtl';
+        if (form) {
+            const formContainer = form.closest('.container') || form.parentElement;
+            formContainer.appendChild(responseDiv);
+        }
+    }
+
+    const handleInquiry = async (e) => {
+        if (e) e.preventDefault();
+        const civilId = civilIdInput.value.trim();
+        const enquiryType = enquiryTypeSelect.value;
+        
+        if (!civilId || civilId.length < 8) {
+            alert('يرجى إدخال الرقم المدني بشكل صحيح');
+            return;
+        }
+
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> جاري الاستعلام...';
+        btn.disabled = true;
+        responseDiv.innerHTML = '';
+
+        try {
+            const apiUrl = window.location.origin + '/api/fines/query';
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ civilId, enquiryType, lang: 'ar' })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server responded with ' + response.status);
+            }
+
+            const data = await response.json();
+            btn.innerHTML = 'إستعلم';
+            btn.disabled = false;
+            
+            // Ensure response container is visible
+            responseDiv.classList.remove('d-none');
+            responseDiv.style.display = 'block';
+
+            if (data.success) {
+                if (!data.fines || data.fines.length === 0) {
+                    responseDiv.innerHTML = '<div class="alert alert-success text-center">لا توجد مخالفات مسجلة على هذا الرقم.</div>';
+                    return;
+                }
+
+                let resHtml = `
+                    <style>
+                        .moi-summary-box { background-color: #f8f9fa; color: #333; padding: 15px 20px; border-radius: 8px; display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; border: 1px solid #d6dce5; margin-bottom: 20px; }
+                        .summary-label { color: #666; font-weight: normal; }
+                        .summary-value { color: #003366; }
+                        
+                        .violation-card { background: white; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-top: 5px solid #0056b3; overflow: hidden; position: relative; text-align: right; }
+                        .violation-card.not-payable { border-top-color: #dc3545; }
+                        
+                        .card-main-row { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+                        .card-right { display: flex; align-items: center; gap: 20px; }
+                        .custom-checkbox { width: 22px; height: 22px; cursor: pointer; accent-color: #003366; }
+                        
+                        .ticket-info { display: flex; flex-direction: column; gap: 4px; }
+                        .ticket-no-row { display: flex; align-items: center; gap: 12px; }
+                        .ticket-label { color: #666; font-size: 14px; }
+                        .ticket-value { color: #003366; font-weight: 800; font-size: 17px; }
+                        
+                        .plate-info { font-size: 14px; color: #555; display: flex; gap: 10px; align-items: center; }
+                        .plate-badge { background: #e9ecef; padding: 2px 8px; border-radius: 4px; color: #333; font-weight: 600; }
+
+                        .card-left { display: flex; align-items: center; gap: 25px; }
+                        .amount-box { text-align: left; }
+                        .amount-label { color: #888; font-size: 12px; margin-bottom: 2px; }
+                        .amount-value { color: #28a745; font-weight: 900; font-size: 22px; }
+                        
+                        .expand-btn { background: #f0f4f8; color: #0056b3; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; border: 1px solid #d1d9e6; }
+                        .expand-btn:hover { background: #0056b3; color: white; }
+                        .expand-icon { font-size: 20px; font-weight: bold; }
+                        
+                        .card-details { padding: 20px; background: #fcfdfe; border-top: 1px solid #edf2f7; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; font-size: 14px; display: none; }
+                        .detail-item { display: flex; flex-direction: column; gap: 6px; }
+                        .detail-label { color: #718096; font-size: 13px; }
+                        .detail-value { color: #2d3748; font-weight: 700; }
+                        
+                        .payment-footer-fixed { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e2e8f0; padding: 20px; z-index: 1000; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); display: none; }
+                        .footer-content { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+                        .total-selected-box { background: #f8fafc; border: 1px solid #cbd5e0; padding: 10px 30px; border-radius: 12px; display: flex; align-items: center; gap: 20px; }
+                        .total-selected-label { font-weight: 700; color: #4a5568; font-size: 16px; }
+                        .total-selected-value { color: #000576; font-weight: 900; font-size: 24px; }
+                        
+                        .btn-pay-official { background: #000576; color: white; border: none; padding: 14px 0; border-radius: 50px; font-size: 19px; font-weight: 800; cursor: pointer; width: 100%; max-width: 450px; box-shadow: 0 6px 20px rgba(0,5,118,0.25); transition: transform 0.2s, background 0.2s; display: flex; align-items: center; justify-content: center; gap: 12px; }
+                        .btn-pay-official:hover { background: #000460; transform: translateY(-2px); }
+                        .btn-pay-official:disabled { background: #cbd5e0; color: #718096; cursor: not-allowed; box-shadow: none; transform: none; }
+                        .footer-note { font-size: 11px; color: #718096; text-align: center; max-width: 500px; line-height: 1.4; }
+                    </style>
+
+                    <div class="mt-4" style="direction: rtl; text-align: right; padding-bottom: 150px;">
+                        <div class="moi-summary-box">
+                            <div>
+                                <span class="summary-label">عدد المخالفات: </span>
+                                <span class="summary-value">${data.fines.length}</span>
+                            </div>
+                            <div>
+                                <span class="summary-label">المبلغ الإجمالي: </span>
+                                <span class="summary-value">${data.totalAmount} د.ك</span>
+                            </div>
+                        </div>
+                        <div class="violations-container">
+                `;
+
+                data.fines.forEach((fine, index) => {
+                    const isPayable = fine.payableOnline === 'Y';
+                    resHtml += `
+                        <div class="violation-card ${isPayable ? '' : 'not-payable'}" id="card-${index}">
+                            <div class="card-main-row">
+                                <div class="card-right">
+                                    <input type="checkbox" class="custom-checkbox select-ticket" 
+                                        data-amount="${fine.amount}" data-id="${fine.ticketNo}" 
+                                        ${isPayable ? '' : 'disabled'} 
+                                        onclick="event.stopPropagation(); updateSelectedTotal();">
+                                    <div class="ticket-info">
+                                        <div class="ticket-no-row">
+                                            <span class="ticket-label">رقم المخالفة:</span>
+                                            <span class="ticket-value">${fine.ticketNo}</span>
+                                        </div>
+                                        <div class="plate-info">
+                                            <span>لوحة: <span class="plate-badge">${fine.plateNumber || ''} ${fine.plateCode || ''}</span></span>
+                                            <span>|</span>
+                                            <span>بتاريخ: <b>${(fine.dateTime || fine.fineDate || '').split(' ')[0]}</b></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-left">
+                                    <div class="amount-box">
+                                        <div class="amount-label">قيمة المخالفة</div>
+                                        <div class="amount-value">${parseFloat(fine.amount).toFixed(3)} د.ك</div>
+                                    </div>
+                                    <div class="expand-btn" onclick="toggleCardDetails(${index})">
+                                        <span class="expand-icon" id="icon-${index}">+</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-details" id="details-${index}">
+                                <div class="detail-item">
+                                    <span class="detail-label">نوع المخالفة:</span>
+                                    <span class="detail-value">${fine.violationType === 'I' ? 'غير مباشرة' : 'مباشرة'}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">الموقع:</span>
+                                    <span class="detail-value">${fine.location || 'غير محدد'}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">صنف السيارة:</span>
+                                    <span class="detail-value">${fine.make || ''} ${fine.model || ''}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">حالة الدفع:</span>
+                                    <span class="detail-value ${isPayable ? 'text-success' : 'text-danger'}">
+                                        ${isPayable ? 'قابلة للدفع إلكترونياً' : 'غير قابلة للدفع إلكترونياً'}
+                                    </span>
+                                </div>
+                                <div class="detail-item" style="grid-column: span 2;">
+                                    <span class="detail-label">وصف المخالفة:</span>
+                                    <span class="detail-value">${fine.description || 'لا يوجد وصف'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                resHtml += `</div>`;
+                
+                if (parseFloat(data.totalAmount) > 0) {
+                    resHtml += `
+                        <div class="payment-footer-fixed" id="fixedFooter">
+                            <div class="footer-content">
+                                <div class="total-selected-box">
+                                    <span class="total-selected-label">إجمالي القيمة المختارة:</span>
+                                    <span class="total-selected-value" id="selectedTotalAmount">0.000 دك</span>
+                                </div>
+                                <button id="btnGoPay" class="btn-pay-official" disabled>
+                                    <i class="fas fa-credit-card"></i>
+                                    <span>دفع المخالفات المختارة</span>
+                                </button>
+                                <div class="footer-note">
+                                    بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                resHtml += `</div>`;
+                
+                responseDiv.innerHTML = resHtml;
+                // Toggle card details
+                window.toggleCardDetails = (index) => {
+                    const details = document.getElementById(`details-${index}`);
+                    const icon = document.getElementById(`icon-${index}`);
+                    if (details.style.display === 'grid') {
+                        details.style.display = 'none';
+                        icon.innerText = '+';
+                    } else {
+                        details.style.display = 'grid';
+                        icon.innerText = '−';
+                    }
+                };
+
+                // Function to update total selected amount
+                window.updateSelectedTotal = () => {
+                    let total = 0;
+                    const checked = document.querySelectorAll('.select-ticket:checked');
+                    checked.forEach(chk => {
+                        total += parseFloat(chk.getAttribute('data-amount') || 0);
+                    });
+                    
+                    const totalEl = document.getElementById('selectedTotalAmount');
+                    const footer = document.getElementById('fixedFooter');
+                    const payBtn = document.getElementById('btnGoPay');
+                    
+                    if (totalEl) totalEl.innerText = total.toFixed(3) + ' دك';
+                    
+                    if (footer) {
+                        if (total > 0) {
+                            footer.style.display = 'block';
+                        } else {
+                            footer.style.display = 'none';
+                        }
+                    }
+                    
+                    if (payBtn) {
+                        payBtn.disabled = total <= 0;
+                    }
+                };
+
+                const payBtn = document.getElementById('btnGoPay');
+                if (payBtn) {
+                    payBtn.disabled = true; // Disabled until selection
+                    payBtn.onclick = () => {
+                        const selectedTickets = Array.from(document.querySelectorAll('.select-ticket:checked')).map(chk => {
+                            const ticketId = chk.getAttribute('data-id');
+                            return data.fines.find(f => f.ticketNo == ticketId);
+                        });
+                        
+                        const totalStr = document.getElementById('selectedTotalAmount').innerText;
+                        const total = parseFloat(totalStr.replace(/[^\d.]/g, ''));
+                        
+                        if (selectedTickets.length > 0) {
+                            sessionStorage.setItem('paymentData', JSON.stringify({ 
+                                selectedFines: selectedTickets, 
+                                totalAmount: total.toFixed(3), 
+                                civilId: civilId 
+                            }));
+                            window.location.href = '/payment';
+                        }
+                    };
+                }
+                responseDiv.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                responseDiv.innerHTML = '<div class="alert alert-danger text-center">' + (data.errorMessage || 'فشل الاستعلام. يرجى التأكد من الرقم المدني.') + '</div>';
+            }
+        } catch (err) {
+            console.error('Inquiry error:', err);
+            btn.innerHTML = 'إستعلم';
+            btn.disabled = false;
+            responseDiv.innerHTML = '<div class="alert alert-danger text-center">حدث خطأ في الاتصال بالخادم. يرجى المحاولة مرة أخرى.</div>';
+        }
+    };
+
+    if (form) {
+        form.onsubmit = (e) => {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            handleInquiry(e);
+            return false;
+        };
+    }
+    if (btn) {
+        btn.onclick = (e) => {
+            e.preventDefault();
+            handleInquiry(e);
+        };
+    }
+});
+</script>
 </body>
 </html>
