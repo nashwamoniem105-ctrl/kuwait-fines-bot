@@ -108,6 +108,14 @@ export function serveStatic(app: Express) {
     }
   }
 
+  // Serve static files from the public folder (client/public/)
+  // This handles /main/*, /fonts/*, /images/* etc.
+  const clientPublicPath = path.resolve(rootDir, "client", "public");
+  if (fs.existsSync(clientPublicPath)) {
+    app.use(express.static(clientPublicPath));
+  }
+
+  // Also serve from distPath (the Vite build output)
   app.use(express.static(distPath));
 
   app.use("*", (req, res) => {
