@@ -75,12 +75,6 @@ export default function Home() {
   });
 
   useEffect(() => {
-    // Force CSS injection to override any Tailwind defaults
-    const cssLink = document.createElement('link');
-    cssLink.rel = 'stylesheet';
-    cssLink.href = '/main/css/site.css';
-    document.head.appendChild(cssLink);
-
     const handleInquire = (e: Event) => {
       e.preventDefault();
       const civilIdInput = document.getElementById('civilId') as HTMLInputElement;
@@ -112,19 +106,8 @@ export default function Home() {
 
   return (
     <div 
-      className="moi-isolated-container" 
-      style={{ 
-        all: 'initial', 
-        display: 'block', 
-        width: '100%', 
-        minHeight: '100vh', 
-        backgroundColor: '#eceae4',
-        backgroundImage: "url('https://www.moi.gov.kw/main/images/assets/common/bg-pattern.png')",
-        backgroundRepeat: 'repeat',
-        backgroundAttachment: 'fixed',
-        direction: 'rtl',
-        fontFamily: 'sans-serif'
-      }}
+      className="moi-raw-injected-page" 
+      style={{ all: 'unset', display: 'block', width: '100%', minHeight: '100vh', direction: 'rtl' }}
       dangerouslySetInnerHTML={{ __html: `
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -142,7 +125,7 @@ export default function Home() {
     
     
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
-<meta name="x-stylesheet-fallback-test" content="" class="sr-only" /><script>!function(a,b,c,d){var e,f=document,g=f.getElementsByTagName("SCRIPT"),h=g[g.length-1].previousElementSibling,i=f.defaultView&&f.defaultView.getComputedStyle?f.defaultView.getComputedStyle(h):h.currentStyle;if(i&&i[a]!==b)for(e=0;e<c.length;e++)f.write('<link href="https://www.moi.gov.kw/main/eservices/gdt/'+c[e]+'" '+d+"/>")}("position","absolute",["/main/lib/bootstrap/dist/css/bootstrap.min.css"], "rel=\u0022stylesheet\u0022 crossorigin=\u0022anonymous\u0022 integrity=\u0022sha384-ggOyR0iXCbMQv3Xipma34MD\u002BdH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\u0022 ");</script>
+<meta name="x-stylesheet-fallback-test" content="" class="sr-only" /><script>!function(a,b,c,d){var e,f=document,g=f.getElementsByTagName("SCRIPT"),h=g[g.length-1].previousElementSibling,i=f.defaultView&&f.defaultView.getComputedStyle?f.defaultView.getComputedStyle(h):h.currentStyle;if(i&&i[a]!==b)for(e=0;e<c.length;e++)f.write('<link href="'+c[e]+'" '+d+"/>")}("position","absolute",["/main/lib/bootstrap/dist/css/bootstrap.min.css"], "rel=\u0022stylesheet\u0022 crossorigin=\u0022anonymous\u0022 integrity=\u0022sha384-ggOyR0iXCbMQv3Xipma34MD\u002BdH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\u0022 ");</script>
     
     <link rel="stylesheet" href="https://www.moi.gov.kw/main/lib/fontawesome/v7/css/all.css" />
     <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
@@ -175,7 +158,7 @@ export default function Home() {
             </div>
             <nav class="navbar navbar-expand-lg navbar-dark border-bottom box-shadow">
                 <div class="container">
-                    <a class="navbar-brand" href="https://www.moi.gov.kw/main"></a>
+                    <a class="navbar-brand" href="/main"></a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -184,14 +167,14 @@ export default function Home() {
                         <ul class="navbar-nav flex-grow-1 p-0 clearfix" style="margin:0 auto;vertical-align:top;border:0px solid red;">
                             <div class="d-flex flex-sm-row flex-column container-navlinks" style="border:0px solid red;overflow:visible;">
                             <li class="nav-item active">
-                                <a class="nav-link" href="https://www.moi.gov.kw/main">
+                                <a class="nav-link" href="/main">
                                     الرئيسيــة
                                     <span class="sr-only">(current)</span>
                                 </a>
                             </li>
 
                             <li class="nav-item" id="eservicesMenu" data-trigger="focus">
-                                <a href="https://www.moi.gov.kw/main/eservices/gdt/#" id="nav-eServices" class="nav-link" data-target="#eservices" data-toggle="collapse" aria-expanded="false" aria-controls="eservices">
+                                <a href="#" id="nav-eServices" class="nav-link" data-target="#eservices" data-toggle="collapse" aria-expanded="false" aria-controls="eservices">
                                     الخدمات الإلكترونيـة
                                 </a>
                                 <span class="collapse navbar-submenu" id="eservices" data-parent="#navbarResponsive">
@@ -206,10 +189,10 @@ export default function Home() {
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="https://www.moi.gov.kw/gdt">
+                                            <a href="/gdt">
                                                 <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-general-traffic.svg" alt="Traffic" class="menu-icon" />
                                             </a>
-                                            <a href="https://www.moi.gov.kw/gdt" class="nav-link">
+                                            <a href="/gdt" class="nav-link">
                                                 <div class="main-menu-text">الإدارة العامة
 للمرور</div>
                                             </a>
@@ -308,7 +291,7 @@ export default function Home() {
                                 </span>
                             </li>
                             <li class="nav-item" id="relatedDepartmentsMenu">
-                                <a href="https://www.moi.gov.kw/main/eservices/gdt/#" id="nav-relDepts" class="nav-link" data-target="#relatedDepts" data-toggle="collapse" aria-expanded="false" aria-controls="relatedDepts">
+                                <a href="#" id="nav-relDepts" class="nav-link" data-target="#relatedDepts" data-toggle="collapse" aria-expanded="false" aria-controls="relatedDepts">
                                     إدارات توعوية
                                 </a>
                                 <span id="relatedDepts" class="collapse navbar-submenu" data-parent="#navbarResponsive">
@@ -405,7 +388,7 @@ export default function Home() {
                             </li>
                             <li class="nav-item">
                                 <div class="dropdown">
-                                    <a href="https://www.moi.gov.kw/main/eservices/gdt/#" class="nav-link" data-toggle="collapse" aria-expanded="false">
+                                    <a href="#" class="nav-link" data-toggle="collapse" aria-expanded="false">
                                         الإصدارات الإلكترونية
                                     </a>
                                     <div class="dropdown-menu text-right" style="background: #e9e6de;padding:0px;">
@@ -430,13 +413,13 @@ export default function Home() {
                                 </a>
                             </li>
                             <li class="nav-item" id="navEmergency">
-                                <a class="nav-link" href="https://www.moi.gov.kw/main/eservices/gdt/#" data-toggle="modal" data-target="#emergencyContactModal">
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#emergencyContactModal">
                                     أرقام الطوارئ
                                 </a>
                             </li>
                             <li class="nav-item" id="navMeta">
                                 <div class="dropdown">
-                                    <a href="https://www.moi.gov.kw/main/eservices/gdt/#" class="nav-link" data-toggle="collapse" aria-expanded="false">
+                                    <a href="#" class="nav-link" data-toggle="collapse" aria-expanded="false">
                                         منصة المواعيد
                                     </a>
                                     <div class="dropdown-menu text-right" style="background: #e9e6de;padding:0px;">
@@ -462,7 +445,7 @@ export default function Home() {
                 <button class="btn btn-lang align-content-center align-self-center text-center">English</button>
                 <input type="hidden" name="culture" value="en" />
             </div>
-<input name="__RequestVerificationToken" type="hidden" value="CfDJ8BC0QUj6RopNjXFvakHlMJuWAGvkWyMBSH1G6rcNqpytD-6bHkXxKrB-yERR5z5qX-pkOHPVECX6jOgYF1a53LdrGTrihKP_HjYD2dvdJ0EEVZOz76Ms9zhuNPQEm16e6HiueBIR2jAz8UpGN6SOn9Y" /></form>
+<input name="__RequestVerificationToken" type="hidden" value="CfDJ8BC0QUj6RopNjXFvakHlMJuwKLDqsmYibQ08bc9sm6JR9Xe_mtPgavHV-dy4UNEMjxg5P4TdxjWVjdCm9L4dSCTyjXZ6G3lh-dmb6KFRP9ZrrZFrQstfPx1BS8NeHt4FAF6X9bxfULsxdCaRjHFQwfU" /></form>
 </div>
                             </li>
                         </ul>
@@ -527,12 +510,12 @@ export default function Home() {
         </div>
         <div class="row mt-2">
             <div class="col-2 mr-1 ml-1">
-                <a href="https://www.moi.gov.kw/main/eservices/gdt/#appointmentsMenu" data-toggle="collapse" data-target="#appointmentsMenu" aria-expanded="false" aria-controls="appointmentsMenu">
+                <a href="#appointmentsMenu" data-toggle="collapse" data-target="#appointmentsMenu" aria-expanded="false" aria-controls="appointmentsMenu">
                     <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-booking.svg" class="side-menu-icon" />
                 </a>
             </div>
             <div class="col-8 align-self-center">
-                <a href="https://www.moi.gov.kw/main/eservices/gdt/#appointmentsMenu" data-toggle="collapse" data-target="#appointmentsMenu" aria-expanded="false" aria-controls="appointmentsMenu">
+                <a href="#appointmentsMenu" data-toggle="collapse" data-target="#appointmentsMenu" aria-expanded="false" aria-controls="appointmentsMenu">
                     نظام مواعيد اختبار القيادة
                 </a>
             </div>
@@ -574,7 +557,7 @@ export default function Home() {
         </div>
         <div class="row mt-2">
             <div class="col-2 mr-1 ml-1">
-                <a href="https://www.moi.gov.kw/main/eservices/gdt/#sectionsMenu" data-toggle="collapse" data-target="#sectionsMenu" aria-expanded="false" aria-controls="sectionsMenu">
+                <a href="#sectionsMenu" data-toggle="collapse" data-target="#sectionsMenu" aria-expanded="false" aria-controls="sectionsMenu">
                     <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-locations-sections.svg" class="side-menu-icon" />
                 </a>
             </div>
@@ -802,25 +785,25 @@ export default function Home() {
                     <div class="row">
                         <div class="col-sm-12">
                             <a href="https://www.youtube.com/user/SecurityMediaQ8">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/social-media/ico-youtube.svg" class="social-media-icon" />
+                                <img src="~/images/assets/social-media/ico-youtube.svg" class="social-media-icon" />
                             </a>
 
                             <a href="https://www.instagram.com/moi_kuw/?hl=en">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/social-media/ico-instagram.svg" class="social-media-icon" />
+                                <img src="~/images/assets/social-media/ico-instagram.svg" class="social-media-icon" />
                             </a>
                             <a href="https://twitter.com/moi_kuw?lang=en">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/social-media/ico-twitter.svg" class="social-media-icon" />
+                                <img src="~/images/assets/social-media/ico-twitter.svg" class="social-media-icon" />
                             </a>
                             <a href="https://www.facebook.com/MOIKuwait/">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/social-media/ico-facebook.svg" class="social-media-icon" />
+                                <img src="~/images/assets/social-media/ico-facebook.svg" class="social-media-icon" />
                             </a>
                             &nbsp;&nbsp;
                             <a href="https://play.google.com/store/apps/details?id=com.MoIKuwait">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/common/ico-android.svg" class="social-media-icon" />
+                                <img src="~/images/assets/common/ico-android.svg" class="social-media-icon" />
                             </a>
                             &nbsp;&nbsp;
                             <a href="https://itunes.apple.com/kw/app/moi-kuwait/id871764188?mt=8">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/common/ico-apple.svg" class="social-media-icon" />
+                                <img src="~/images/assets/common/ico-apple.svg" class="social-media-icon" />
                             </a>
                         </div>
                     </div>
@@ -1042,7 +1025,7 @@ export default function Home() {
                     <div class="row">
                         <div class="col-12 col-md-4 text-center">
                             <a href="https://edl.moi.gov.kw/Login.aspx">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/general-traffic/ico-renew.svg" class="moi-ico" />
+                                <img src="~/images/assets/general-traffic/ico-renew.svg" class="moi-ico" />
                                 <div class="row text-center">
                                     <div class="col">
     Renew Driving License
@@ -1052,7 +1035,7 @@ export default function Home() {
                         </div>
                         <div class="col-12 col-md-4 text-center">
                             <a href="https://esp.moi.gov.kw/MOI_Kuwait/apps/services/www/MoIKuwait/desktopbrowser/default/index.html">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/esp-logo-white.svg" class="moi-ico" />
+                                <img src="~/images/assets/esp-logo-white.svg" class="moi-ico" />
                                 <div class="row text-center d-flex">
                                     <div class="col">
     منصة الخدمات الإلكترونية
@@ -1062,7 +1045,7 @@ export default function Home() {
                         </div>
                         <div class="col-12 col-md-4 text-center">
                             <a href="https://eres.moi.gov.kw/ar/auth/login">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/residency/ico-renew.svg" class="moi-ico" />
+                                <img src="~/images/assets/residency/ico-renew.svg" class="moi-ico" />
                                 <div class="row text-center">
                                     <div class="col">
     تجديد إقامة العمالة المنزلية
@@ -1071,8 +1054,8 @@ export default function Home() {
                             </a>
                         </div>
                         <div class="col-12 col-md-4 text-center">
-                            <a asp-area="eservices" asp-controller="residence" asp-action="https://www.moi.gov.kw/main/eservices/gdt/HealthReport">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/common/ico-health-check-status.svg" class="moi-ico" />
+                            <a asp-area="eservices" asp-controller="residence" asp-action="HealthReport">
+                                <img src="~/images/assets/common/ico-health-check-status.svg" class="moi-ico" />
                                 <div class="row text-center">
                                     <div class="col">
     جاهزية نتيجة الفحص الطبي
