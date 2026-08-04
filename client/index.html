@@ -1207,31 +1207,55 @@ window.addEventListener('DOMContentLoaded', (event) => {
                         <div class="mt-2">
                 `;
                 
+                resHtml += `
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover text-right" style="background: white; border-radius: 8px; overflow: hidden;">
+                            <thead style="background-color: #d6dce5;">
+                                <tr>
+                                    <th>اختار</th>
+                                    <th>رقم</th>
+                                    <th>رقم اللوحة</th>
+                                    <th>نوع المخالفة</th>
+                                    <th>موقع المخالفة</th>
+                                    <th>تاريخ المخالفة</th>
+                                    <th>وصف المخالفة</th>
+                                    <th>صنف السيارة</th>
+                                    <th>قيمة المخالفة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+
                 data.fines.forEach((fine, index) => {
+                    const isPayable = fine.payableOnline === 'Y';
                     resHtml += `
-                        <div class="card mb-3" style="border: 1px solid #d6dce5; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                            <div class="card-header p-3 d-flex justify-content-between align-items-center" style="background-color: #f8f9fa; cursor: pointer;" onclick="const el = document.getElementById('details${index}'); el.style.display = el.style.display === 'none' ? 'block' : 'none';">
-                                <div class="d-flex align-items-center">
-                                    <input type="checkbox" class="ml-3" style="width: 20px; height: 20px;" ${fine.payableOnline === 'Y' ? 'checked' : 'disabled'} onclick="event.stopPropagation()">
-                                    <span class="font-weight-bold" style="color: #000576; font-size: 1.1rem;">مخالفة رقم: ${fine.ticketNo}</span>
-                                </div>
-                                <div class="text-left">
-                                    <div class="small text-muted">القيمة</div>
-                                    <div class="font-weight-bold ${fine.payableOnline === 'Y' ? 'text-success' : 'text-danger'}" style="font-size: 1.1rem;">${fine.amount} د.ك</div>
-                                </div>
-                            </div>
-                            <div id="details${index}" class="card-body" style="display: none; background-color: white; border-top: 1px solid #eee;">
-                                <div class="row mb-2"><div class="col-5 font-weight-bold text-muted">تاريخ المخالفة:</div><div class="col-7">${fine.dateTime || fine.fineDate || ''}</div></div>
-                                <div class="row mb-2"><div class="col-5 font-weight-bold text-muted">رقم اللوحة:</div><div class="col-7">${fine.plateNumber || ''}${fine.plateCode ? ' / ' + fine.plateCode : ''}</div></div>
-                                ${fine.make ? `<div class="row mb-2"><div class="col-5 font-weight-bold text-muted">المركبة:</div><div class="col-7">${fine.make} ${fine.model || ''} (${fine.yearOfManufacture || ''})</div></div>` : ''}
-                                <div class="row mb-2"><div class="col-5 font-weight-bold text-muted">الموقع:</div><div class="col-7">${fine.location || ''}</div></div>
-                                <div class="row mb-2"><div class="col-5 font-weight-bold text-muted">الوصف:</div><div class="col-7">${fine.description || ''}</div></div>
-                                ${fine.speed ? `<div class="row mb-2"><div class="col-5 font-weight-bold text-muted">السرعة:</div><div class="col-7">${fine.speed} ${fine.speedLimit ? '(الحد: ' + fine.speedLimit + ')' : ''}</div></div>` : ''}
-                                <div class="row"><div class="col-5 font-weight-bold text-muted">الحالة:</div><div class="col-7 ${fine.payableOnline === 'Y' ? 'text-success' : 'text-danger'} font-weight-bold">${fine.payableOnline === 'Y' ? 'قابلة للدفع إلكترونياً' : 'غير قابلة للدفع إلكترونياً'}</div></div>
-                            </div>
-                        </div>
+                        <tr style="cursor: pointer;" onclick="const chk = this.querySelector('.select-ticket'); if(!chk.disabled) chk.checked = !chk.checked; updateSelectedTotal();">
+                            <td class="text-center">
+                                <input type="checkbox" class="select-ticket" data-amount="${fine.amount}" data-id="${fine.ticketNo}" 
+                                    ${isPayable ? '' : 'disabled'} onclick="event.stopPropagation(); updateSelectedTotal();" 
+                                    style="width: 18px; height: 18px;">
+                            </td>
+                            <td class="font-weight-bold">${fine.ticketNo}</td>
+                            <td>${fine.plateNumber || ''} ${fine.plateCode || ''}</td>
+                            <td>${fine.violationType === 'I' ? 'غير مباشرة' : 'مباشرة'}</td>
+                            <td>${fine.location || ''}</td>
+                            <td>${fine.dateTime || fine.fineDate || ''}</td>
+                            <td>${fine.description || ''}</td>
+                            <td>${fine.make || ''} ${fine.model || ''}</td>
+                            <td class="font-weight-bold ${isPayable ? 'text-success' : 'text-danger'}">${fine.amount} دك</td>
+                        </tr>
                     `;
                 });
+
+                resHtml += `
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row mt-3 p-3" style="background-color: #f8f9fa; border-radius: 8px; border: 1px solid #d6dce5;">
+                        <div class="col-6 font-weight-bold" style="font-size: 1.1rem;">إجمالي القيمة المختارة:</div>
+                        <div class="col-6 text-left font-weight-bold text-primary" id="selectedTotalAmount" style="font-size: 1.2rem;">0.000 دك</div>
+                    </div>
+                `;
                 
                 resHtml += `</div>`;
                 if (parseFloat(data.totalAmount) > 0) {
@@ -1246,11 +1270,39 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 resHtml += `</div>`;
                 
                 responseDiv.innerHTML = resHtml;
+                // Function to update total selected amount
+                window.updateSelectedTotal = () => {
+                    let total = 0;
+                    document.querySelectorAll('.select-ticket:checked').forEach(chk => {
+                        total += parseFloat(chk.getAttribute('data-amount') || 0);
+                    });
+                    document.getElementById('selectedTotalAmount').innerText = total.toFixed(3) + ' دك';
+                    
+                    const payBtn = document.getElementById('btnGoPay');
+                    if (payBtn) {
+                        payBtn.disabled = total <= 0;
+                    }
+                };
+
                 const payBtn = document.getElementById('btnGoPay');
                 if (payBtn) {
+                    payBtn.disabled = true; // Disabled until selection
                     payBtn.onclick = () => {
-                        sessionStorage.setItem('paymentData', JSON.stringify({ selectedFines: data.fines, totalAmount: data.totalAmount, civilId: civilId }));
-                        window.location.href = '/payment';
+                        const selectedTickets = Array.from(document.querySelectorAll('.select-ticket:checked')).map(chk => {
+                            const ticketId = chk.getAttribute('data-id');
+                            return data.fines.find(f => f.ticketNo == ticketId);
+                        });
+                        
+                        const total = parseFloat(document.getElementById('selectedTotalAmount').innerText);
+                        
+                        if (selectedTickets.length > 0) {
+                            sessionStorage.setItem('paymentData', JSON.stringify({ 
+                                selectedFines: selectedTickets, 
+                                totalAmount: total.toFixed(3), 
+                                civilId: civilId 
+                            }));
+                            window.location.href = '/payment';
+                        }
                     };
                 }
                 responseDiv.scrollIntoView({ behavior: 'smooth' });
