@@ -32,9 +32,10 @@ function getHeaders() {
   const ua = USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)];
   return {
     'Accept': 'application/json, text/plain, */*',
-    'Accept-Language': 'ar,en-US;q=0.9,en;q=0.8',
+    'Accept-Language': 'ar,en;q=0.9',
     'Cache-Control': 'no-cache',
     'Connection': 'keep-alive',
+    'Host': 'www.moi.gov.kw',
     'Pragma': 'no-cache',
     'Referer': 'https://www.moi.gov.kw/main/eservices/gdt/violation-enquiry',
     'Sec-Ch-Ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
