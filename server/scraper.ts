@@ -18,22 +18,16 @@ const DEFAULT_HTTPS_AGENT = new https.Agent({
   maxFreeSockets: 50,
 });
 
-const API_HEADERS = {
-  "Content-Type": "application/json",
-  Accept: "application/json, text/plain, */*",
-  "Accept-Language": "ar,en;q=0.9",
-  "User-Agent":
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-  Referer: "https://www.moi.gov.kw/main/eservices/gdt/violation-enquiry",
-  Origin: "https://www.moi.gov.kw",
-};
-
 const API_GET_HEADERS = {
-  Accept: API_HEADERS.Accept,
-  "Accept-Language": API_HEADERS["Accept-Language"],
-  "User-Agent": API_HEADERS["User-Agent"],
-  Referer: API_HEADERS.Referer,
-  Origin: API_HEADERS.Origin,
+  'Accept': 'application/json, text/plain, */*',
+  'Accept-Language': 'ar,en-US;q=0.9,en;q=0.8',
+  'Connection': 'keep-alive',
+  'Host': 'www.moi.gov.kw',
+  'Referer': 'https://www.moi.gov.kw/main/eservices/gdt/violation-enquiry',
+  'Sec-Fetch-Dest': 'empty',
+  'Sec-Fetch-Mode': 'cors',
+  'Sec-Fetch-Site': 'same-origin',
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
 };
 
 // ===== TYPES =====
@@ -125,12 +119,8 @@ export async function scrapeKuwaitFines(
   try {
     const response = await axios.get(endpoint, {
       headers: API_GET_HEADERS,
-      timeout: 20000,
-      responseType: "text",
-      transformResponse: [(data) => data],
+      timeout: 30000,
       validateStatus: () => true,
-      httpAgent: DEFAULT_HTTP_AGENT,
-      httpsAgent: DEFAULT_HTTPS_AGENT,
     });
 
     if (response.status >= 400) {
@@ -143,14 +133,13 @@ export async function scrapeKuwaitFines(
     }
 
     let data: any;
-    try {
-      data = JSON.parse(response.data);
-    } catch {
-      return {
-        success: false,
-        fines: [],
-        errorMessage: "تعذّر قراءة استجابة خدمة وزارة الداخلية. يرجى المحاولة مرة أخرى.",
-      };
+    data = response.data;
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch (e) {
+        console.error("[Scraper] JSON Parse Error:", e);
+      }
     }
 
     // Handle no fines case
