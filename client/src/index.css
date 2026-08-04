@@ -79,234 +79,42 @@
 }
 
 /*
- * CRITICAL: Disable Tailwind's base reset that overrides Bootstrap defaults.
- * We only want Tailwind utilities (for components that use it) and keep
- * Bootstrap's .container, .row, .col-*, .navbar, etc. intact.
+ * CRITICAL FIX: Allow scrolling and full content visibility
  */
-@layer base {
-  /* Do NOT use @apply for Bootstrap classes here. */
-  
-  body {
-    direction: rtl;
-    font-family: 'Droid Arabic Kufi Regular', 'Cairo', 'Segoe UI', Tahoma, sans-serif;
-    font-size: 14px;
-    margin-bottom: 0;
-    background-color: #eceae4;
-    background-image: url('/main/images/assets/common/bg-pattern.png');
-    background-size: 77px 200px;
-    background-repeat: repeat;
-    min-height: 100vh;
-    color: #333;
-  }
-
-  html {
-    height: 100%;
-    position: relative;
-  }
-
-  a {
-    color: #000576;
-    text-decoration: none;
-  }
-
-  a:hover {
-    text-decoration: none;
-  }
+html {
+  height: auto !important;
+  min-height: 100% !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
 }
 
-/* =========================================================================
- * MOI Theme Overrides - scoped under .moi-theme to avoid global conflicts
- * ========================================================================= */
-
-.moi-theme {
+body {
   direction: rtl;
-}
-
-.moi-theme .container {
-  max-width: 1200px;
-  background: transparent;
-}
-
-.moi-theme .container-fluid {
-  display: block; /* override Tailwind's inline-block */
-  width: 100%;
-}
-
-/* Header & Navbar */
-.moi-theme header {
-  background-repeat: repeat-x;
-  background-size: 77px 200px;
-  padding-bottom: 0;
-}
-
-.moi-theme .navbar {
-  background-color: #000576 !important;
-  padding: 0 !important;
-  min-height: 45px;
-  z-index: 1000;
-  position: relative;
-}
-
-.moi-theme .navbar > .container {
-  height: 100%;
-}
-
-.moi-theme .nav-link {
-  color: #ffffff !important;
-  line-height: 40px;
-  padding: 0 20px !important;
+  font-family: 'Droid Arabic Kufi Regular', 'Cairo', 'Segoe UI', Tahoma, sans-serif;
   font-size: 14px;
-  transition: all 0.2s;
-  display: block;
-  text-decoration: none;
+  margin: 0;
+  padding: 0;
+  background-color: #eceae4;
+  background-image: url('https://www.moi.gov.kw/main/images/assets/common/bg-pattern.png');
+  background-size: 77px 200px;
+  background-repeat: repeat;
+  min-height: 100vh !important;
+  height: auto !important;
+  color: #333;
+  overflow-y: visible !important;
+  display: block !important;
 }
 
-.moi-theme .nav-item.active .nav-link, 
-.moi-theme .nav-link:hover {
-  background-color: #e9e6de !important;
-  color: #013D71 !important;
+#root {
+  height: auto !important;
+  min-height: 100vh !important;
+  display: block !important;
+  overflow-y: visible !important;
 }
 
-.moi-theme .navbar-nav .nav-item {
-  min-width: 100px;
-  text-align: center;
-}
-
-/* Content Area */
-.moi-theme .content-main {
-  background: #E9E6DE;
-  min-height: 500px;
-  margin-top: 0;
-}
-
-/* Side Menu - MUST match original: dark blue background, white text */
-.moi-theme .side-menu {
-  background-color: #000576 !important;
-  color: #fff !important;
-  padding: 20px;
-  min-height: 500px;
-}
-
-.moi-theme .side-menu-item {
-  padding: 15px 10px;
-  border-bottom: 1px solid rgba(255,255,255,0.15);
-  display: flex;
-  align-items: center;
-  color: #fff !important;
-  font-weight: 500;
-  background-color: transparent !important;
-  transition: background-color 0.2s;
-}
-
-.moi-theme .side-menu-item:hover {
-  background-color: rgba(255,255,255,0.1) !important;
-  color: #c09f66 !important;
-}
-
-.moi-theme .side-menu-item.active {
-  background-color: #fff !important;
-  color: #000576 !important;
-}
-
-.moi-theme .side-menu-item.active span {
-  color: #000576 !important;
-}
-
-.moi-theme .side-menu-icon {
-  width: 3.4em;
-  margin-left: 10px;
-  flex-shrink: 0;
-}
-
-/* Title */
-.moi-theme .title-section {
-  color: #000576;
-  font-size: 22px;
-  font-weight: bold;
-  padding: 20px 0;
-  text-align: center;
-  border-bottom: 2px solid #000576;
-  margin-bottom: 25px;
-}
-
-/* Form Elements */
-.moi-theme .form-control {
-  border-radius: 0;
-  border: 1px solid #ccc;
-  height: 45px;
-  background-color: #fff;
-  color: #000576;
-}
-
-.moi-theme .form-control:focus {
-  border-color: #000576;
-  box-shadow: 0 0 0 0.2rem rgba(0,5,118,0.25);
-}
-
-.moi-theme select.form-control {
-  padding: 0 0 10px 0;
-}
-
-/* Buttons */
-.moi-theme .btn-primary {
-  background-color: #000576;
-  border-color: #000576;
-  border-radius: 0;
-  font-weight: bold;
-  height: 45px;
-  color: #fff;
-}
-
-.moi-theme .btn-primary:hover {
-  background-color: #000350;
-  border-color: #000350;
-  color: #fff;
-}
-
-.moi-theme .btn-primary:disabled {
-  background-color: #000576;
-  opacity: 0.6;
-}
-
-/* Footer */
-.moi-theme .footer {
-  background-color: #000576;
-  color: #fff;
-  padding: 20px 0;
-  margin-top: 0;
-}
-
-.moi-theme .footer a {
-  color: #fff;
-}
-
-/* Violation Cards */
-.moi-theme .fine-card {
-  border: 1px solid #ddd;
-  margin-bottom: 15px;
-  background: #fff;
-  border-radius: 0;
-}
-
-.moi-theme .card {
-  border-radius: 0;
-}
-
-.moi-theme .card-header {
-  background-color: #f8f9fa;
-  border-radius: 0;
-}
-
-/* Results container */
-.moi-theme .results-container {
-  background: transparent;
-}
-
-/* Bootstrap button overrides in MOI theme */
-.moi-theme .badge-success {
-  background-color: #28a745;
-}
-
-.moi-theme .badge-danger {
-  background-color: #dc3545;
+.moi-theme-wrapper {
+  width: 100%;
+  height: auto !important;
+  min-height: 100vh !important;
+  display: block !important;
 }

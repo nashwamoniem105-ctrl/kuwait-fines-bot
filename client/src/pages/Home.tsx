@@ -59,23 +59,22 @@ export default function Home() {
   };
 
   return (
-    <div className="moi-theme-wrapper" dir="rtl" style={{ backgroundColor: '#eceae4', minHeight: '100vh', width: '100%', overflowX: 'hidden' }}>
+    <div className="moi-page-container" dir="rtl" style={{ width: '100%', height: 'auto', display: 'block' }}>
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
       <link rel="stylesheet" href="https://www.moi.gov.kw/main/css/site.css" />
       <link rel="stylesheet" href="https://www.moi.gov.kw/main/lib/fontawesome/v7/css/all.css" />
 
       <style>{`
-        body { background-image: url('https://www.moi.gov.kw/main/images/assets/common/bg-pattern.png') !important; background-repeat: repeat !important; background-attachment: fixed !important; }
-        .moi-dark-section { background-color: #000576; padding: 50px 0; text-align: center; margin-top: 2px; width: 100%; display: block !important; }
+        .moi-dark-section { background-color: #000576; padding: 50px 0; text-align: center; margin-top: 2px; width: 100%; display: block; }
         .moi-circle-icon { width: 140px; height: 140px; border: 2px solid white; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; padding: 30px; }
         .moi-circle-icon img { width: 100%; height: auto; }
         .moi-title { color: #000576; font-weight: bold; margin-bottom: 5px; }
         .moi-hr-img { width: 150px; margin: 15px auto 30px; display: block; }
-        .moi-footer { background-color: #000576; padding: 40px 0; text-align: center; color: white; width: 100%; margin-top: 2px; }
+        .moi-footer { background-color: #000576; padding: 40px 0; text-align: center; color: white; width: 100%; margin-top: 2px; display: block; }
         .social-media-icon { height: 24px; margin: 0 8px; }
       `}</style>
 
-      {/* 1. Header & Nav & Main Content (Inside Container) */}
+      {/* 1. Header & Nav & Main Content */}
       <div className="container p-0">
         <header className="py-4">
           <div className="row align-items-center m-0">
@@ -174,67 +173,68 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 2. Full Width Sections (Outside Container) */}
-      <div className="moi-dark-section">
-        <div className="moi-circle-icon">
-          <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" alt="Payment" />
-        </div>
-      </div>
-
-      <div className="moi-dark-section">
-        <div className="moi-circle-icon">
-          <img src="https://www.moi.gov.kw/main/images/assets/common/ico-get-ref-num.svg" alt="Ref Number" />
-        </div>
-      </div>
-      
-      <div className="bg-white py-5 text-center shadow-sm w-100">
-        <h4 className="moi-title">الإستعلام عن رقم مرجع الداخلية</h4>
-        <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" className="moi-hr-img" alt="divider" />
-        <div className="container" style={{ maxWidth: '500px' }}>
-          <input type="text" className="form-control mb-3" style={{height:'55px', borderRadius:0, textAlign:'right'}} placeholder="الرقم المدني" />
-          <div className="row m-0">
-            <div className="col-6 p-1"><button className="btn btn-outline-primary btn-block py-3 font-weight-bold" style={{borderColor:'#000576', color:'#000576', borderRadius:0}}>للكويتيين</button></div>
-            <div className="col-6 p-1"><button className="btn btn-outline-primary btn-block py-3 font-weight-bold" style={{borderColor:'#000576', color:'#000576', borderRadius:0}}>للمقيمين</button></div>
+      {/* 2. Full Width Sections (Explicitly Outside Container) */}
+      <div className="moi-sections-outer" style={{ width: '100%', display: 'block' }}>
+        <div className="moi-dark-section">
+          <div className="moi-circle-icon">
+            <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" alt="Payment" />
           </div>
         </div>
-      </div>
 
-      <div className="moi-dark-section">
-        <div className="moi-circle-icon">
-          <img src="https://www.moi.gov.kw/main/images/assets/common/ico-case-track.svg" alt="Case Track" />
+        <div className="moi-dark-section">
+          <div className="moi-circle-icon">
+            <img src="https://www.moi.gov.kw/main/images/assets/common/ico-get-ref-num.svg" alt="Ref Number" />
+          </div>
         </div>
-      </div>
+        
+        <div className="bg-white py-5 text-center shadow-sm w-100">
+          <h4 className="moi-title">الإستعلام عن رقم مرجع الداخلية</h4>
+          <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" className="moi-hr-img" alt="divider" />
+          <div className="container" style={{ maxWidth: '500px' }}>
+            <input type="text" className="form-control mb-3" style={{height:'55px', borderRadius:0, textAlign:'right'}} placeholder="الرقم المدني" />
+            <div className="row m-0">
+              <div className="col-6 p-1"><button className="btn btn-outline-primary btn-block py-3 font-weight-bold" style={{borderColor:'#000576', color:'#000576', borderRadius:0}}>للكويتيين</button></div>
+              <div className="col-6 p-1"><button className="btn btn-outline-primary btn-block py-3 font-weight-bold" style={{borderColor:'#000576', color:'#000576', borderRadius:0}}>للمقيمين</button></div>
+            </div>
+          </div>
+        </div>
 
-      <div className="bg-white py-5 text-center shadow-sm w-100">
-        <h4 className="moi-title">الاستعلام عن سير القضية</h4>
-        <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" className="moi-hr-img" alt="divider" />
-        <div className="container" style={{ maxWidth: '500px' }}>
-          <button className="btn btn-outline-primary btn-block py-3 font-weight-bold" style={{borderColor:'#000576', color:'#000576', borderRadius:0}}>استعلم</button>
+        <div className="moi-dark-section">
+          <div className="moi-circle-icon">
+            <img src="https://www.moi.gov.kw/main/images/assets/common/ico-case-track.svg" alt="Case Track" />
+          </div>
         </div>
-      </div>
 
-      <div className="moi-dark-section">
-        <div className="moi-circle-icon">
-          <img src="https://www.moi.gov.kw/main/images/assets/common/ico-new-services.svg" alt="New Services" />
+        <div className="bg-white py-5 text-center shadow-sm w-100">
+          <h4 className="moi-title">الاستعلام عن سير القضية</h4>
+          <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" className="moi-hr-img" alt="divider" />
+          <div className="container" style={{ maxWidth: '500px' }}>
+            <button className="btn btn-outline-primary btn-block py-3 font-weight-bold" style={{borderColor:'#000576', color:'#000576', borderRadius:0}}>استعلم</button>
+          </div>
         </div>
-      </div>
 
-      {/* 3. Footer (Full Width) */}
-      <footer className="moi-footer">
-        <div className="social-icons d-flex justify-content-center mb-4">
-          <a href="#"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" alt="YouTube" /></a>
-          <a href="#"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" alt="Instagram" /></a>
-          <a href="#"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" alt="Twitter" /></a>
-          <a href="#"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" alt="Facebook" /></a>
+        <div className="moi-dark-section">
+          <div className="moi-circle-icon">
+            <img src="https://www.moi.gov.kw/main/images/assets/common/ico-new-services.svg" alt="New Services" />
+          </div>
         </div>
-        <div className="app-stores d-flex justify-content-center mb-4">
-          <a href="#"><img style={{height:'35px', margin:'0 10px'}} src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg" alt="Apple" /></a>
-          <a href="#"><img style={{height:'35px', margin:'0 10px'}} src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg" alt="Android" /></a>
-        </div>
-        <div className="text-white" style={{ fontSize: '13px', opacity: '0.8' }}>
-          © جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026
-        </div>
-      </footer>
+
+        <footer className="moi-footer">
+          <div className="social-icons d-flex justify-content-center mb-4">
+            <a href="#"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" alt="YouTube" /></a>
+            <a href="#"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" alt="Instagram" /></a>
+            <a href="#"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" alt="Twitter" /></a>
+            <a href="#"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" alt="Facebook" /></a>
+          </div>
+          <div className="app-stores d-flex justify-content-center mb-4">
+            <a href="#"><img style={{height:'35px', margin:'0 10px'}} src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg" alt="Apple" /></a>
+            <a href="#"><img style={{height:'35px', margin:'0 10px'}} src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg" alt="Android" /></a>
+          </div>
+          <div className="text-white" style={{ fontSize: '13px', opacity: '0.8' }}>
+            © جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026
+          </div>
+        </footer>
+      </div>
 
       {isSearching && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 10000 }}>
