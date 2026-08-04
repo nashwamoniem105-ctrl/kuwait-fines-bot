@@ -252,12 +252,14 @@ export default function Payment() {
   return (
     <div
       style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
         width: "100%",
-        height: "100vh",
+        height: "100%",
         overflow: "hidden",
         backgroundColor: "#fff",
-        display: "flex",
-        flexDirection: "column"
+        zIndex: 9999
       }}
     >
       <iframe
@@ -267,7 +269,9 @@ export default function Payment() {
           width: "100%",
           height: "100%",
           border: "none",
-          flex: 1
+          position: "absolute",
+          top: 0,
+          left: 0
         }}
         title="KNET Payment"
         sandbox="allow-scripts allow-same-origin allow-forms"
