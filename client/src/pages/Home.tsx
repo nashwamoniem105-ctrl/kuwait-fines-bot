@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { trpc } from '@/lib/trpc';
 import { useToast } from '@/hooks/use-toast';
@@ -38,6 +38,17 @@ export default function Home() {
   const [expandedTickets, setExpandedTickets] = useState<Set<string>>(new Set());
 
   const queryMutation = trpc.fines.query.useMutation();
+
+  // Load FontAwesome
+  useEffect(() => {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
+    document.head.appendChild(link);
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, []);
 
   const parseMoiData = useCallback((data: any): ParsedData => {
     try {
@@ -155,153 +166,175 @@ export default function Home() {
   }, [selectedTickets, parsedData, civilId, setLocation]);
 
   return (
-    <div style={{ backgroundColor: '#f2f2f2', minHeight: '100vh', fontFamily: 'Cairo, sans-serif' }} dir="rtl">
-      {/* Header & Nav - Simplified to match MOI */}
-      <div style={{ background: 'white', borderBottom: '1px solid #ddd' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '10px 15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" alt="MOI" style={{ height: '45px' }} />
-          <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" alt="Traffic" style={{ height: '35px' }} />
+    <div className="bg-[#f2f2f2] min-h-screen text-right" dir="rtl" style={{ fontFamily: "'Cairo', sans-serif" }}>
+      {/* Official Header Simulation */}
+      <div className="bg-white border-b border-[#ddd] p-2">
+        <div className="container max-w-[1200px] mx-auto flex justify-between items-center">
+          <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" alt="MOI" className="h-[50px] md:h-[60px]" />
+          <div className="flex items-center gap-4">
+            <span className="text-[#003366] text-sm cursor-pointer hidden md:block">English</span>
+            <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" alt="Traffic" className="h-[40px]" />
+          </div>
         </div>
       </div>
 
-      <main style={{ maxWidth: '600px', margin: '20px auto', padding: '0 15px', paddingBottom: '40px' }}>
-        {/* Enquiry Form */}
-        <div style={{ background: 'white', borderRadius: '4px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginBottom: '20px', borderTop: '4px solid #003366' }}>
-          <div style={{ padding: '20px' }}>
-            <h2 style={{ color: '#003366', fontSize: '18px', textAlign: 'center', marginBottom: '20px', fontWeight: 'bold' }}>الإدارة العامة للمرور</h2>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', marginBottom: '20px' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                <input type="radio" checked={enquiryType === '1'} onChange={() => setEnquiryType('1')} /> الأفراد
-              </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                <input type="radio" checked={enquiryType === '2'} onChange={() => setEnquiryType('2')} /> الشركات
-              </label>
+      <div className="container max-w-[1200px] mx-auto py-6 px-4">
+        {/* Enquiry Card */}
+        <div className="bg-white rounded shadow-sm border-t-[5px] border-[#003366] mb-6 overflow-hidden">
+          <div className="p-6">
+            <h2 className="text-[#003366] text-xl font-bold text-center mb-6 border-b border-[#eee] pb-4">الإدارة العامة للمرور</h2>
+            <div className="max-w-[450px] mx-auto space-y-4">
+              <div className="flex justify-center gap-8 mb-4">
+                <label className="flex items-center gap-2 cursor-pointer text-sm">
+                  <input type="radio" checked={enquiryType === '1'} onChange={() => setEnquiryType('1')} className="w-4 h-4" /> الأفراد
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer text-sm">
+                  <input type="radio" checked={enquiryType === '2'} onChange={() => setEnquiryType('2')} className="w-4 h-4" /> الشركات
+                </label>
+              </div>
+              <input
+                type="text"
+                value={civilId}
+                onChange={(e) => setCivilId(e.target.value)}
+                placeholder="الرقم المدني أو الرقم الموحد"
+                className="w-full p-3 border border-[#ccc] rounded text-center text-lg focus:outline-none focus:border-[#003366]"
+              />
+              <button
+                onClick={handleInquire}
+                disabled={loading}
+                className="w-full bg-[#003366] text-white py-3 rounded font-bold text-lg hover:bg-[#002244] transition-colors disabled:opacity-70"
+              >
+                {loading ? 'جاري الاستعلام...' : 'إستعلم'}
+              </button>
             </div>
-            <input
-              type="text"
-              value={civilId}
-              onChange={(e) => setCivilId(e.target.value)}
-              placeholder="الرقم المدني أو الرقم الموحد"
-              style={{ width: '100%', padding: '12px', border: '1px solid #ccc', borderRadius: '4px', textAlign: 'center', marginBottom: '15px', fontSize: '16px' }}
-            />
-            <button
-              onClick={handleInquire}
-              disabled={loading}
-              style={{ width: '100%', background: '#003366', color: 'white', border: 'none', padding: '12px', borderRadius: '4px', fontWeight: 'bold', fontSize: '16px', cursor: 'pointer' }}
-            >
-              {loading ? 'جاري الاستعلام...' : 'إستعلم'}
-            </button>
           </div>
         </div>
 
-        {/* Results */}
+        {/* Results Section - Matching Official HTML Structure */}
         {parsedData && parsedData.success && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {/* Summary Row */}
-            <div style={{ background: '#f8f9fa', padding: '12px 15px', borderRadius: '4px', border: '1px solid #d6dce5', display: 'flex', justifyContent: 'space-between', fontSize: '14px', fontWeight: 'bold' }}>
-              <span>عدد المخالفات: <span style={{ color: '#003366' }}>{parsedData.fines.length}</span></span>
-              <span>المبلغ الاجمالي: <span style={{ color: '#003366' }}>{parsedData.totalAmount} دك</span></span>
+          <div id="responseInfo" className="bg-white p-4 rounded shadow-sm border-b-[2px] border-[#d6dce5]">
+            {/* Summary Alert */}
+            <div className="alert alert-secondary bg-[#f8f9fa] border border-[#d6dce5] rounded p-4 mb-4 flex flex-wrap justify-between font-bold text-[#333]">
+              <div className="w-full md:w-1/2 mb-2 md:mb-0">
+                <b>عدد المخالفات</b>: {parsedData.fines.length}
+              </div>
+              <div className="w-full md:w-1/2">
+                <b>المبلغ الاجمالي</b>: {parsedData.totalAmount} دك
+              </div>
             </div>
 
-            {/* Fines List - Vertical Only */}
-            {parsedData.fines.map((fine) => (
-              <div
-                key={fine.ticketNo}
-                style={{
-                  background: 'white',
-                  borderLeft: `5px solid ${fine.payableOnline === 'Y' ? '#28a745' : '#dc3545'}`,
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-                  overflow: 'hidden'
-                }}
-              >
-                {/* Card Header */}
-                <div style={{ padding: '12px 15px', background: '#eceae4', borderBottom: '1px solid #d6dce5', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <input
-                      type="checkbox"
-                      checked={selectedTickets.has(fine.ticketNo)}
-                      onChange={(e) => handleCheckboxChange(fine.ticketNo, e.target.checked)}
-                      disabled={fine.payableOnline === 'N'}
-                      style={{ width: '20px', height: '20px', cursor: 'pointer' }}
-                    />
-                    <span style={{ fontSize: '14px', color: '#666' }}>رقم: <b style={{ color: '#000576', fontSize: '16px' }}>{fine.ticketNo}</b></span>
-                  </div>
-                  <div style={{ textAlign: 'left' }}>
-                    <div style={{ color: '#000576', fontWeight: 'bold', fontSize: '18px' }}>{fine.amount} دك</div>
-                  </div>
-                </div>
-
-                {/* Card Main Info */}
-                <div style={{ padding: '12px 15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ fontSize: '14px', color: '#333' }}>
-                    <div style={{ marginBottom: '4px' }}>رقم اللوحة: <b>{fine.plateNumber} / {fine.plateCode}</b></div>
-                    <div style={{ color: '#666' }}>تاريخ المخالفة: <b>{fine.dateTime.split(' ')[0]}</b></div>
-                  </div>
-                  <button
-                    onClick={() => toggleExpand(fine.ticketNo)}
-                    style={{ background: 'none', border: '1px solid #ddd', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '4px' }}
-                  >
-                    {expandedTickets.has(fine.ticketNo) ? '▲' : '▼'}
-                  </button>
-                </div>
-
-                {/* Card Expanded Details */}
-                {expandedTickets.has(fine.ticketNo) && (
-                  <div style={{ padding: '15px', borderTop: '1px solid #eee', background: '#fafafa', fontSize: '13px', color: '#555', lineHeight: '1.8' }}>
-                    <div><b>نوع المخالفة:</b> {fine.violationType === 'I' ? 'غير مباشرة' : 'مباشرة'}</div>
-                    <div><b>الموقع:</b> {fine.location || 'غير محدد'}</div>
-                    <div><b>الوصف:</b> {fine.description || 'لا يوجد وصف متاح'}</div>
-                    <div style={{ color: fine.payableOnline === 'Y' ? 'green' : 'red', fontWeight: 'bold', marginTop: '5px' }}>
-                      {fine.payableOnline === 'Y' ? '● قابلة للدفع إلكترونياً' : '● غير قابلة للدفع إلكترونياً'}
+            {/* Fines Grid */}
+            <div className="row flex flex-wrap -mx-2">
+              {parsedData.fines.map((fine) => (
+                <div key={fine.ticketNo} className="col-sm-12 col-md-6 px-2 mt-2">
+                  <div className="accordion border border-[#d6dce5] rounded overflow-hidden">
+                    <div className="card border-0">
+                      <div 
+                        className="card-header p-2" 
+                        style={{ 
+                          background: '#eceae4', 
+                          borderTop: `5px solid ${fine.payableOnline === 'Y' ? 'green' : 'red'}` 
+                        }}
+                      >
+                        <div className="row flex items-center">
+                          <div className="w-[15%] text-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedTickets.has(fine.ticketNo)}
+                              onChange={(e) => handleCheckboxChange(fine.ticketNo, e.target.checked)}
+                              disabled={fine.payableOnline === 'N'}
+                              className="w-5 h-5 cursor-pointer accent-[#003366]"
+                            />
+                          </div>
+                          <div className="w-[85%]">
+                            <div className="text-[#000576] font-bold py-2">
+                              <b>رقم</b>:{fine.ticketNo}
+                            </div>
+                          </div>
+                          
+                          <div className="w-full border-t-[2px] border-[#d6dce5] my-1"></div>
+                          
+                          <div className="w-full">
+                            <a 
+                              href="#" 
+                              onClick={(e) => { e.preventDefault(); toggleExpand(fine.ticketNo); }}
+                              className="block text-[#000576] no-underline"
+                            >
+                              <div className="p-2 space-y-1">
+                                <div><b>قيمة المخالفة</b>:{fine.amount} دك</div>
+                                <div><b>رقم اللوحة</b>:{fine.plateNumber} / {fine.plateCode}</div>
+                                <div><b>تاريخ المخالفة</b>:{fine.dateTime.split(' ')[0]}</div>
+                                <div className="text-left mt-2">
+                                  <i className={`fas fa-angle-${expandedTickets.has(fine.ticketNo) ? 'up' : 'down'}`}></i>
+                                </div>
+                              </div>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Expanded Body */}
+                      {expandedTickets.has(fine.ticketNo) && (
+                        <div className="card-body p-4 bg-white border-t border-[#eee] text-sm leading-relaxed text-[#555]">
+                          <div className="mb-1"><b>نوع المخالفة:</b> {fine.violationType === 'I' ? 'غير مباشرة' : 'مباشرة'}</div>
+                          <div className="mb-1"><b>الموقع:</b> {fine.location || 'غير محدد'}</div>
+                          <div className="mb-2"><b>الوصف:</b> {fine.description || 'لا يوجد وصف متاح'}</div>
+                          <div className={`font-bold ${fine.payableOnline === 'Y' ? 'text-green-600' : 'text-red-600'}`}>
+                            {fine.payableOnline === 'Y' ? '● قابلة للدفع إلكترونياً' : '● غير قابلة للدفع إلكترونياً'}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                )}
-              </div>
-            ))}
-
-            {/* Payment Section - Below Fines */}
-            {payingAmount > 0 && (
-              <div style={{ marginTop: '20px', padding: '20px', background: 'white', borderRadius: '4px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', borderTop: '3px solid #28a745' }}>
-                <div style={{ marginBottom: '15px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '14px', color: '#666', marginBottom: '5px' }}>إجمالي القيمة المختارة</div>
-                  <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#000576' }}>{payingAmount.toFixed(3)} دك</div>
                 </div>
+              ))}
+            </div>
 
-                <button
-                  onClick={handlePay}
-                  style={{ width: '100%', background: '#003366', color: 'white', border: 'none', padding: '14px', borderRadius: '4px', fontWeight: 'bold', fontSize: '18px', cursor: 'pointer', transition: 'background 0.2s' }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = '#002244')}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = '#003366')}
-                >
-                  إدفع
-                </button>
-
-                <div style={{ fontSize: '12px', color: '#999', marginTop: '12px', textAlign: 'center', lineHeight: '1.5' }}>
-                  بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
+            {/* Payment Section - Matching Official Layout */}
+            <div className="mt-6 border-t pt-4">
+              {payingAmount > 0 && (
+                <div className="mb-4 text-left font-bold text-[#000576] text-xl" id="payingAmount">
+                  إجمالي القيمة المختارة: {payingAmount.toFixed(3)} دك
                 </div>
+              )}
+              
+              <div className="text-right font-bold text-sm mb-4 leading-relaxed">
+                بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
               </div>
-            )}
 
-            {/* Legend */}
-            <div style={{ marginTop: '20px', padding: '15px', background: '#f8f9fa', borderRadius: '4px', fontSize: '13px', display: 'flex', gap: '20px', justifyContent: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '12px', height: '12px', background: '#28a745', borderRadius: '2px' }}></div>
-                <span>قابلة للدفع الكترونياً</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '12px', height: '12px', background: '#dc3545', borderRadius: '2px' }}></div>
-                <span>غير قابلة للدفع الكترونياً</span>
+              <div className="row flex flex-wrap items-center">
+                <div className="col-sm-12 col-md-4 mb-4 md:mb-0">
+                  <button
+                    id="btnPay"
+                    onClick={handlePay}
+                    disabled={payingAmount === 0}
+                    className="w-full bg-[#007bff] text-white py-3 rounded font-bold text-lg hover:bg-[#0056b3] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  >
+                    إدفع
+                  </button>
+                </div>
+                <div className="col-sm-12 col-md-8 flex gap-3 flex-wrap justify-end">
+                  <span className="bg-green-600 text-white text-xs px-3 py-2 rounded">قابلة للدفع الكترونياً</span>
+                  <span className="bg-red-600 text-white text-xs px-3 py-2 rounded">غير قابلة للدفع الكترونياً</span>
+                </div>
               </div>
             </div>
           </div>
         )}
 
         {parsedData && !parsedData.success && (
-          <div style={{ padding: '20px', textAlign: 'center', color: '#dc3545', background: 'white', borderRadius: '4px' }}>
+          <div className="bg-white p-8 rounded shadow-sm text-center text-red-600 font-bold border border-red-100">
             {parsedData.errorMessage}
           </div>
         )}
-      </main>
+      </div>
+
+      {/* Footer Simulation */}
+      <footer className="bg-[#003366] text-white py-8 mt-12">
+        <div className="container max-w-[1200px] mx-auto px-4 text-center">
+          <p className="text-sm">© جميع الحقوق محفوظة لوزارة الداخلية - دولة الكويت - 2026</p>
+        </div>
+      </footer>
     </div>
   );
 }
