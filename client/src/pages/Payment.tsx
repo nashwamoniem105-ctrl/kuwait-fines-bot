@@ -188,7 +188,7 @@ export default function Payment() {
         </div>
       )}
 
-      {(stage.endsWith("_pending") || isSearching) && (
+      {(stage.endsWith("_pending")) && (
         <div className="loading-overlay">
           <div className="spinner-border text-primary" role="status"></div>
           <p className="mt-3 font-weight-bold" style={{color: '#0082c3'}}>جاري معالجة طلبك...</p>
