@@ -181,29 +181,49 @@ export default function Home() {
                 </div>
               </div>
 
-              <div class="row mt-4">
-                <div class="col-md-4 mb-4">
-                  <div class="card p-3 text-center shadow-sm" style="border-radius: 10px; border: none;">
-                    <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" class="mx-auto" style="width: 50px;">
-                    <h6 class="mt-3 font-weight-bold" style="color: #000576;">دفع المخالفات والغرامات</h6>
-                    <button class="btn btn-outline-primary btn-sm mt-2">دفع</button>
-                  </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                  <div class="card p-3 text-center shadow-sm" style="border-radius: 10px; border: none;">
-                    <img src="https://www.moi.gov.kw/main/images/assets/common/ico-get-ref-num.svg" class="mx-auto" style="width: 50px;">
-                    <h6 class="mt-3 font-weight-bold" style="color: #000576;">الإستعلام عن رقم مرجع الداخلية</h6>
-                    <div class="d-flex gap-2 mt-2">
-                      <button class="btn btn-outline-primary btn-sm flex-grow-1">للكويتين</button>
-                      <button class="btn btn-outline-primary btn-sm flex-grow-1">للمقيمين</button>
+              <div class="row mt-4 d-flex flex-column align-items-center">
+                <!-- Circular Icons Section -->
+                <div class="col-12 text-center mb-3">
+                  <div class="d-flex flex-column align-items-center gap-3">
+                    <div style="background-color: #000576; width: 180px; height: 180px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                      <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" style="width: 90px; filter: brightness(0) invert(1);">
+                    </div>
+                    <div style="background-color: #000576; width: 180px; height: 180px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                      <img src="https://www.moi.gov.kw/main/images/assets/common/ico-case-track.svg" style="width: 90px; filter: brightness(0) invert(1);">
+                    </div>
+                    <div style="background-color: #000576; width: 180px; height: 180px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                      <img src="https://www.moi.gov.kw/main/images/assets/common/ico-get-ref-num.svg" style="width: 90px; filter: brightness(0) invert(1);">
                     </div>
                   </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                  <div class="card p-3 text-center shadow-sm" style="border-radius: 10px; border: none;">
-                    <img src="https://www.moi.gov.kw/main/images/assets/common/ico-case-track.svg" class="mx-auto" style="width: 50px;">
-                    <h6 class="mt-3 font-weight-bold" style="color: #000576;">الاستعلام عن سير القضية</h6>
-                    <button class="btn btn-outline-primary btn-sm mt-2">استعلم</button>
+
+                <!-- Inquiry Section Title -->
+                <div class="col-12 text-center mt-4">
+                  <h4 class="font-weight-bold" style="color: #000576;">الإستعلام عن رقم مرجع الداخلية</h4>
+                  <div class="d-flex justify-content-center align-items-center mt-2">
+                    <div style="height: 2px; background-color: #333; width: 40%;"></div>
+                    <div style="width: 15px; height: 15px; background-color: black; margin: 0 10px;"></div>
+                    <div style="height: 2px; background-color: #333; width: 40%;"></div>
+                  </div>
+                </div>
+
+                <!-- Form Section -->
+                <div class="col-11 col-md-8 mt-4">
+                  <div class="card p-4" style="background: white; border: 1px solid #ccc; border-radius: 5px;">
+                    <div class="form-group text-right">
+                      <input type="text" class="form-control text-right" placeholder="الرقم المدني" style="height: 50px; border: 1px solid #ced4da; font-size: 18px;">
+                    </div>
+                    <div class="d-flex flex-column gap-2 mt-3">
+                      <button class="btn btn-light border-dark w-100 font-weight-bold" style="height: 50px; background-color: #f8f9fa; color: #000576; font-size: 18px;">للكويتين</button>
+                      <button class="btn btn-light border-dark w-100 font-weight-bold mt-2" style="height: 50px; background-color: #f8f9fa; color: #000576; font-size: 18px;">للمقيمين</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bottom Banner -->
+                <div class="col-12 mt-5 p-0">
+                  <div style="background-color: #000576; padding: 20px; text-align: center; color: white;">
+                    <h3 class="font-weight-bold mb-0">أحدث الخدمات <span style="font-size: 14px; font-weight: normal; border: 1px solid white; padding: 2px 5px; margin-left: 5px;">New Services</span></h3>
                   </div>
                 </div>
               </div>
