@@ -15,6 +15,8 @@ interface Fine {
   plateCode: string;
   violationType?: string;
   vehicleType?: string;
+  make?: string;
+  model?: string;
   [key: string]: any;
 }
 
@@ -31,7 +33,6 @@ export default function Home() {
 
   const [loading, setLoading] = useState(false);
   const [parsedData, setParsedData] = useState<ParsedData | null>(null);
-  const [payingAmount, setPayingAmount] = useState(0);
   const [selectedTickets, setSelectedTickets] = useState<Set<string>>(new Set());
   const [enquiryType, setEnquiryType] = useState<'1' | '2'>('1');
   const [civilId, setCivilId] = useState('');
@@ -78,6 +79,8 @@ export default function Home() {
             plateCode: d.PlateCode || '',
             violationType: d.ViolationType || 'D',
             vehicleType: d.Make || d.Model || 'سيارة',
+            make: d.Make || '',
+            model: d.Model || '',
           });
         });
       }
@@ -99,7 +102,6 @@ export default function Home() {
     setLoading(true);
     setParsedData(null);
     setSelectedTickets(new Set());
-    setPayingAmount(0);
     setExpandedTickets(new Set());
 
     queryMutation.mutate(
@@ -128,16 +130,10 @@ export default function Home() {
         } else {
           newSet.delete(ticketNo);
         }
-        let total = 0;
-        newSet.forEach((tn) => {
-          const ticket = parsedData?.fines.find((f) => f.ticketNo === tn);
-          if (ticket) total += parseFloat(ticket.amount);
-        });
-        setPayingAmount(total);
         return newSet;
       });
     },
-    [parsedData]
+    []
   );
 
   const toggleExpand = (ticketNo: string) => {
@@ -148,6 +144,15 @@ export default function Home() {
       return newSet;
     });
   };
+
+  const getTotalSelected = useCallback(() => {
+    let total = 0;
+    selectedTickets.forEach((tn) => {
+      const ticket = parsedData?.fines.find((f) => f.ticketNo === tn);
+      if (ticket) total += parseFloat(ticket.amount);
+    });
+    return total;
+  }, [selectedTickets, parsedData]);
 
   const handlePay = useCallback(() => {
     if (selectedTickets.size === 0) return;
@@ -165,13 +170,8 @@ export default function Home() {
     setLocation('/payment');
   }, [selectedTickets, parsedData, civilId, setLocation]);
 
-  // Get background color for payment button
-  const getPayButtonBgColor = () => {
-    if (payingAmount === 0) {
-      return '#f2f2f2'; // Same as page background
-    }
-    return '#007bff'; // Blue
-  };
+  const totalSelected = getTotalSelected();
+  const hasSelectedTickets = selectedTickets.size > 0;
 
   return (
     <div className="bg-[#f2f2f2] min-h-screen text-right" dir="rtl" style={{ fontFamily: "'Cairo', sans-serif" }}>
@@ -218,133 +218,151 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Results Section - New Card Design */}
-        {parsedData && parsedData.success && (
-          <div id="responseInfo">
-            {/* Summary Alert */}
-            <div className="alert alert-secondary bg-[#f8f9fa] border border-[#d6dce5] rounded p-4 mb-6 flex flex-wrap justify-between font-bold text-[#333]">
-              <div className="w-full md:w-1/2 mb-2 md:mb-0">
-                <b>عدد المخالفات</b>: {parsedData.fines.length}
+        {/* Results Section */}
+        {parsedData && parsedData.success && parsedData.fines.length === 0 && (
+          <div className="bg-white p-6 rounded shadow-sm text-center text-green-600 font-bold border border-green-100">
+            لا توجد مخالفات مسجلة على هذا الرقم.
+          </div>
+        )}
+
+        {parsedData && parsedData.success && parsedData.fines.length > 0 && (
+          <div className="bg-white p-6 rounded shadow-sm" style={{ paddingBottom: '200px' }}>
+            {/* Summary Box */}
+            <div className="bg-[#f8f9fa] border border-[#d6dce5] rounded p-4 mb-6 flex flex-wrap justify-between font-bold text-[#333] text-right">
+              <div className="mb-2 md:mb-0">
+                <span className="text-[#666]">عدد المخالفات: </span>
+                <span className="text-[#003366]">{parsedData.fines.length}</span>
               </div>
-              <div className="w-full md:w-1/2">
-                <b>المبلغ الاجمالي</b>: {parsedData.totalAmount} دك
+              <div>
+                <span className="text-[#666]">المبلغ الإجمالي: </span>
+                <span className="text-[#003366]">{parsedData.totalAmount} د.ك</span>
               </div>
             </div>
 
-            {/* Fines Grid - New Card Design */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {/* Violations Container */}
+            <div className="space-y-4">
               {parsedData.fines.map((fine) => (
-                <div 
-                  key={fine.ticketNo} 
-                  className="bg-white rounded-lg shadow-md overflow-hidden border-t-4"
-                  style={{ borderTopColor: fine.payableOnline === 'Y' ? '#22c55e' : '#ef4444' }}
+                <div
+                  key={fine.ticketNo}
+                  className="bg-white border rounded overflow-hidden"
+                  style={{
+                    borderTop: `5px solid ${fine.payableOnline === 'Y' ? '#28a745' : '#dc3545'}`,
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  }}
                 >
-                  {/* Card Header with Checkbox and Ticket Number */}
-                  <div className="p-4 border-b border-[#e5e7eb]">
-                    <div className="flex items-center justify-between gap-3 mb-3">
+                  {/* Card Main Row */}
+                  <div className="p-5 flex justify-between items-center text-right">
+                    <div className="flex items-center gap-5">
                       <input
                         type="checkbox"
                         checked={selectedTickets.has(fine.ticketNo)}
                         onChange={(e) => handleCheckboxChange(fine.ticketNo, e.target.checked)}
                         disabled={fine.payableOnline === 'N'}
-                        className="w-5 h-5 cursor-pointer accent-[#003366]"
+                        className="w-5 h-5 cursor-pointer"
+                        style={{ accentColor: '#003366' }}
                       />
-                      <div className="flex-1">
-                        <div className="text-[#000576] font-bold text-lg">
-                          {fine.ticketNo}
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className="text-[#666] text-sm">رقم المخالفة:</span>
+                          <span className="text-[#003366] font-bold text-lg">{fine.ticketNo}</span>
+                        </div>
+                        <div className="text-sm text-[#555] flex gap-3">
+                          <span>لوحة: <span className="bg-[#e9ecef] px-2 py-1 rounded text-[#333] font-semibold">{fine.plateNumber} {fine.plateCode}</span></span>
+                          <span>|</span>
+                          <span>بتاريخ: <b>{(fine.dateTime || fine.fineDate || '').split(' ')[0]}</b></span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Main Info */}
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="font-semibold text-[#333]">قيمة المخالفة:</span>
-                        <span className="text-[#000576] font-bold">{fine.amount} دك</span>
+                    <div className="flex items-center gap-6">
+                      <div className="text-left">
+                        <div className="text-[#888] text-xs mb-1">قيمة المخالفة</div>
+                        <div className="text-[#28a745] font-bold text-2xl">{parseFloat(fine.amount).toFixed(3)} د.ك</div>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="font-semibold text-[#333]">رقم اللوحة:</span>
-                        <span className="text-[#555]">{fine.plateNumber} / {fine.plateCode}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="font-semibold text-[#333]">التاريخ والوقت:</span>
-                        <span className="text-[#555]">{fine.dateTime}</span>
-                      </div>
+                      <button
+                        onClick={() => toggleExpand(fine.ticketNo)}
+                        className="w-9 h-9 rounded-full flex items-center justify-center transition-all"
+                        style={{
+                          background: '#f0f4f8',
+                          color: '#0056b3',
+                          border: '1px solid #d1d9e6',
+                          cursor: 'pointer',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = '#0056b3';
+                          e.currentTarget.style.color = 'white';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = '#f0f4f8';
+                          e.currentTarget.style.color = '#0056b3';
+                        }}
+                      >
+                        <i className={`fas fa-${expandedTickets.has(fine.ticketNo) ? 'minus' : 'plus'}`}></i>
+                      </button>
                     </div>
                   </div>
 
-                  {/* Expandable Details */}
-                  <div className="p-4">
-                    <button
-                      onClick={() => toggleExpand(fine.ticketNo)}
-                      className="w-full flex items-center justify-between text-[#000576] hover:text-[#003366] transition-colors"
-                    >
-                      <span className="font-semibold">التفاصيل</span>
-                      <i className={`fas fa-chevron-${expandedTickets.has(fine.ticketNo) ? 'up' : 'down'} text-lg`}></i>
-                    </button>
-
-                    {expandedTickets.has(fine.ticketNo) && (
-                      <div className="mt-4 pt-4 border-t border-[#e5e7eb] space-y-3 text-sm">
+                  {/* Card Details */}
+                  {expandedTickets.has(fine.ticketNo) && (
+                    <div className="p-5 bg-[#fcfdfe] border-t border-[#edf2f7]">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
                         <div>
-                          <span className="font-semibold text-[#333]">نوع المخالفة:</span>
-                          <p className="text-[#555] mt-1">{fine.violationType === 'I' ? 'غير مباشرة' : 'مباشرة'}</p>
+                          <div className="text-[#718096] text-xs mb-1">نوع المخالفة:</div>
+                          <div className="text-[#2d3748] font-bold">{fine.violationType === 'I' ? 'غير مباشرة' : 'مباشرة'}</div>
                         </div>
                         <div>
-                          <span className="font-semibold text-[#333]">الموقع:</span>
-                          <p className="text-[#555] mt-1">{fine.location || 'غير محدد'}</p>
+                          <div className="text-[#718096] text-xs mb-1">الموقع:</div>
+                          <div className="text-[#2d3748] font-bold">{fine.location || 'غير محدد'}</div>
                         </div>
                         <div>
-                          <span className="font-semibold text-[#333]">الوصف:</span>
-                          <p className="text-[#555] mt-1">{fine.description || 'لا يوجد وصف متاح'}</p>
+                          <div className="text-[#718096] text-xs mb-1">صنف السيارة:</div>
+                          <div className="text-[#2d3748] font-bold">{fine.make || ''} {fine.model || ''}</div>
                         </div>
-                        <div className={`font-bold mt-3 p-2 rounded ${fine.payableOnline === 'Y' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
-                          {fine.payableOnline === 'Y' ? '✓ قابلة للدفع إلكترونياً' : '✗ غير قابلة للدفع إلكترونياً'}
+                        <div>
+                          <div className="text-[#718096] text-xs mb-1">حالة الدفع:</div>
+                          <div className={`font-bold ${fine.payableOnline === 'Y' ? 'text-green-600' : 'text-red-600'}`}>
+                            {fine.payableOnline === 'Y' ? 'قابلة للدفع إلكترونياً' : 'غير قابلة للدفع إلكترونياً'}
+                          </div>
+                        </div>
+                        <div className="md:col-span-2">
+                          <div className="text-[#718096] text-xs mb-1">وصف المخالفة:</div>
+                          <div className="text-[#2d3748] font-bold">{fine.description || 'لا يوجد وصف'}</div>
                         </div>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
 
-            {/* Payment Section */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <div className="mb-6">
-                <div className="text-right font-bold text-sm mb-4 leading-relaxed text-[#666]">
-                  بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
-                </div>
-
-                {payingAmount > 0 && (
-                  <div className="mb-4 text-left font-bold text-[#000576] text-lg bg-[#f0f4ff] p-3 rounded">
-                    إجمالي القيمة المختارة: {payingAmount.toFixed(3)} دك
+            {/* Payment Footer */}
+            {parsedData.totalAmount && parseFloat(parsedData.totalAmount) > 0 && (
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-[#e2e8f0] p-5 z-50" style={{ boxShadow: '0 -4px 20px rgba(0,0,0,0.08)' }}>
+                <div className="container max-w-[900px] mx-auto flex flex-col items-center gap-4">
+                  <div className="bg-[#f8fafc] border border-[#cbd5e0] rounded-lg px-8 py-3 flex items-center gap-5">
+                    <span className="font-bold text-[#4a5568] text-base">إجمالي القيمة المختارة:</span>
+                    <span className="text-[#000576] font-black text-2xl">{totalSelected.toFixed(3)} دك</span>
                   </div>
-                )}
-              </div>
-
-              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div className="w-full md:w-auto">
                   <button
-                    id="btnPay"
                     onClick={handlePay}
-                    disabled={payingAmount === 0}
-                    className="w-full md:w-auto px-8 py-3 rounded font-bold text-lg transition-all duration-300"
+                    disabled={!hasSelectedTickets}
+                    className="px-12 py-3 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-3"
                     style={{
-                      backgroundColor: getPayButtonBgColor(),
-                      color: payingAmount === 0 ? '#999' : 'white',
-                      cursor: payingAmount === 0 ? 'not-allowed' : 'pointer',
-                      border: payingAmount === 0 ? '2px solid #ddd' : 'none'
+                      background: hasSelectedTickets ? '#000576' : '#cbd5e0',
+                      color: hasSelectedTickets ? 'white' : '#718096',
+                      cursor: hasSelectedTickets ? 'pointer' : 'not-allowed',
+                      boxShadow: hasSelectedTickets ? '0 6px 20px rgba(0,5,118,0.25)' : 'none',
                     }}
                   >
-                    ادفع
+                    <i className="fas fa-credit-card"></i>
+                    <span>دفع المخالفات المختارة</span>
                   </button>
-                </div>
-
-                <div className="flex gap-3 flex-wrap justify-end">
-                  <span className="bg-green-600 text-white text-xs px-3 py-2 rounded">✓ قابلة للدفع إلكترونياً</span>
-                  <span className="bg-red-600 text-white text-xs px-3 py-2 rounded">✗ غير قابلة للدفع إلكترونياً</span>
+                  <div className="text-xs text-[#718096] text-center max-w-[500px]">
+                    بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         )}
 
