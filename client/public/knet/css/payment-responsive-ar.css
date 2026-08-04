@@ -7,7 +7,6 @@
 		margin-top: 3%;
 	}
 }
-
 /* Medium devices (tablets, 768px and up) */
 @media (max-width: 991px) and (min-width: 769px){
 	.wrapper{
@@ -15,195 +14,65 @@
 		max-width: 90%;
 	}
 }
-
 /* Small devices (landscape phones, 576px and up) */
 @media (max-width: 768px){
 	.wrapper{
-		margin-top: 5%;
-		max-width: 100%;
-		width: 100%;
+		margin-top: 8%;
+		max-width: 95%;
+		width: 95%;
 	}
 	.contentBox{
-		padding: 15px;
-		max-width: 100%;
-		width: 100%;
-	}
-	.add{
-		max-width: 100%;
-		background-image: url("../images/adds/NewDerayaCamp/mob.jpg");
-		background-size: cover;
-		background-position: center;
-		height: 70px;
-	}
-	.madd{
-		height: 70px;
-		max-width: 100%;
-		margin: 5px auto;
-		border-radius: 0px 10px;
-		background-image: url("../images/adds/NewDerayaCamp/mob.jpg");
-		background-size: cover;
-		background-position: center;
-		display: block;
-	}
-	/* Use mobile ad, hide desktop ad */
-	.wrapper > .add {
-		display: none;
-	}
-	.wrapper > .madd {
-		display: block;
-	}
-	.paymentinput{
-		height: 40px;
-		font-size: 14px;
-		width: 100%;
-		max-width: 300px;
-	}
-	input#debitNumber{
-		max-width: 300px;
-		width: 100%;
-	}
-	.bank, .pin{
-		max-width: 300px;
-		width: 100%;
-	}
-	.button{
-		min-width: 110px;
-		height: 38px;
-		font-size: 14px;
-	}
-	select{
-		height: 36px;
-		width: 100%;
-		max-width: 300px;
+		padding: 25px;
 	}
 }
-
 /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 500px){
 	.wrapper{
 		max-width: 100%;
 		width: 100%;
-		margin-top: 8%;
-		padding: 6px;
+		margin-top: 10%;
+		padding: 8px;
 	}
 	.contentBox{
-		padding: 12px;
-		margin-bottom: 10px;
-		max-width: 100%;
-	}
-	.add{
-		height: 50px;
-		max-width: 100%;
-	}
-	.madd{
-		height: 50px;
-		max-width: 100%;
-	}
-	.paymentinput{
-		height: 42px;
-		font-size: 15px;
-		width: 100%;
-		max-width: 260px;
-	}
-	input#debitNumber{
-		max-width: 260px;
-		width: 100%;
-	}
-	.bank, .pin{
-		max-width: 260px;
-		width: 100%;
-	}
-	.button{
-		min-width: 100px;
-		height: 40px;
-		font-size: 14px;
-		padding: 0 15px;
-	}
-	select{
-		height: 36px;
-		width: 100%;
-		max-width: 260px;
-		font-size: 14px;
-	}
-	.logoHead{
-		max-width: 80%;
-		height: auto;
-	}
-	.paymentheader{
-		font-size: 13px;
-	}
-	.paymentlabel{
-		font-size: 11px;
-	}
-	.paymentdata{
-		font-size: 12px;
-	}
-	.col4{
-		width: 100%;
-		text-align: center;
-		display: flex;
-		justify-content: center;
-		gap: 8px;
-		flex-wrap: wrap;
+		padding: 20px;
+		margin-bottom: 15px;
 	}
 }
-
 /* Very small devices */
 @media (max-width: 435px){
+	.logoHead {
+   	    left: 36%;
+	}
 	.contentBox{
-		padding: 10px;
+		padding: 18px;
 	}
 	.wrapper{
-		margin-top: 10%;
-	}
-	.logoHead {
-		max-width: 75%;
+		margin-top: 12%;
 	}
 }
-
 /* Tiny devices */
 @media (max-width: 380px){
 	.contentBox {
-		padding: 8px;
+    	padding: 15px;
 	} 
 	.wrapper {
-		margin-top: 12%;
-		padding: 4px;
+    	margin-top: 15%;
 	}
-	.paymentinput{
-		height: 38px;
-		font-size: 14px;
-	}
-	.button{
-		min-width: 90px;
-		height: 36px;
-		font-size: 13px;
-	}
-	.add, .madd{
-		height: 40px;
-	}
-}
-
+}	
 @media (max-width: 350px){
 	.contentBox .col:first-child .paymentlabel {
 		padding-left: 0;
 	}
 	.contentBox{
-		padding: 6px;
-	}
-	.paymentlabel{
-		padding-right: 5px;
-		font-size: 10px;
-	}
-	.paymentdata{
-		font-size: 11px;
+		padding: 12px;
 	}
 }
+/*added for tooltip by sib*/
 
-/* added for tooltip by sib */
 .tooltip {
   position: relative;
   display: block;
+ 
 }
 .tooltip .tooltiptext {
   visibility: hidden;
@@ -225,6 +94,8 @@
   -webkit-box-shadow:4px 3px 10px 0px rgba(0,0,0,0.75);
   -moz-box-shadow:4px 3px 10px 0px rgba(0,0,0,0.75);
   box-shadow:4px 3px 10px 0px rgba(0,0,0,0.75);
+  
+  
 }
 .tooltip .tooltiptext::after {
   content: "";
@@ -240,29 +111,26 @@ div#tooltip_0:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
 }
-
-/* turn the img to gray :sib */
+/* turn the img to gray :sib*/
 .doGray{
 	-webkit-filter:grayscale(100%);
 	filter:grayscale(100%);
 	opacity:0.5;
 }
-
 #ValidationMessage{
-	-moz-transition: height 1s ease;
-	-webkit-transition: height 1s ease;
+	-moz-transaction: height 1s ease;
+	-webkit-transaction: height 1s ease;
 	transition: height 1s ease;
 	border: #ff0000 1px solid;
 	background-color: #f7dadd;
 	font-size: 12px;
     font-family: helvetica, arial, sans serif;
     color: #ff0000;
-   	padding: 2px; 
-	display:none;
-	margin-bottom: 3px; 
-	text-align:center;
+   	 padding: 2px; 
+	 display:none;
+	 margin-bottom: 3px; 
+	 text-align:center;
 }
-
 div#fasterCheckDiv1{
 	display:flex;
 	float:left;
@@ -271,7 +139,7 @@ div#fasterCheckDiv1{
 	display:block;
 	width:35%;
 	padding-top:3px;
-}
+	}
 div#fasterCheckDiv2{
 	float:left;
 	margin-left:30%;
@@ -279,7 +147,7 @@ div#fasterCheckDiv2{
 	padding-top:3px;
 	width:70px;
 	padding-top:3px;
-}
+	}
 div#fasterCheckDiv1>label>img{
 	flex:1;
 	width: 48px;
@@ -304,147 +172,144 @@ div#fasterCheckDiv2>label>img{
 	margin: 5px auto -30px auto;
 	border-radius: 0px 10px;
 	background-image: url("../images/adds/NewDerayaCamp/mob.jpg");
-	display:none;	
-}
+	display:block;	
+	}
+  
+	/* checkpoint - Suppress autofill background for card fields in Chrome/Safari */
+   
+  
+    #debitNumber:-webkit-autofill:hover,
+    #debitNumber:-webkit-autofill:focus,
+   	#debitNumber:-webkit-autofill:active,
+    #expiryMonthBox:-webkit-autofill,
+    #expiryMonthBox:-webkit-autofill:hover,
+    #expiryMonthBox:-webkit-autofill:focus,
+    #expiryMonthBox:-webkit-autofill:active,
+    #expiryYearBox:-webkit-autofill,
+    #expiryYearBox:-webkit-autofill:hover,
+    #expiryYearBox:-webkit-autofill:focus,
+    #expiryYearBox:-webkit-autofill:active,
+    #expiryDate:-webkit-autofill,
+    #expiryDate:-webkit-autofill:hover,
+    #expiryDate:-webkit-autofill:focus,
+    #expiryDate:-webkit-autofill:active,
+    #expirySlashBox:-webkit-autofill,
+    #expirySlashBox:-webkit-autofill:hover,
+    #expirySlashBox:-webkit-autofill:focus,
+    #expirySlashBox:-webkit-autofill:active,
+    #cardPin:-webkit-autofill,
+    #cardPin:-webkit-autofill:hover,
+    #cardPin:-webkit-autofill:focus,
+    #cardPin:-webkit-autofill:active{
+  	-webkit-text-fill-color: #797575 !important;
+    color: #797575 !important;
+    font-size: 13px;
+    font-weight: 700 !important;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+    box-shadow: 0 0 0 1000px transparent inset !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    -webkit-background-clip: text !important;
+    transition: background-color 999999s ease-in-out 0s, color 999999s ease-in-out 0s !important;
+    caret-color: #000 !important;
+    }
+    
+  /*checkpoint - Alternate method: delay transition to prevent autofill color change */
+  
+    #expiryMonthBox:-webkit-autofill,
+    #expiryYearBox:-webkit-autofill,
+    #expiryDate:-webkit-autofill,
+    #expirySlashBox:-webkit-autofill,
+    #cardPin:-webkit-autofill {
+      -webkit-transition: background-color 5000s ease-in-out 0s;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+      #debitNumber:-webkit-autofill {
+   -webkit-text-fill-color: #797575 !important;
+    font-weight: 700 !important;
 
-/* checkpoint - Suppress autofill background for card fields in Chrome/Safari */
-#debitNumber:-webkit-autofill:hover,
-#debitNumber:-webkit-autofill:focus,
-#debitNumber:-webkit-autofill:active,
-#expiryMonthBox:-webkit-autofill,
-#expiryMonthBox:-webkit-autofill:hover,
-#expiryMonthBox:-webkit-autofill:focus,
-#expiryMonthBox:-webkit-autofill:active,
-#expiryYearBox:-webkit-autofill,
-#expiryYearBox:-webkit-autofill:hover,
-#expiryYearBox:-webkit-autofill:focus,
-#expiryYearBox:-webkit-autofill:active,
-#expiryDate:-webkit-autofill,
-#expiryDate:-webkit-autofill:hover,
-#expiryDate:-webkit-autofill:focus,
-#expiryDate:-webkit-autofill:active,
-#expirySlashBox:-webkit-autofill,
-#expirySlashBox:-webkit-autofill:hover,
-#expirySlashBox:-webkit-autofill:focus,
-#expirySlashBox:-webkit-autofill:active,
-#cardPin:-webkit-autofill,
-#cardPin:-webkit-autofill:hover,
-#cardPin:-webkit-autofill:focus,
-#cardPin:-webkit-autofill:active{
-	-webkit-text-fill-color: #797575 !important;
-	color: #797575 !important;
-	font-size: 13px;
-	font-weight: 700 !important;
-	-webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
-	box-shadow: 0 0 0 1000px transparent inset !important;
-	background: transparent !important;
-	background-color: transparent !important;
-	-webkit-background-clip: text !important;
-	transition: background-color 999999s ease-in-out 0s, color 999999s ease-in-out 0s !important;
-	caret-color: #000 !important;
-}
+    -webkit-box-shadow:
+        0 0 0 1000px rgba(0,0,0,0) inset,
+        inset 0 6px 5px #7975754f
+        !important;
 
-#expiryMonthBox:-webkit-autofill,
-#expiryYearBox:-webkit-autofill,
-#expiryDate:-webkit-autofill,
-#expirySlashBox:-webkit-autofill,
-#cardPin:-webkit-autofill {
-	-webkit-transition: background-color 5000s ease-in-out 0s;
-	transition: background-color 5000s ease-in-out 0s;
-}
+    background-color: transparent !important;
+    -webkit-background-clip: padding-box !important;
 
-#debitNumber:-webkit-autofill {
-	-webkit-text-fill-color: #797575 !important;
-	font-weight: 700 !important;
-	-webkit-box-shadow:
-		0 0 0 1000px rgba(0,0,0,0) inset,
-		inset 0 6px 5px #7975754f
-		!important;
-	background-color: transparent !important;
-	-webkit-background-clip: padding-box !important;
-	transition: background-color 999999s ease-in-out 0s !important;
-	caret-color: #000 !important;
+    transition: background-color 999999s ease-in-out 0s !important;
+    caret-color: #000 !important;
+    }
+    
+ #cardPin {
+  direction: rtl !important;
+  text-align: right !important; /* optional, keeps digits aligned to the right */
 }
-
-#cardPin {
-	direction: rtl !important;
-	text-align: right !important;
-}
-
 .expiry-wrapper {
-	display: flex;
-	position: relative;
-	width: 71px;
-	float: right;
-	border-radius: 5px;
-	background: linear-gradient(to bottom, #c9c9c9 0%, #fff 39%)!important;
-	background-color: #fff !important;
+  display: flex;
+  position: relative;
+  width: 71px;
+  float: right;
+  border-radius: 5px;
+  background: linear-gradient(to bottom, #c9c9c9 0%, #fff 39%)!important;
+  background-color: #fff !important;
 }
-
 .card-input-wrapper {
-	border-radius: 4px;
-	background: linear-gradient(to bottom,rgba(201, 201, 201, 1) 0%,rgba(255, 255, 255, 1) 39%) !important;
-	padding-top: 4px;
-}
+border-radius: 4px;
+background: linear-gradient(to bottom,rgba(201, 201, 201, 1) 0%,rgba(255, 255, 255, 1) 39%) !important;
+padding-top: 4px;
 
+}
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
 	background: linear-gradient(to bottom, rgba(201,201,201,1) 0%, rgba(255,255,255,1) 39%)!important;
 }
-
 .input-wrapper {
-	position: relative;
+  position: relative;   /* anchor for dropdown */
+ 
 }
+ 
+
 
 #knetCardInfoSection input:-webkit-autofill,
 #knetCardInfoSection input:-webkit-autofill:hover,
 #knetCardInfoSection input:-webkit-autofill:focus,
 #knetCardInfoSection input:-internal-autofill-selected {
-	font-weight: bold;
-	color: #797575 !important;
-	-webkit-text-fill-color: #797575 !important;
-	border: #c7d0d5 1px solid !important;
-	font-family: Arial, Helvetica, serif;
-	font-size: 13px;
-	height: 26px;
-	border-radius: 5px;
-	padding-left: 5px;
-	appearance: none !important;
-	-webkit-appearance: none !important;
-	background: linear-gradient(to bottom,
-		rgba(201, 201, 201, 1) 0%,
-		rgba(255, 255, 255, 1) 39%) !important;
-	background-color: transparent !important;
-	outline: none !important;
-	box-shadow: none !important;
-	-webkit-box-shadow: 0 0 0px 1000px rgb(255 255 255 / 0%) inset, inset 0 6px 5px #7975754f !important;
-	transition: background-color 999999s ease-in-out 0s !important;
+ 
+    font-weight: bold;
+    color: #797575 !important;
+    -webkit-text-fill-color: #797575 !important;
+ 
+    border: #c7d0d5 1px solid !important;
+ 
+    font-family: Arial, Helvetica, serif;
+    font-size: 13px;
+ 
+    height: 26px;
+    border-radius: 5px;
+ 
+    padding-left: 5px;
+ 
+    appearance: none !important;
+    -webkit-appearance: none !important;
+ 
+    background: linear-gradient(to bottom,
+            rgba(201, 201, 201, 1) 0%,
+            rgba(255, 255, 255, 1) 39%) !important;
+ 
+    background-color: transparent !important;
+ 
+    outline: none !important;
+ 
+    box-shadow: none !important;
+ 
+    /* MAIN FIX */
+    -webkit-box-shadow: 0 0 0px 1000px rgb(255 255 255 / 0%) inset, inset 0 6px 5px #7975754f !important;
+ 
+    transition: background-color 999999s ease-in-out 0s !important;
 }
-
 .pinmask {
-	-webkit-text-security: disc;
-	text-security: disc;
-}
-
-/* Mobile-specific: ensure input fields are properly sized for touch */
-@media (max-width: 480px) {
-	input.paymentinput,
-	input#debitNumber,
-	input#cardPin,
-	input#expiryMonthBox,
-	input#expiryYearBox {
-		height: 42px !important;
-		font-size: 15px !important;
-		-webkit-appearance: none;
-		border-radius: 6px;
-	}
-	select {
-		height: 40px !important;
-		font-size: 14px !important;
-	}
-	#cardPin {
-		height: 42px !important;
-	}
+    -webkit-text-security: disc; /* Safari, Chrome */
+    text-security: disc;         /* Standard (not widely supported yet) */
 }

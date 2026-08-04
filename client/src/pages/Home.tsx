@@ -247,7 +247,7 @@ export default function Home() {
         direction: 'rtl',
       }}
     >
-      {/* Header */}
+      {/* Header - MOI Logo */}
       <div
         style={{
           backgroundColor: '#fff',
@@ -343,136 +343,117 @@ export default function Home() {
               </div>
             ) : (
               <>
-                {/* Summary Row - SIMPLE TABLE-LIKE LAYOUT */}
+                {/* Summary Box - EXACT MOI STYLE */}
                 <div
                   style={{
-                    backgroundColor: '#e9ecef',
+                    backgroundColor: '#e8e8e8',
                     borderRadius: '4px',
-                    padding: '12px 15px',
-                    marginBottom: '15px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    flexWrap: 'nowrap',
+                    padding: '15px 18px',
+                    marginBottom: '20px',
+                    direction: 'ltr',
                   }}
                 >
-                  <div style={{ textAlign: 'right' }}>
-                    <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#495057' }}>
-                      عدد المخالفات: {parsedData.totalFines || parsedData.fines.length}
-                    </span>
+                  <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#333', marginBottom: '6px' }}>
+                    Total tickets: {parsedData.totalFines || parsedData.fines.length}
                   </div>
-                  <div style={{ textAlign: 'left' }}>
-                    <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#495057' }}>
-                      المبلغ الإجمالي: {parsedData.totalAmount} KD
-                    </span>
+                  <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#333' }}>
+                    Total Amount: {parsedData.totalAmount} KD
                   </div>
                 </div>
 
-                {/* Violation Cards */}
+                {/* Violation Cards - EXACT MOI STYLE */}
                 {parsedData.fines.map((fine, index) => {
                   const isPayable = fine.payableOnline === 'Y' || fine.fineType === 'payable';
                   const isPaid = fine.isPaid === true || fine.status === 'paid';
+                  const borderColor = isPayable ? '#28a745' : '#cc0000';
+                  const isExpanded = expandedTickets.has(fine.ticketNo);
 
                   return (
                     <div
                       key={`${fine.ticketNo}-${index}`}
                       style={{
                         backgroundColor: '#fff',
-                        borderRadius: '6px',
-                        marginBottom: '12px',
-                        overflow: 'hidden',
-                        borderTop: `4px solid ${isPayable ? '#28a745' : '#dc3545'}`,
-                        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                        borderTop: `4px solid ${borderColor}`,
+                        marginBottom: '0',
+                        borderBottom: '1px solid #ddd',
                       }}
                     >
-                      <div style={{ padding: '12px' }}>
-                        {/* Row 1: Checkbox + Ticket Number */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                          {isPayable && !isPaid && (
-                            <input
-                              type="checkbox"
-                              checked={selectedTickets.has(fine.ticketNo)}
-                              onChange={(e) => handleCheckboxChange(fine.ticketNo, e.target.checked)}
-                              style={{ width: '18px', height: '18px', accentColor: '#003366', cursor: 'pointer', flexShrink: 0 }}
-                            />
-                          )}
-                          <span style={{ fontSize: '11px', color: '#888' }}>رقم المخالفة:</span>
-                          <span style={{ fontWeight: 'bold', color: '#003366', fontSize: '16px' }}>{fine.ticketNo}</span>
+                      <div style={{ padding: '12px 15px' }}>
+                        {/* Row 1: Checkbox + Ticket */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            {isPayable && !isPaid && (
+                              <input
+                                type="checkbox"
+                                checked={selectedTickets.has(fine.ticketNo)}
+                                onChange={(e) => handleCheckboxChange(fine.ticketNo, e.target.checked)}
+                                style={{ width: '16px', height: '16px', cursor: 'pointer', flexShrink: 0 }}
+                              />
+                            )}
+                          </div>
+                          <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#000080', direction: 'ltr' }}>
+                            Ticket: <span style={{ fontWeight: 'normal' }}>{fine.ticketNo}</span>
+                          </span>
                         </div>
 
                         {/* Divider */}
-                        <div style={{ borderTop: '1px solid #eee', margin: '8px 0' }}></div>
+                        <div style={{ borderTop: '1px solid #ddd', margin: '8px 0' }}></div>
 
-                        {/* Row 2: Amount + Plate - STACKED for mobile clarity */}
-                        <div style={{ marginBottom: '8px' }}>
-                          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '4px' }}>
-                            <span style={{ fontWeight: 'bold', color: '#003366', fontSize: '13px', minWidth: '60px' }}>المبلغ:</span>
-                            <span style={{ fontWeight: 'bold', color: '#003366', fontSize: '14px' }}>{fine.amount} KD</span>
-                          </div>
-                          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '4px' }}>
-                            <span style={{ fontWeight: 'bold', color: '#003366', fontSize: '13px', minWidth: '60px' }}>اللوحة:</span>
-                            <span style={{ color: '#333', fontSize: '13px' }}>{fine.plateNumber}{fine.plateCode ? '/' + fine.plateCode : ''}</span>
-                          </div>
-                          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                            <span style={{ fontWeight: 'bold', color: '#003366', fontSize: '13px', minWidth: '60px' }}>التاريخ:</span>
-                            <span style={{ color: '#333', fontSize: '13px' }}>{fine.dateTime || fine.fineDate || ''}</span>
-                          </div>
+                        {/* Row 2: Amount */}
+                        <div style={{ marginBottom: '6px', direction: 'ltr' }}>
+                          <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#000080' }}>
+                            Amount: <span style={{ fontWeight: 'normal', color: '#333' }}>{fine.amount} KD</span>
+                          </span>
                         </div>
 
-                        {/* Expand Button */}
-                        <div style={{ textAlign: 'left', marginTop: '5px' }}>
-                          <button
+                        {/* Row 3: Plate */}
+                        <div style={{ marginBottom: '6px', direction: 'ltr' }}>
+                          <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#000080' }}>
+                            Plate: <span style={{ fontWeight: 'normal', color: '#333' }}>{fine.plateNumber}{fine.plateCode ? '/' + fine.plateCode : ''}</span>
+                          </span>
+                        </div>
+
+                        {/* Row 4: Date */}
+                        <div style={{ marginBottom: '6px', direction: 'ltr' }}>
+                          <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#000080' }}>
+                            Date: <span style={{ fontWeight: 'normal', color: '#333' }}>{fine.dateTime || fine.fineDate || ''}</span>
+                          </span>
+                        </div>
+
+                        {/* Chevron */}
+                        <div style={{ marginTop: '8px', textAlign: 'center' }}>
+                          <i
+                            className={`fas fa-chevron-${isExpanded ? 'up' : 'down'}`}
                             onClick={() => toggleExpand(fine.ticketNo)}
                             style={{
-                              background: 'none',
-                              border: 'none',
-                              color: '#003366',
+                              color: '#666',
                               fontSize: '14px',
                               cursor: 'pointer',
-                              padding: '4px 8px',
+                              padding: '5px',
                             }}
-                          >
-                            <i className={`fas fa-chevron-${expandedTickets.has(fine.ticketNo) ? 'up' : 'down'}`}></i>
-                          </button>
+                          />
                         </div>
 
                         {/* Expanded Details */}
-                        {expandedTickets.has(fine.ticketNo) && (
-                          <div style={{ marginTop: '10px', padding: '10px', backgroundColor: '#f8f9fa', borderRadius: '4px', fontSize: '13px', borderRight: '3px solid #003366' }}>
-                            {fine.location && (
-                              <div style={{ marginBottom: '5px' }}>
-                                <span style={{ fontWeight: 'bold', color: '#666' }}>الموقع: </span>
-                                <span>{fine.location}</span>
-                              </div>
-                            )}
-                            {fine.description && (
-                              <div style={{ marginBottom: '5px' }}>
-                                <span style={{ fontWeight: 'bold', color: '#666' }}>الوصف: </span>
-                                <span>{fine.description}</span>
-                              </div>
-                            )}
-                            {fine.fineType && fine.fineType !== 'payable' && (
-                              <div style={{ marginBottom: '5px' }}>
-                                <span style={{ fontWeight: 'bold', color: '#666' }}>النوع: </span>
-                                <span>
-                                  {fine.fineType === 'blackpoints'
-                                    ? 'نقاط سوداء'
-                                    : fine.fineType === 'unpayable'
-                                    ? 'غير قابلة للدفع'
-                                    : fine.fineType}
+                        {isExpanded && (
+                          <div style={{ marginTop: '10px', padding: '12px', backgroundColor: '#fff', borderTop: '1px solid #ddd' }}>
+                            {fine.violationType && (
+                              <div style={{ marginBottom: '8px', direction: 'ltr' }}>
+                                <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#000' }}>
+                                  Type: <span style={{ fontWeight: 'normal' }}>{fine.violationType === 'D' ? 'Direct' : fine.violationType === 'I' ? 'InDirect' : fine.violationType}</span>
                                 </span>
                               </div>
                             )}
-                            {fine.blackPoints ? (
-                              <div style={{ marginBottom: '5px' }}>
-                                <span style={{ fontWeight: 'bold', color: '#666' }}>النقاط السوداء: </span>
-                                <span>{fine.blackPoints}</span>
+                            {fine.location && (
+                              <div style={{ marginBottom: '8px', direction: 'ltr' }}>
+                                <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#000' }}>
+                                  Place: <span style={{ fontWeight: 'normal' }}>{fine.location}</span>
+                                </span>
                               </div>
-                            ) : null}
-                            {fine.speed && (
-                              <div>
-                                <span style={{ fontWeight: 'bold', color: '#666' }}>السرعة: </span>
-                                <span>{fine.speed} {fine.speedLimit ? `(الحد: ${fine.speedLimit})` : ''}</span>
+                            )}
+                            {fine.description && (
+                              <div style={{ marginBottom: '8px' }}>
+                                <span style={{ fontSize: '13px', color: '#333' }}>{fine.description}</span>
                               </div>
                             )}
                           </div>
@@ -482,12 +463,21 @@ export default function Home() {
                   );
                 })}
 
-                {/* Pay Button Section */}
-                <div style={{ marginTop: '15px', marginBottom: '10px' }}>
-                  <p style={{ color: '#666', fontSize: '12px', textAlign: 'center', marginBottom: '12px', direction: 'ltr' }}>
+                {/* Pay Warning + Button - EXACT MOI STYLE */}
+                <div style={{ marginTop: '20px', marginBottom: '15px' }}>
+                  <p style={{
+                    color: '#000',
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    marginBottom: '15px',
+                    direction: 'ltr',
+                    lineHeight: '1.5',
+                  }}>
                     After making the payment please do not try to pay again as it may take upto 15 minutes to update the data
                   </p>
 
+                  {/* Pay Button */}
                   <button
                     onClick={handlePay}
                     disabled={!hasSelected}
@@ -497,19 +487,20 @@ export default function Home() {
                       backgroundColor: hasSelected ? '#003366' : '#ccc',
                       color: '#fff',
                       border: 'none',
-                      borderRadius: '6px',
+                      borderRadius: '4px',
                       fontWeight: 'bold',
                       fontSize: '16px',
                       cursor: hasSelected ? 'pointer' : 'not-allowed',
+                      marginBottom: '15px',
                     }}
                   >
                     ادفع
                   </button>
 
                   {/* Legend */}
-                  <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '15px' }}>
-                    <span style={{ backgroundColor: '#28a745', color: '#fff', fontSize: '12px', padding: '5px 12px', borderRadius: '4px' }}>قابلة للدفع</span>
-                    <span style={{ backgroundColor: '#dc3545', color: '#fff', fontSize: '12px', padding: '5px 12px', borderRadius: '4px' }}>غير قابلة للدفع</span>
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '10px' }}>
+                    <span style={{ backgroundColor: '#28a745', color: '#fff', fontSize: '12px', padding: '6px 14px', borderRadius: '4px', fontWeight: 'bold' }}>Payable</span>
+                    <span style={{ backgroundColor: '#cc0000', color: '#fff', fontSize: '12px', padding: '6px 14px', borderRadius: '4px', fontWeight: 'bold' }}>Non Payable</span>
                   </div>
                 </div>
               </>
