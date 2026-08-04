@@ -106,7 +106,7 @@ export default function Home() {
 
   return (
     <div 
-      className="moi-absolute-cloned-wrapper" 
+      className="moi-local-cloned-wrapper" 
       dangerouslySetInnerHTML={{ __html: `
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -114,7 +114,7 @@ export default function Home() {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>General Department of Traffic - Ministry of Interior - Kuwait</title>
-    <link rel="icon" type="image/x-icon" href="https://www.moi.gov.kw/main/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/main/favicon.ico" />
     <script type="text/javascript">
         <!--
         window.rsConf = {general: {usePost: true,skipHiddenContent:true }};
@@ -123,14 +123,14 @@ export default function Home() {
     <script src="https://cdn-na.readspeaker.com/script/56/webReader/webReader.js?pids=wr" type="text/javascript" id="rs_req_Init"></script>
     
     
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
-<meta name="x-stylesheet-fallback-test" content="" class="sr-only" /><script>!function(a,b,c,d){var e,f=document,g=f.getElementsByTagName("SCRIPT"),h=g[g.length-1].previousElementSibling,i=f.defaultView&&f.defaultView.getComputedStyle?f.defaultView.getComputedStyle(h):h.currentStyle;if(i&&i[a]!==b)for(e=0;e<c.length;e++)f.write('<link href="https://www.moi.gov.kw/main/eservices/gdt/'+c[e]+'" '+d+"/>")}("position","absolute",["/main/lib/bootstrap/dist/css/bootstrap.min.css"], "rel=\u0022stylesheet\u0022 crossorigin=\u0022anonymous\u0022 integrity=\u0022sha384-ggOyR0iXCbMQv3Xipma34MD\u002BdH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\u0022 ");</script>
+        <link rel="stylesheet" href="/main/css/bootstrap.min.css" crossorigin="anonymous" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
+<meta name="x-stylesheet-fallback-test" content="" class="sr-only" /><script>!function(a,b,c,d){var e,f=document,g=f.getElementsByTagName("SCRIPT"),h=g[g.length-1].previousElementSibling,i=f.defaultView&&f.defaultView.getComputedStyle?f.defaultView.getComputedStyle(h):h.currentStyle;if(i&&i[a]!==b)for(e=0;e<c.length;e++)f.write('<link href="'+c[e]+'" '+d+"/>")}("position","absolute",["/main/lib/bootstrap/dist/css/bootstrap.min.css"], "rel=\u0022stylesheet\u0022 crossorigin=\u0022anonymous\u0022 integrity=\u0022sha384-ggOyR0iXCbMQv3Xipma34MD\u002BdH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\u0022 ");</script>
     
-    <link rel="stylesheet" href="https://www.moi.gov.kw/main/lib/fontawesome/v7/css/all.css" />
+    <link rel="stylesheet" href="/main/lib/fontawesome/v7/css/all.css" />
     <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
     optionally if you need to use a theme, then include the theme CSS file as mentioned below 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/themes/krajee-svg/theme.css" media="all" rel="stylesheet" type="text/css" />-->
-    <link rel="stylesheet" href="https://www.moi.gov.kw/main/css/site.css?v=go_4IccMhw1NChPOSH_W7AbpThLoN7-zMHFe4trNRE0" />
+    <link rel="stylesheet" href="/main/css/site.css?v=go_4IccMhw1NChPOSH_W7AbpThLoN7-zMHFe4trNRE0" />
     
 </head>
 <body>
@@ -138,26 +138,26 @@ export default function Home() {
         <header>
             <div class="row">
                 <div class="col-4 col-md-2 col-lg-2 text-center" style="border:0px solid red;">
-                    <a class="navbar-brand m-0" href="https://www.moi.gov.kw/main/">
-                        <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" style="height: 120px;" />
+                    <a class="navbar-brand m-0" href="/main/">
+                        <img src="/main/images/assets/common/logo-moi.svg" style="height: 120px;" />
                     </a>
                 </div>
                 <div class="col-1 align-self-center" style="border:0px solid red;">
                     <div class="row">
                         <div class="col text-center">
-                            <img src="https://www.moi.gov.kw/main/images/assets/common/ar/state-of-kuwait.svg" class="text-center main-header-title" />
+                            <img src="/main/images/assets/common/ar/state-of-kuwait.svg" class="text-center main-header-title" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col text-center">
-                            <img src="https://www.moi.gov.kw/main/images/assets/common/ar/ministry-of-interior.svg" class="mt-2 main-header-title" />
+                            <img src="/main/images/assets/common/ar/ministry-of-interior.svg" class="mt-2 main-header-title" />
                         </div>
                     </div>
                 </div>
             </div>
             <nav class="navbar navbar-expand-lg navbar-dark border-bottom box-shadow">
                 <div class="container">
-                    <a class="navbar-brand" href="https://www.moi.gov.kw/main"></a>
+                    <a class="navbar-brand" href="/main"></a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -166,39 +166,39 @@ export default function Home() {
                         <ul class="navbar-nav flex-grow-1 p-0 clearfix" style="margin:0 auto;vertical-align:top;border:0px solid red;">
                             <div class="d-flex flex-sm-row flex-column container-navlinks" style="border:0px solid red;overflow:visible;">
                             <li class="nav-item active">
-                                <a class="nav-link" href="https://www.moi.gov.kw/main">
+                                <a class="nav-link" href="/main">
                                     الرئيسيــة
                                     <span class="sr-only">(current)</span>
                                 </a>
                             </li>
 
                             <li class="nav-item" id="eservicesMenu" data-trigger="focus">
-                                <a href="https://www.moi.gov.kw/main/eservices/gdt/#" id="nav-eServices" class="nav-link" data-target="#eservices" data-toggle="collapse" aria-expanded="false" aria-controls="eservices">
+                                <a href="#" id="nav-eServices" class="nav-link" data-target="#eservices" data-toggle="collapse" aria-expanded="false" aria-controls="eservices">
                                     الخدمات الإلكترونيـة
                                 </a>
                                 <span class="collapse navbar-submenu" id="eservices" data-parent="#navbarResponsive">
                                     <ul class="nav justify-content-center pt-2 pb-2 pl-3 pr-3" style="border:0px solid red;">
                                         <li class="nav-item m-0">
-                                            <a href="https://www.moi.gov.kw/main/eservices">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/it-comm/ico-it-communications.svg" alt="Information Systems" class="menu-icon" />
+                                            <a href="/main/eservices">
+                                                <img src="/main/images/assets/it-comm/ico-it-communications.svg" alt="Information Systems" class="menu-icon" />
                                             </a>
-                                            <a class="nav-link active" href="https://www.moi.gov.kw/main/eservices">
+                                            <a class="nav-link active" href="/main/eservices">
                                                 <div class="main-menu-text">الإدارة العامة
 لنظم المعلومات</div>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="https://www.moi.gov.kw/gdt">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-general-traffic.svg" alt="Traffic" class="menu-icon" />
+                                            <a href="/gdt">
+                                                <img src="/main/images/assets/general-traffic/ico-general-traffic.svg" alt="Traffic" class="menu-icon" />
                                             </a>
-                                            <a href="https://www.moi.gov.kw/gdt" class="nav-link">
+                                            <a href="/gdt" class="nav-link">
                                                 <div class="main-menu-text">الإدارة العامة
 للمرور</div>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="https://nat.moi.gov.kw/citizenship-passport.nsf/Main?OpenForm&langid=1">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/citizenship-passport/ico-citizenship-passport.svg" alt="Citizenship" class="menu-icon" />
+                                                <img src="/main/images/assets/citizenship-passport/ico-citizenship-passport.svg" alt="Citizenship" class="menu-icon" />
                                             </a>
                                             <a class="nav-link" href="https://nat.moi.gov.kw/citizenship-passport.nsf/Main?OpenForm&langid=1">
                                                 <div class="main-menu-text">الإدارة العامة
@@ -206,35 +206,35 @@ export default function Home() {
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="https://www.moi.gov.kw/main/eservices/residence">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/residency/ico-residence.svg" alt="Immigration" class="menu-icon" />
+                                            <a href="/main/eservices/residence">
+                                                <img src="/main/images/assets/residency/ico-residence.svg" alt="Immigration" class="menu-icon" />
                                             </a>
-                                            <a class="nav-link" href="https://www.moi.gov.kw/main/eservices/residence">
+                                            <a class="nav-link" href="/main/eservices/residence">
                                                 <div class="main-menu-text">الإدارة العامة
 لشؤون  الإقامة</div>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="https://www.moi.gov.kw/main/eservices/civildefence">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/civil-defence/ico-civil-defence.svg" alt="Civil Defence" class="menu-icon" />
+                                            <a href="/main/eservices/civildefence">
+                                                <img src="/main/images/assets/civil-defence/ico-civil-defence.svg" alt="Civil Defence" class="menu-icon" />
                                             </a>
-                                            <a class="nav-link" href="https://www.moi.gov.kw/main/eservices/civildefence">
+                                            <a class="nav-link" href="/main/eservices/civildefence">
                                                 <div class="main-menu-text">الإدارة العامة
 للدفاع المدني</div>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="https://www.moi.gov.kw/main/eservices/servicecentres">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/service-centres/ico-service-centre.svg" alt="Service Centres" class="menu-icon" />
+                                            <a href="/main/eservices/servicecentres">
+                                                <img src="/main/images/assets/service-centres/ico-service-centre.svg" alt="Service Centres" class="menu-icon" />
                                             </a>
-                                            <a class="nav-link" href="https://www.moi.gov.kw/main/eservices/servicecentres">
+                                            <a class="nav-link" href="/main/eservices/servicecentres">
                                                 <div class="main-menu-text">الإدارة العامة
 لمراكز الخدمة</div>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="https://nat5.moi.gov.kw/Coast-Guard.nsf/Main?openform&langid=1">
-                                        <img src="https://www.moi.gov.kw/main/images/assets/coast-guard/ico-coast-guard.svg" alt="Coast Guard" class="menu-icon" />
+                                        <img src="/main/images/assets/coast-guard/ico-coast-guard.svg" alt="Coast Guard" class="menu-icon" />
                                         </a>
                                             <a class="nav-link" href="https://nat5.moi.gov.kw/Coast-Guard.nsf/Main?openform&langid=1">
                                         <div class="main-menu-text">الإدارة العامة
@@ -243,7 +243,7 @@ export default function Home() {
                                         </li>
                                         <li class="nav-item">
                                             <a href="https://rnt.moi.gov.kw/pas/">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/ico-shoon-quwa.svg" alt="Police Affairs" class="menu-icon" />
+                                                <img src="/main/images/assets/ico-shoon-quwa.svg" alt="Police Affairs" class="menu-icon" />
                                             </a>
                                             <a class="nav-link" href="https://rnt.moi.gov.kw/pas/">
                                                 <div class="main-menu-text">الإدارة العامة
@@ -252,7 +252,7 @@ export default function Home() {
                                         </li>
                                         <li class="nav-item">
                                             <a href="https://nat4.moi.gov.kw/saad-abdullah-academy.nsf">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/academy/ico-police-academy.svg" alt="Saad Abdullah Police Academy" class="menu-icon" />
+                                                <img src="/main/images/assets/academy/ico-police-academy.svg" alt="Saad Abdullah Police Academy" class="menu-icon" />
                                             </a>
                                             <a class="nav-link" href="https://nat4.moi.gov.kw/saad-abdullah-academy.nsf">
                                                 <div class="main-menu-text">أكاديمية سعد العبدالله
@@ -260,17 +260,17 @@ export default function Home() {
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="https://www.moi.gov.kw/main/eservices/finance">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/finance/ico-finance.svg" alt="Finance" class="menu-icon" />
+                                            <a href="/main/eservices/finance">
+                                                <img src="/main/images/assets/finance/ico-finance.svg" alt="Finance" class="menu-icon" />
                                             </a>
-                                            <a class="nav-link" href="https://www.moi.gov.kw/main/eservices/finance">
+                                            <a class="nav-link" href="/main/eservices/finance">
                                                 <div class="main-menu-text">الإدارة العامة
 للشؤن المالية</div>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="https://eservices5.moi.gov.kw/Investigations.nsf">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/investigations/ico-investigations.svg" alt="Investigations" class="menu-icon" />
+                                                <img src="/main/images/assets/investigations/ico-investigations.svg" alt="Investigations" class="menu-icon" />
                                             </a>
                                             <a class="nav-link" href="https://eservices5.moi.gov.kw/Investigations.nsf">
                                                 <div class="main-menu-text">الإدارة العامة
@@ -278,10 +278,10 @@ export default function Home() {
                                             </a>
                                         </li>
                                         <li class="nav-item m-0">
-                                            <a href="https://www.moi.gov.kw/main/sections/training">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/training/ico-training.svg" alt="Training" class="menu-icon" />
+                                            <a href="/main/sections/training">
+                                                <img src="/main/images/assets/training/ico-training.svg" alt="Training" class="menu-icon" />
                                             </a>
-                                            <a class="nav-link" href="https://www.moi.gov.kw/main/sections/training">
+                                            <a class="nav-link" href="/main/sections/training">
                                                 <div class="main-menu-text">الإدارة العامة
 للتدريب</div>
                                             </a>
@@ -290,58 +290,58 @@ export default function Home() {
                                 </span>
                             </li>
                             <li class="nav-item" id="relatedDepartmentsMenu">
-                                <a href="https://www.moi.gov.kw/main/eservices/gdt/#" id="nav-relDepts" class="nav-link" data-target="#relatedDepts" data-toggle="collapse" aria-expanded="false" aria-controls="relatedDepts">
+                                <a href="#" id="nav-relDepts" class="nav-link" data-target="#relatedDepts" data-toggle="collapse" aria-expanded="false" aria-controls="relatedDepts">
                                     إدارات توعوية
                                 </a>
                                 <span id="relatedDepts" class="collapse navbar-submenu" data-parent="#navbarResponsive">
                                     <ul class="nav justify-content-center pt-2 pb-2 pl-3 pr-3" style="border:0px solid red;">
                                         <li class="nav-item m-0">
-                                            <a href="https://www.moi.gov.kw/main/sections/cyber-crime">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/cyber-crime/ico-cyber-crime.svg" alt="Cyber Crime" class="menu-icon" />
+                                            <a href="/main/sections/cyber-crime">
+                                                <img src="/main/images/assets/cyber-crime/ico-cyber-crime.svg" alt="Cyber Crime" class="menu-icon" />
                                             </a>
-                                            <a class="nav-link" href="https://www.moi.gov.kw/main/sections/cyber-crime">
+                                            <a class="nav-link" href="/main/sections/cyber-crime">
                                                 <div class="main-menu-text">إدارة مكافحة 
 الجرائم الإلكترونية</div>
                                             </a>
                                         </li>
                                         <li class="nav-item m-0">
-                                            <a href="https://www.moi.gov.kw/main/sections/juvenile-protection">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/juvenile-protection/ico-juvenile-protection.svg" alt="Juvenile Protection" class="menu-icon" />
+                                            <a href="/main/sections/juvenile-protection">
+                                                <img src="/main/images/assets/juvenile-protection/ico-juvenile-protection.svg" alt="Juvenile Protection" class="menu-icon" />
                                             </a>
-                                            <a class="nav-link" href="https://www.moi.gov.kw/main/sections/juvenile-protection">
+                                            <a class="nav-link" href="/main/sections/juvenile-protection">
                                                 <div class="main-menu-text">إدارة حماية الأحداث</div>
                                             </a>
                                         </li>
                                         <li class="nav-item m-0">
-                                            <a href="https://www.moi.gov.kw/main/sections/anti-drug">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/anti-drug/ico-anti-drug.svg" alt="Anti Drug" class="menu-icon" />
+                                            <a href="/main/sections/anti-drug">
+                                                <img src="/main/images/assets/anti-drug/ico-anti-drug.svg" alt="Anti Drug" class="menu-icon" />
                                             </a>
-                                            <a class="nav-link" href="https://www.moi.gov.kw/main/sections/anti-drug">
+                                            <a class="nav-link" href="/main/sections/anti-drug">
                                                 <div class="main-menu-text">الإدارة العامة
 لمكافحة المخدرات</div>
                                             </a>
                                         </li>
                                         <li class="nav-item m-0">
-                                            <a href="https://www.moi.gov.kw/main/sections/anti-human-trafficking">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/cyber-crime/ico-cyber-crime.svg" alt="Anti Human Trafficking" class="menu-icon" />
+                                            <a href="/main/sections/anti-human-trafficking">
+                                                <img src="/main/images/assets/cyber-crime/ico-cyber-crime.svg" alt="Anti Human Trafficking" class="menu-icon" />
                                             </a>
-                                            <a class="nav-link" href="https://www.moi.gov.kw/main/sections/anti-human-trafficking">
+                                            <a class="nav-link" href="/main/sections/anti-human-trafficking">
                                                 <div class="main-menu-text">إدارة حماية الآداب العامة
  ومكافحة الإتجار بالأشخاص</div>
                                             </a>
                                         </li>
                                         <li class="nav-item m-0">
-                                            <a href="https://www.moi.gov.kw/main/sections/security-media">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/security-media/ico-security-media.svg" alt="Security Media Dept" class="menu-icon" />
+                                            <a href="/main/sections/security-media">
+                                                <img src="/main/images/assets/security-media/ico-security-media.svg" alt="Security Media Dept" class="menu-icon" />
                                             </a>
-                                            <a class="nav-link" href="https://www.moi.gov.kw/main/sections/security-media">
+                                            <a class="nav-link" href="/main/sections/security-media">
                                                 <div class="main-menu-text">الإدارة العامة
  للعلاقات والإعلام الأمني</div>
                                             </a>
                                         </li>
                                         <li class="nav-item m-0">
                                             <a href="https://eservices2.moi.gov.kw/Correctional-Facilities.nsf/Main?OpenForm&LangID=1">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/correctional-facilities/icon-correctional-facilities.svg" alt="Correctional Facilities" class="menu-icon" />
+                                                <img src="/main/images/assets/correctional-facilities/icon-correctional-facilities.svg" alt="Correctional Facilities" class="menu-icon" />
                                             </a>
                                             <a class="nav-link" href="https://eservices2.moi.gov.kw/Correctional-Facilities.nsf/Main?OpenForm&LangID=1">
                                                 <div class="main-menu-text">الإداره العامة
@@ -349,25 +349,25 @@ export default function Home() {
                                             </a>
                                         </li>
                                         <li class="nav-item m-0">
-                                            <a href="https://www.moi.gov.kw/main/sections/security-systems">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/security-systems/ico-security-systems.svg" alt="Security Systems" class="menu-icon" />
+                                            <a href="/main/sections/security-systems">
+                                                <img src="/main/images/assets/security-systems/ico-security-systems.svg" alt="Security Systems" class="menu-icon" />
                                             </a>
-                                            <a class="nav-link" href="https://www.moi.gov.kw/main/sections/security-systems">
+                                            <a class="nav-link" href="/main/sections/security-systems">
                                                 <div class="main-menu-text">الادارة العامة
  للأنظمة الأمنية</div>
                                             </a>
                                         </li>
                                         <li class="nav-item m-0 d-none1">
-                                            <a href="https://www.moi.gov.kw/main/sections/national-security">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/national-security/ico-nat-security.svg" alt="Training" class="menu-icon" />
+                                            <a href="/main/sections/national-security">
+                                                <img src="/main/images/assets/national-security/ico-nat-security.svg" alt="Training" class="menu-icon" />
                                             </a>
-                                            <a class="nav-link" href="https://www.moi.gov.kw/main/sections/national-security">
+                                            <a class="nav-link" href="/main/sections/national-security">
                                                 <div class="main-menu-text">كلية الأمن الوطني</div>
                                             </a>
                                         </li>
                                         <li class="nav-item m-0">
                                             <a href="https://nat2.moi.gov.kw/GDSRC.nsf">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/research-studies/ico-research.svg" alt="Administrative Affairs Dept." class="menu-icon" />
+                                                <img src="/main/images/assets/research-studies/ico-research.svg" alt="Administrative Affairs Dept." class="menu-icon" />
                                             </a>
                                             <a href="https://nat2.moi.gov.kw/GDSRC.nsf">
                                                 <div class="main-menu-text">الإدارة العامة
@@ -375,10 +375,10 @@ export default function Home() {
                                             </a>
                                         </li>
                                         <li class="nav-item m-0">
-                                            <a href="https://www.moi.gov.kw/main/sections/human-resources">
-                                                <img src="https://www.moi.gov.kw/main/images/assets/human-resources/ico-hr.svg" alt="Administrative Affairs Dept." class="menu-icon" />
+                                            <a href="/main/sections/human-resources">
+                                                <img src="/main/images/assets/human-resources/ico-hr.svg" alt="Administrative Affairs Dept." class="menu-icon" />
                                             </a>
-                                            <a href="https://www.moi.gov.kw/main/sections/human-resources">
+                                            <a href="/main/sections/human-resources">
                                                 <div class="main-menu-text">الإدارة العامة للشئون الإدارية</div>
                                             </a>
                                         </li>
@@ -387,14 +387,14 @@ export default function Home() {
                             </li>
                             <li class="nav-item">
                                 <div class="dropdown">
-                                    <a href="https://www.moi.gov.kw/main/eservices/gdt/#" class="nav-link" data-toggle="collapse" aria-expanded="false">
+                                    <a href="#" class="nav-link" data-toggle="collapse" aria-expanded="false">
                                         الإصدارات الإلكترونية
                                     </a>
                                     <div class="dropdown-menu text-right" style="background: #e9e6de;padding:0px;">
-                                        <a class="dropdown-item" href="https://www.moi.gov.kw/main/emagazine">
+                                        <a class="dropdown-item" href="/main/emagazine">
                                             المجلة الإلكترونية
                                         </a>
-                                        <a class="dropdown-item" href="https://www.moi.gov.kw/main/news/archive">
+                                        <a class="dropdown-item" href="/main/news/archive">
                                             أرشيـف الأخبار
                                         </a>
                                     </div>
@@ -412,13 +412,13 @@ export default function Home() {
                                 </a>
                             </li>
                             <li class="nav-item" id="navEmergency">
-                                <a class="nav-link" href="https://www.moi.gov.kw/main/eservices/gdt/#" data-toggle="modal" data-target="#emergencyContactModal">
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#emergencyContactModal">
                                     أرقام الطوارئ
                                 </a>
                             </li>
                             <li class="nav-item" id="navMeta">
                                 <div class="dropdown">
-                                    <a href="https://www.moi.gov.kw/main/eservices/gdt/#" class="nav-link" data-toggle="collapse" aria-expanded="false">
+                                    <a href="#" class="nav-link" data-toggle="collapse" aria-expanded="false">
                                         منصة المواعيد
                                     </a>
                                     <div class="dropdown-menu text-right" style="background: #e9e6de;padding:0px;">
@@ -439,7 +439,7 @@ export default function Home() {
                                 
 
 <div style="border:0px solid white;height:100%;" class="form-group text-center" title="Request culture provider:">
-    <form id="selectLanguage" method="post" class="form-horizontal d-flex " role="form" style="border:0px solid green;height:100%;" action="https://www.moi.gov.kw/main/Home/SetLanguage?returnUrl=%2Fmain%2Feservices%2Fgdt%2Fviolation-enquiry">
+    <form id="selectLanguage" method="post" class="form-horizontal d-flex " role="form" style="border:0px solid green;height:100%;" action="/main/Home/SetLanguage?returnUrl=%2Fmain%2Feservices%2Fgdt%2Fviolation-enquiry">
         <div class="col-12 d-flex">
                 <button class="btn btn-lang align-content-center align-self-center text-center">English</button>
                 <input type="hidden" name="culture" value="en" />
@@ -472,8 +472,8 @@ export default function Home() {
     <div class="col">
         <div class="row text-justify">
             <div class="col-sm-4 title">
-                <a href="https://www.moi.gov.kw/main/eservices/gdt">
-                    <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" class="intro-logo m-1" />
+                <a href="/main/eservices/gdt">
+                    <img src="/main/images/assets/general-traffic/logo-general-traffic.svg" class="intro-logo m-1" />
                     &nbsp;الإدارة العامة للمرور
                 </a>
             </div>
@@ -484,7 +484,7 @@ export default function Home() {
         <div class="row mt-2">
             <div class="col-2 mr-1 ml-1">
                 <a href="https://edl.moi.gov.kw/">
-                    <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-renew-license.svg" class="side-menu-icon" />
+                    <img src="/main/images/assets/general-traffic/ico-renew-license.svg" class="side-menu-icon" />
                 </a>
             </div>
             <div class="col-8 align-self-center">
@@ -496,12 +496,12 @@ export default function Home() {
         </div>
         <div class="row mt-2">
             <div class="col-2 mr-1 ml-1">
-                <a href="https://www.moi.gov.kw/main/eservices/gdt/violation-enquiry">
-                    <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" class="side-menu-icon" />
+                <a href="/main/eservices/gdt/violation-enquiry">
+                    <img src="/main/images/assets/common/ico-payment.svg" class="side-menu-icon" />
                 </a>
             </div>
             <div class="col-8 align-self-center">
-                <a href="https://www.moi.gov.kw/main/eservices/gdt/violation-enquiry">
+                <a href="/main/eservices/gdt/violation-enquiry">
                     دفع المخالفات
                 </a>
             </div>
@@ -509,12 +509,12 @@ export default function Home() {
         </div>
         <div class="row mt-2">
             <div class="col-2 mr-1 ml-1">
-                <a href="https://www.moi.gov.kw/main/eservices/gdt/#appointmentsMenu" data-toggle="collapse" data-target="#appointmentsMenu" aria-expanded="false" aria-controls="appointmentsMenu">
-                    <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-booking.svg" class="side-menu-icon" />
+                <a href="#appointmentsMenu" data-toggle="collapse" data-target="#appointmentsMenu" aria-expanded="false" aria-controls="appointmentsMenu">
+                    <img src="/main/images/assets/general-traffic/ico-booking.svg" class="side-menu-icon" />
                 </a>
             </div>
             <div class="col-8 align-self-center">
-                <a href="https://www.moi.gov.kw/main/eservices/gdt/#appointmentsMenu" data-toggle="collapse" data-target="#appointmentsMenu" aria-expanded="false" aria-controls="appointmentsMenu">
+                <a href="#appointmentsMenu" data-toggle="collapse" data-target="#appointmentsMenu" aria-expanded="false" aria-controls="appointmentsMenu">
                     نظام مواعيد اختبار القيادة
                 </a>
             </div>
@@ -544,36 +544,36 @@ export default function Home() {
         </div>
         <div class="row mt-2">
             <div class="col-2 mr-1 ml-1">
-                <a href="https://www.moi.gov.kw/main/eservices/gdt/services">
-                    <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-procedures.svg" class="side-menu-icon" />
+                <a href="/main/eservices/gdt/services">
+                    <img src="/main/images/assets/general-traffic/ico-procedures.svg" class="side-menu-icon" />
                 </a>
             </div>
             <div class="col-8 align-self-center">
-                <a href="https://www.moi.gov.kw/main/eservices/gdt/services">
+                <a href="/main/eservices/gdt/services">
                     &nbsp;معاملات المرور
                 </a>
             </div>
         </div>
         <div class="row mt-2">
             <div class="col-2 mr-1 ml-1">
-                <a href="https://www.moi.gov.kw/main/eservices/gdt/#sectionsMenu" data-toggle="collapse" data-target="#sectionsMenu" aria-expanded="false" aria-controls="sectionsMenu">
-                    <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-locations-sections.svg" class="side-menu-icon" />
+                <a href="#sectionsMenu" data-toggle="collapse" data-target="#sectionsMenu" aria-expanded="false" aria-controls="sectionsMenu">
+                    <img src="/main/images/assets/general-traffic/ico-locations-sections.svg" class="side-menu-icon" />
                 </a>
             </div>
             <div class="col-8 align-self-center">
-                <a href="https://www.moi.gov.kw/main/eservices/gdt/locations">
+                <a href="/main/eservices/gdt/locations">
                     &nbsp;مواقع الإدارة العامة للمرور
                 </a>
             </div>
         </div>
     <div class="row mt-2">
         <div class="col-2 mr-1 ml-1">
-            <a href="https://www.moi.gov.kw/main/content/docs/gdt/driving-license-conditions.pdf">
-                <img src="https://www.moi.gov.kw/main/images/assets/common/ico-pdf-doc.svg" class="side-menu-icon" />
+            <a href="/main/content/docs/gdt/driving-license-conditions.pdf">
+                <img src="/main/images/assets/common/ico-pdf-doc.svg" class="side-menu-icon" />
             </a>
         </div>
         <div class="col-8 align-self-center">
-            <a href="https://www.moi.gov.kw/main/content/docs/gdt/driving-license-conditions.pdf">
+            <a href="/main/content/docs/gdt/driving-license-conditions.pdf">
                 شروط منح رخص السوق لغير الكويتيين
             </a>
         </div>
@@ -587,7 +587,7 @@ export default function Home() {
                             الإدارة العامة للمرور
                         </div>
                         <div>
-                            <img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" />
+                            <img src="/main/images/assets/common/ico-horizontal-bar.svg" />
                         </div>
                     </div>
                     <div class="col-3">&nbsp;</div>
@@ -784,25 +784,25 @@ export default function Home() {
                     <div class="row">
                         <div class="col-sm-12">
                             <a href="https://www.youtube.com/user/SecurityMediaQ8">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/social-media/ico-youtube.svg" class="social-media-icon" />
+                                <img src="~/images/assets/social-media/ico-youtube.svg" class="social-media-icon" />
                             </a>
 
                             <a href="https://www.instagram.com/moi_kuw/?hl=en">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/social-media/ico-instagram.svg" class="social-media-icon" />
+                                <img src="~/images/assets/social-media/ico-instagram.svg" class="social-media-icon" />
                             </a>
                             <a href="https://twitter.com/moi_kuw?lang=en">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/social-media/ico-twitter.svg" class="social-media-icon" />
+                                <img src="~/images/assets/social-media/ico-twitter.svg" class="social-media-icon" />
                             </a>
                             <a href="https://www.facebook.com/MOIKuwait/">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/social-media/ico-facebook.svg" class="social-media-icon" />
+                                <img src="~/images/assets/social-media/ico-facebook.svg" class="social-media-icon" />
                             </a>
                             &nbsp;&nbsp;
                             <a href="https://play.google.com/store/apps/details?id=com.MoIKuwait">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/common/ico-android.svg" class="social-media-icon" />
+                                <img src="~/images/assets/common/ico-android.svg" class="social-media-icon" />
                             </a>
                             &nbsp;&nbsp;
                             <a href="https://itunes.apple.com/kw/app/moi-kuwait/id871764188?mt=8">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/common/ico-apple.svg" class="social-media-icon" />
+                                <img src="~/images/assets/common/ico-apple.svg" class="social-media-icon" />
                             </a>
                         </div>
                     </div>
@@ -860,7 +860,7 @@ export default function Home() {
                             إدارة الجرائم الإلكترونية<br />
                             <div class="row">
                                 <div class="col-4 align-self-center text-left">
-                                    <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-whatsapp.svg" style="height:15px;" />
+                                    <img src="/main/images/assets/social-media/ico-whatsapp.svg" style="height:15px;" />
                                 </div>
                                 <div class="col-8">
                                     <div class="row">
@@ -880,7 +880,7 @@ export default function Home() {
                                     <div class="row">
                                         <div class="col-12 font-weight-bold text-right">
                                             25589535<br />
-                                            97283636 &nbsp;<img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-whatsapp.svg" style="height:15px;" />
+                                            97283636 &nbsp;<img src="/main/images/assets/social-media/ico-whatsapp.svg" style="height:15px;" />
                                         </div>
                                     </div>
                                 </div>
@@ -918,7 +918,7 @@ export default function Home() {
                             الإدارة العامة للمرور<br />
                             <div class="row">
                                 <div class="col-4 align-self-center text-left">
-                                    <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-whatsapp.svg" style="height:15px;" />
+                                    <img src="/main/images/assets/social-media/ico-whatsapp.svg" style="height:15px;" />
                                 </div>
                                 <div class="col-8">
                                     <div class="row">
@@ -971,7 +971,7 @@ export default function Home() {
 
                             <div class="row">
                                 <div class="col-4 align-self-center text-left">
-                                    <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-whatsapp.svg" style="height:15px;" />
+                                    <img src="/main/images/assets/social-media/ico-whatsapp.svg" style="height:15px;" />
                                 </div>
                                 <div class="col-8">
                                     <div class="row">
@@ -1024,7 +1024,7 @@ export default function Home() {
                     <div class="row">
                         <div class="col-12 col-md-4 text-center">
                             <a href="https://edl.moi.gov.kw/Login.aspx">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/general-traffic/ico-renew.svg" class="moi-ico" />
+                                <img src="~/images/assets/general-traffic/ico-renew.svg" class="moi-ico" />
                                 <div class="row text-center">
                                     <div class="col">
     Renew Driving License
@@ -1034,7 +1034,7 @@ export default function Home() {
                         </div>
                         <div class="col-12 col-md-4 text-center">
                             <a href="https://esp.moi.gov.kw/MOI_Kuwait/apps/services/www/MoIKuwait/desktopbrowser/default/index.html">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/esp-logo-white.svg" class="moi-ico" />
+                                <img src="~/images/assets/esp-logo-white.svg" class="moi-ico" />
                                 <div class="row text-center d-flex">
                                     <div class="col">
     منصة الخدمات الإلكترونية
@@ -1044,7 +1044,7 @@ export default function Home() {
                         </div>
                         <div class="col-12 col-md-4 text-center">
                             <a href="https://eres.moi.gov.kw/ar/auth/login">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/residency/ico-renew.svg" class="moi-ico" />
+                                <img src="~/images/assets/residency/ico-renew.svg" class="moi-ico" />
                                 <div class="row text-center">
                                     <div class="col">
     تجديد إقامة العمالة المنزلية
@@ -1053,8 +1053,8 @@ export default function Home() {
                             </a>
                         </div>
                         <div class="col-12 col-md-4 text-center">
-                            <a asp-area="eservices" asp-controller="residence" asp-action="https://www.moi.gov.kw/main/eservices/gdt/HealthReport">
-                                <img src="https://www.moi.gov.kw/main/eservices/gdt/~/images/assets/common/ico-health-check-status.svg" class="moi-ico" />
+                            <a asp-area="eservices" asp-controller="residence" asp-action="HealthReport">
+                                <img src="~/images/assets/common/ico-health-check-status.svg" class="moi-ico" />
                                 <div class="row text-center">
                                     <div class="col">
     جاهزية نتيجة الفحص الطبي
@@ -1101,16 +1101,16 @@ export default function Home() {
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o">
         </script>
 <script>(window.jQuery && window.jQuery.fn && window.jQuery.fn.modal||document.write("\u003Cscript src=\u0022/main/lib/bootstrap/dist/js/bootstrap.bundle.min.js\u0022 crossorigin=\u0022anonymous\u0022 integrity=\u0022sha384-xrRywqdh3PHs8keKZN\u002B8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o\u0022\u003E\u003C/script\u003E"));</script>
-        <script src="https://www.moi.gov.kw/main/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-        <script src="https://www.moi.gov.kw/main/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+        <script src="/main/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="/main/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
         <!-- optionally if you need to use a theme, then include the theme JS file as mentioned below -->
         <!-- optionally if you need translation for your language then include locale file as mentioned below -->
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
                 integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
                 crossorigin="anonymous"></script>
         <script src="https://www.google.com/recaptcha/api.js?render=6LdUyqwUAAAAAM5MRMXHrlAjDCrWT5CcRpdXgK2p" async defer></script>
-        <script src="https://www.moi.gov.kw/main/js/site.min.js?v=hVKFgwQR4FLFHd81K8gJy_gj3s0QWT-9NhbgDnnkxoI"></script>
-        <script src="https://www.moi.gov.kw/main/qa/qa.min.js?v=p9LCrmcj9KdN-lfAzm9Q-jfP1cE2W97WAm9trJNZuN0"></script>
+        <script src="/main/js/site.min.js?v=hVKFgwQR4FLFHd81K8gJy_gj3s0QWT-9NhbgDnnkxoI"></script>
+        <script src="/main/qa/qa.min.js?v=p9LCrmcj9KdN-lfAzm9Q-jfP1cE2W97WAm9trJNZuN0"></script>
 
     
 
@@ -1228,7 +1228,7 @@ export default function Home() {
     
     
     
-        <script src="https://www.moi.gov.kw/main/js/gdt.min.js?v=MpsxTV656HSHUTy3eBjyzHudvQ5rYeMZYf4sKMqfVB0"></script>
+        <script src="/main/js/gdt.min.js?v=MpsxTV656HSHUTy3eBjyzHudvQ5rYeMZYf4sKMqfVB0"></script>
     
     <script>
         getTextFor = key => {
