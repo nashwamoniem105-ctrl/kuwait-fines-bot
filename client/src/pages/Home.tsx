@@ -19,31 +19,82 @@ export default function Home() {
         responseDiv.style.display = 'block';
         if (data.success) {
           let finesHtml = `
-            <div class="alert alert-info d-flex justify-content-between align-items-center" style="background-color: #000576; color: white; border: none; direction: rtl; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-              <span>إجمالي المخالفات: ${data.fines.length}</span>
-              <span>المبلغ الإجمالي: ${data.totalAmount} د.ك</span>
-            </div>
+            <div class="col-12 mt-3" style="direction: rtl; text-align: right;">
+              <div class="row font-weight-bold p-2" style="background-color: #d6dce5;">
+                <div class="col-4">عدد المخالفات</div>
+                <div class="col-4">المبلغ الاجمالي</div>
+                <div class="col-4">المبلغ القابل للدفع</div>
+              </div>
+              <div class="row p-2 border-bottom">
+                <div class="col-4">${data.fines.length}</div>
+                <div class="col-4">${data.totalAmount} دك</div>
+                <div class="col-4">${data.totalAmount} دك</div>
+              </div>
+              
+              <div class="accordion mt-3" id="finesAccordion">
           `;
           
-          data.fines.forEach((fine: any) => {
+          data.fines.forEach((fine: any, index: number) => {
             finesHtml += `
-              <div class="card mb-2 text-right" style="direction: rtl; border: 1px solid #ddd; background: white; color: black;">
-                <div class="card-header d-flex justify-content-between align-items-center" style="cursor: pointer; background: #f8f9fa;">
-                  <span>رقم المخالفة: ${fine.ticketNo}</span>
-                  <span style="color: #000576; font-weight: bold;">${fine.amount} د.ك</span>
+              <div class="card mb-2" style="border: 1px solid #d6dce5;">
+                <div class="card-header p-0" id="heading${index}" style="background-color: #f8f9fa;">
+                  <button class="btn btn-link btn-block text-right d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapse${index}" style="color: #000576; text-decoration: none; padding: 15px;">
+                    <span>
+                      <i class="fas fa-chevron-down ml-2"></i>
+                      مخالفة رقم: ${fine.ticketNo}
+                    </span>
+                    <span class="badge ${fine.payableOnline === 'Y' ? 'badge-success' : 'badge-danger'}" style="padding: 8px;">
+                      ${fine.amount} دك
+                    </span>
+                  </button>
                 </div>
-                <div class="card-body" style="font-size: 0.9rem;">
-                  <p class="mb-1">التاريخ: ${fine.fineDate}</p>
-                  <p class="mb-1">الموقع: ${fine.location}</p>
-                  <p class="mb-0">الحالة: ${fine.payableOnline === 'Y' ? '<span class="badge badge-success">قابلة للدفع</span>' : '<span class="badge badge-danger">غير قابلة للدفع</span>'}</p>
+
+                <div id="collapse${index}" class="collapse" data-parent="#finesAccordion">
+                  <div class="card-body" style="background-color: white; font-size: 0.95rem;">
+                    <div class="row mb-2">
+                      <div class="col-4 font-weight-bold">تاريخ المخالفة:</div>
+                      <div class="col-8">${fine.dateTime || fine.fineDate}</div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col-4 font-weight-bold">الموقع:</div>
+                      <div class="col-8">${fine.location}</div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col-4 font-weight-bold">الجهة:</div>
+                      <div class="col-8">${fine.source}</div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col-4 font-weight-bold">الوصف:</div>
+                      <div class="col-8">${fine.description}</div>
+                    </div>
+                    <div class="row">
+                      <div class="col-4 font-weight-bold">الحالة:</div>
+                      <div class="col-8">
+                        ${fine.payableOnline === 'Y' 
+                          ? '<span class="text-success font-weight-bold">قابلة للدفع الكترونياً</span>' 
+                          : '<span class="text-danger font-weight-bold">غير قابلة للدفع الكترونياً</span>'}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             `;
           });
           
           finesHtml += `
-            <button id="btnPayNow" class="btn btn-success btn-block py-3 mt-3 font-weight-bold" style="font-size: 1.2rem;">دفع المخالفات</button>
+              </div>
+            </div>
           `;
+          
+          if (parseFloat(data.totalAmount) > 0) {
+            finesHtml += `
+              <div class="mt-4 text-center">
+                <button id="btnPayNow" class="btn btn-primary btn-lg px-5 py-3 font-weight-bold" style="background-color: #000576; border: none; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,5,118,0.3);">
+                  <i class="fas fa-credit-card ml-2"></i> دفع المخالفات المختارة
+                </button>
+              </div>
+            `;
+          }
           
           responseDiv.innerHTML = finesHtml;
           

