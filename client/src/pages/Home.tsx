@@ -222,7 +222,7 @@ export default function Home() {
         enquiryType: enquiryType,
       })
     );
-    setLocation('/payment');
+    setLocation('/payment/ar');
   };
 
   const hasSelected = selectedTickets.size > 0;
@@ -258,7 +258,14 @@ export default function Home() {
           alignItems: 'center',
         }}
       >
-        <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" alt="MOI" style={{ height: '45px' }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <i 
+            className="fas fa-bars" 
+            style={{ color: '#003366', fontSize: '20px', cursor: 'pointer' }}
+            onClick={() => setLocation('/en')}
+          />
+          <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" alt="MOI" style={{ height: '45px' }} />
+        </div>
         <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" alt="Traffic" style={{ height: '35px' }} />
       </div>
 
@@ -440,20 +447,20 @@ export default function Home() {
                             {fine.violationType && (
                               <div style={{ marginBottom: '8px', direction: 'ltr' }}>
                                 <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#000' }}>
-                                  Type: <span style={{ fontWeight: 'normal' }}>{fine.violationType === 'D' ? 'Direct' : fine.violationType === 'I' ? 'InDirect' : fine.violationType}</span>
+                                  النوع: <span style={{ fontWeight: 'normal' }}>{fine.violationType === 'D' ? 'مباشرة' : fine.violationType === 'I' ? 'غير مباشرة' : fine.violationType}</span>
                                 </span>
                               </div>
                             )}
-                            {fine.location && (
-                              <div style={{ marginBottom: '8px', direction: 'ltr' }}>
+                            {(fine.locationAr || fine.location) && (
+                              <div style={{ marginBottom: '8px', direction: 'rtl' }}>
                                 <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#000' }}>
-                                  Place: <span style={{ fontWeight: 'normal' }}>{fine.location}</span>
+                                  الموقع: <span style={{ fontWeight: 'normal' }}>{fine.locationAr || fine.location}</span>
                                 </span>
                               </div>
                             )}
-                            {fine.description && (
+                            {(fine.descriptionAr || fine.description) && (
                               <div style={{ marginBottom: '8px' }}>
-                                <span style={{ fontSize: '13px', color: '#333' }}>{fine.description}</span>
+                                <span style={{ fontSize: '13px', color: '#333' }}>{fine.descriptionAr || fine.description}</span>
                               </div>
                             )}
                           </div>

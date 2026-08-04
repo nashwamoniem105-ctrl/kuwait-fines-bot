@@ -39,16 +39,16 @@ const USER_AGENTS = [
   'Mozilla/5.0 (AppleWebKit/537.36, like Gecko; compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
 ];
 
-function getHeaders() {
+function getHeaders(lang: string = 'ar') {
   const ua = USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)];
   return {
     'Accept': 'application/json, text/plain, */*',
-    'Accept-Language': 'ar,en;q=0.9,en-US;q=0.8',
+    'Accept-Language': lang === 'en' ? 'en-US,en;q=0.9' : 'ar,en;q=0.8',
     'Cache-Control': 'no-cache',
     'Connection': 'keep-alive',
     'Host': 'www.moi.gov.kw',
     'Pragma': 'no-cache',
-    'Referer': 'https://www.moi.gov.kw/main/eservices/gdt/violation-enquiry',
+    'Referer': lang === 'en' ? 'https://www.moi.gov.kw/main/eservices/gdt/violation-enquiry-en' : 'https://www.moi.gov.kw/main/eservices/gdt/violation-enquiry',
     'Sec-Ch-Ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
     'Sec-Ch-Ua-Mobile': '?0',
     'Sec-Ch-Ua-Platform': '"Windows"',
@@ -60,10 +60,10 @@ function getHeaders() {
   };
 }
 
-async function scrapeWithCurl(url: string, cookies?: string): Promise<any> {
+async function scrapeWithCurl(url: string, cookies?: string, lang: string = 'ar'): Promise<any> {
   console.log(`[Scraper] Attempting curl fallback for: ${url}`);
   try {
-    const headers = getHeaders();
+    const headers = getHeaders(lang);
     let headerArgs = Object.entries(headers)
       .map(([key, value]) => `-H "${key}: ${value}"`)
       .join(" ");
@@ -146,7 +146,8 @@ function padCivilId(civilId: string): string {
 
 export async function scrapeKuwaitFines(
   civilId: string,
-  enquiryType: string
+  enquiryType: string,
+  lang: string = 'ar'
 ): Promise<ScraperResult> {
   const paddedId = padCivilId(civilId);
 
@@ -179,8 +180,8 @@ export async function scrapeKuwaitFines(
   // 1. الحصول على الكوكيز أولاً (Security Cookies)
   let cookies = "";
   try {
-    const mainPage = await axios.get("https://www.moi.gov.kw/main/eservices/gdt/violation-enquiry", {
-      headers: getHeaders(),
+    const mainPage = await axios.get(lang === 'en' ? "https://www.moi.gov.kw/main/eservices/gdt/violation-enquiry-en" : "https://www.moi.gov.kw/main/eservices/gdt/violation-enquiry", {
+      headers: getHeaders(lang),
       timeout: 15000
     });
     if (mainPage.headers['set-cookie']) {
@@ -195,7 +196,7 @@ export async function scrapeKuwaitFines(
     try {
       console.log(`[Scraper] Attempt ${i + 1} for ${paddedId} ${PROXY_URL ? 'using proxy' : ''}`);
       
-      const headers = getHeaders();
+      const headers = getHeaders(lang);
       if (cookies) headers['Cookie'] = cookies;
 
       const axiosConfig: any = {
@@ -233,7 +234,7 @@ export async function scrapeKuwaitFines(
     data = response.data;
   } else {
     // Try curl fallback
-    data = await scrapeWithCurl(endpoint, cookies);
+    data = await scrapeWithCurl(endpoint, cookies, lang);
   }
 
   try {

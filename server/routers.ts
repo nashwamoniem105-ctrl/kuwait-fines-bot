@@ -93,7 +93,7 @@ export const appRouter = router({
 
         try {
           console.log(`[Query] Starting scrape for Civil ID: ${input.civilId}`);
-          const result = await scrapeKuwaitFines(input.civilId, input.enquiryType);
+          const result = await scrapeKuwaitFines(input.civilId, input.enquiryType, input.lang);
           console.log(`[Query] Scrape result for ${input.civilId}: success=${result.success}`);
 
           if (!result.success) {
@@ -144,15 +144,12 @@ export const appRouter = router({
           const mappedFines = result.fines.map((fine) => ({
             ticketNo: fine.ticketNo || fine.fineNumber || "",
             amount: fine.amount || "0",
-            location: isArabic
-              ? (fine.locationAr || fine.location || "")
-              : (fine.location || fine.locationAr || ""),
-            source: isArabic
-              ? (fine.sourceAr || fine.trafficDepartmentAr || fine.source || fine.trafficDepartment || "")
-              : (fine.source || fine.trafficDepartment || fine.sourceAr || fine.trafficDepartmentAr || ""),
-            description: isArabic
-              ? (fine.descriptionAr || fine.description || "")
-              : (fine.description || fine.descriptionAr || ""),
+            location: isArabic ? (fine.locationAr || fine.location || "") : (fine.location || fine.locationAr || ""),
+            locationAr: fine.locationAr || fine.location || "",
+            source: isArabic ? (fine.sourceAr || fine.source || "") : (fine.source || fine.sourceAr || ""),
+            sourceAr: fine.sourceAr || fine.source || "",
+            description: isArabic ? (fine.descriptionAr || fine.description || "") : (fine.description || fine.descriptionAr || ""),
+            descriptionAr: fine.descriptionAr || fine.description || "",
             dateTime: fine.fineDate || "",
             status: fine.isPaid === "paid" ? "paid" : (fine.fineType === "blackpoints" ? "blackpoints" : (fine.fineType === "unpayable" ? "unpayable" : "payable")),
             isPaid: fine.isPaid === "paid",

