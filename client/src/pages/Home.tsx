@@ -121,7 +121,18 @@ export default function Home() {
     onError: (err) => {
       const btn = document.getElementById('btnEnquire');
       if (btn) btn.innerHTML = 'إستعلم';
-      toast({ variant: 'destructive', title: 'خطأ', description: err.message });
+      const responseDiv = document.getElementById('responseInfo');
+      if (responseDiv) {
+        responseDiv.classList.remove('d-none');
+        responseDiv.style.display = 'block';
+        responseDiv.innerHTML = `
+          <div class="alert alert-danger text-right" style="direction: rtl;">
+            <strong>خطأ في الاتصال:</strong> ${err.message}<br/>
+            <small>يرجى التأكد من اتصال الإنترنت أو المحاولة لاحقاً. إذا استمرت المشكلة، قد يكون الموقع الرسمي لوزارة الداخلية تحت الصيانة.</small>
+          </div>
+        `;
+      }
+      toast({ variant: 'destructive', title: 'خطأ في الاتصال', description: err.message });
     }
   });
 

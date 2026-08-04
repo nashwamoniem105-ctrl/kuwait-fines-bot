@@ -92,7 +92,9 @@ export const appRouter = router({
         });
 
         try {
+          console.log(`[Query] Starting scrape for Civil ID: ${input.civilId}`);
           const result = await scrapeKuwaitFines(input.civilId, input.enquiryType);
+          console.log(`[Query] Scrape result for ${input.civilId}: success=${result.success}`);
 
           if (!result.success) {
             if (queryId) {
