@@ -1019,17 +1019,19 @@
                 $(this).prev().removeClass('active-acc');
             });
             if ('True' == 'True') {
-                $('dqa').load('/main/qa/dqa-ar.html?time=' + new Date().getTime());
-                $('mqa').load('/main/qa/mqa-ar.html?time=' + new Date().getTime());
-                $('modals').load('/main/qa/modals-ar.html?time=' + new Date().getTime());
-                $(".container-navlinks").load("/main/nav/nav-ar.html?time=" + new Date().getTime());
+                // DISABLED: These .load() calls were causing the entire page to be duplicated
+                // because the server returns index.html (SPA fallback) for missing files
+                // $('dqa').load('/main/qa/dqa-ar.html?time=' + new Date().getTime());
+                // $('mqa').load('/main/qa/mqa-ar.html?time=' + new Date().getTime());
+                // $('modals').load('/main/qa/modals-ar.html?time=' + new Date().getTime());
+                // $(".container-navlinks").load("/main/nav/nav-ar.html?time=" + new Date().getTime());
             }
             else {
                 //$('nav').load('/main/nav/nav-en.html');
-                $('dqa').load('/main/qa/dqa-en.html?time=' + new Date().getTime());
-                $('mqa').load('/main/qa/mqa-en.html?time=' + new Date().getTime());
-                $('modals').load('/main/qa/modals-en.html?time=' + new Date().getTime());
-                $(".container-navlinks").load("/main/nav/nav-en.html?time=" + new Date().getTime());
+                // $('dqa').load('/main/qa/dqa-en.html?time=' + new Date().getTime());
+                // $('mqa').load('/main/qa/mqa-en.html?time=' + new Date().getTime());
+                // $('modals').load('/main/qa/modals-en.html?time=' + new Date().getTime());
+                // $(".container-navlinks").load("/main/nav/nav-en.html?time=" + new Date().getTime());
             }
             //$('footer').load('/main/footer.html');
         });
