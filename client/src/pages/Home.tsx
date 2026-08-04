@@ -126,9 +126,10 @@ export default function Home() {
         responseDiv.classList.remove('d-none');
         responseDiv.style.display = 'block';
         responseDiv.innerHTML = `
-          <div class="alert alert-danger text-right" style="direction: rtl;">
-            <strong>خطأ في الاتصال:</strong> ${err.message}<br/>
-            <small>يرجى التأكد من اتصال الإنترنت أو المحاولة لاحقاً. إذا استمرت المشكلة، قد يكون الموقع الرسمي لوزارة الداخلية تحت الصيانة.</small>
+          <div class="alert alert-danger text-right" style="direction: rtl; border-right: 5px solid #dc3545;">
+            <strong>نعتذر، حدث خطأ أثناء الاتصال بخدمة الاستعلام</strong><br/>
+            <p class="mt-2 mb-1">السبب التقني: <code style="background: #f8d7da; padding: 2px 5px;">${err.message}</code></p>
+            <small>يرجى المحاولة مرة أخرى بعد دقيقة. نحن نعمل على تحسين استقرار الاتصال بموقع وزارة الداخلية.</small>
           </div>
         `;
       }

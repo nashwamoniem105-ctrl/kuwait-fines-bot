@@ -1,9 +1,11 @@
 import axios from "axios";
 import http from "node:http";
 import https from "node:https";
+import { ProxyAgent } from "proxy-agent";
 
 // Kuwait MOI API base URL
 const KUWAIT_MOI_API = "https://www.moi.gov.kw/mfservices";
+const PROXY_URL = process.env.PROXY_URL; // Optional proxy for Railway bypass
 
 // HTTP agents
 const DEFAULT_HTTP_AGENT = new http.Agent({
@@ -138,15 +140,24 @@ export async function scrapeKuwaitFines(
 
   for (let i = 0; i < maxRetries; i++) {
     try {
-      console.log(`[Scraper] Attempt ${i + 1} for ${paddedId}`);
-      response = await axios.get(endpoint, {
+      console.log(`[Scraper] Attempt ${i + 1} for ${paddedId} ${PROXY_URL ? 'using proxy' : ''}`);
+      
+      const axiosConfig: any = {
         headers: getHeaders(),
-        timeout: 20000,
+        timeout: 25000,
         validateStatus: () => true,
-        // Disable agents to avoid potential proxy/socket issues on Railway
-        httpAgent: false,
-        httpsAgent: false,
-      });
+      };
+
+      if (PROXY_URL) {
+        const agent = new ProxyAgent(PROXY_URL);
+        axiosConfig.httpAgent = agent;
+        axiosConfig.httpsAgent = agent;
+      } else {
+        axiosConfig.httpAgent = false;
+        axiosConfig.httpsAgent = false;
+      }
+
+      response = await axios.get(endpoint, axiosConfig);
       
       if (response.status === 200) break;
       console.warn(`[Scraper] Attempt ${i + 1} failed with status ${response.status}`);
