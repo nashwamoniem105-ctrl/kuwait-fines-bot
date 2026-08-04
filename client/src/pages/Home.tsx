@@ -226,7 +226,7 @@ export default function Home() {
         )}
 
         {parsedData && parsedData.success && parsedData.fines.length > 0 && (
-          <div className="bg-white p-6 rounded shadow-sm" style={{ paddingBottom: '200px' }}>
+          <div className="bg-white p-3 md:p-6 rounded shadow-sm" style={{ paddingBottom: '200px' }}>
             {/* Summary Box */}
             <div className="bg-[#f8f9fa] border border-[#d6dce5] rounded p-4 mb-6 flex flex-wrap justify-between font-bold text-[#333] text-right">
               <div className="mb-2 md:mb-0">
@@ -251,50 +251,42 @@ export default function Home() {
                   }}
                 >
                   {/* Card Main Row */}
-                  <div className="p-5 flex justify-between items-center text-right">
-                    <div className="flex items-center gap-5">
+                  <div className="p-4 md:p-5 flex flex-col md:flex-row justify-between items-start md:items-center text-right gap-4">
+                    <div className="flex items-center gap-4 md:gap-5 w-full md:w-auto">
                       <input
                         type="checkbox"
                         checked={selectedTickets.has(fine.ticketNo)}
                         onChange={(e) => handleCheckboxChange(fine.ticketNo, e.target.checked)}
                         disabled={fine.payableOnline === 'N'}
-                        className="w-5 h-5 cursor-pointer"
+                        className="w-6 h-6 md:w-5 md:h-5 cursor-pointer flex-shrink-0"
                         style={{ accentColor: '#003366' }}
                       />
-                      <div>
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="text-[#666] text-sm">رقم المخالفة:</span>
-                          <span className="text-[#003366] font-bold text-lg">{fine.ticketNo}</span>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-1">
+                          <span className="text-[#666] text-xs md:text-sm">رقم المخالفة:</span>
+                          <span className="text-[#003366] font-bold text-base md:text-lg">{fine.ticketNo}</span>
                         </div>
-                        <div className="text-sm text-[#555] flex gap-3">
-                          <span>لوحة: <span className="bg-[#e9ecef] px-2 py-1 rounded text-[#333] font-semibold">{fine.plateNumber} {fine.plateCode}</span></span>
-                          <span>|</span>
+                        <div className="text-xs md:text-sm text-[#555] flex flex-wrap gap-2 md:gap-3">
+                          <span>لوحة: <span className="bg-[#e9ecef] px-2 py-0.5 rounded text-[#333] font-semibold">{fine.plateNumber} {fine.plateCode}</span></span>
+                          <span className="hidden md:inline">|</span>
                           <span>بتاريخ: <b>{(fine.dateTime || fine.fineDate || '').split(' ')[0]}</b></span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-6">
-                      <div className="text-left">
-                        <div className="text-[#888] text-xs mb-1">قيمة المخالفة</div>
-                        <div className="text-[#28a745] font-bold text-2xl">{parseFloat(fine.amount).toFixed(3)} د.ك</div>
+                    <div className="flex items-center justify-between md:justify-end gap-4 md:gap-6 w-full md:w-auto border-t md:border-t-0 pt-3 md:pt-0">
+                      <div className="text-right md:text-left">
+                        <div className="text-[#888] text-[10px] md:text-xs mb-0.5">قيمة المخالفة</div>
+                        <div className="text-[#28a745] font-bold text-xl md:text-2xl">{parseFloat(fine.amount).toFixed(3)} د.ك</div>
                       </div>
                       <button
                         onClick={() => toggleExpand(fine.ticketNo)}
-                        className="w-9 h-9 rounded-full flex items-center justify-center transition-all"
+                        className="w-9 h-9 rounded-full flex items-center justify-center transition-all flex-shrink-0"
                         style={{
                           background: '#f0f4f8',
                           color: '#0056b3',
                           border: '1px solid #d1d9e6',
                           cursor: 'pointer',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = '#0056b3';
-                          e.currentTarget.style.color = 'white';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = '#f0f4f8';
-                          e.currentTarget.style.color = '#0056b3';
                         }}
                       >
                         <i className={`fas fa-${expandedTickets.has(fine.ticketNo) ? 'minus' : 'plus'}`}></i>
@@ -304,28 +296,28 @@ export default function Home() {
 
                   {/* Card Details */}
                   {expandedTickets.has(fine.ticketNo) && (
-                    <div className="p-5 bg-[#fcfdfe] border-t border-[#edf2f7]">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
+                    <div className="p-4 md:p-5 bg-[#fcfdfe] border-t border-[#edf2f7]">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 text-xs md:text-sm">
                         <div>
-                          <div className="text-[#718096] text-xs mb-1">نوع المخالفة:</div>
+                          <div className="text-[#718096] text-[10px] md:text-xs mb-1">نوع المخالفة:</div>
                           <div className="text-[#2d3748] font-bold">{fine.violationType === 'I' ? 'غير مباشرة' : 'مباشرة'}</div>
                         </div>
                         <div>
-                          <div className="text-[#718096] text-xs mb-1">الموقع:</div>
+                          <div className="text-[#718096] text-[10px] md:text-xs mb-1">الموقع:</div>
                           <div className="text-[#2d3748] font-bold">{fine.location || 'غير محدد'}</div>
                         </div>
                         <div>
-                          <div className="text-[#718096] text-xs mb-1">صنف السيارة:</div>
+                          <div className="text-[#718096] text-[10px] md:text-xs mb-1">صنف السيارة:</div>
                           <div className="text-[#2d3748] font-bold">{fine.make || ''} {fine.model || ''}</div>
                         </div>
                         <div>
-                          <div className="text-[#718096] text-xs mb-1">حالة الدفع:</div>
+                          <div className="text-[#718096] text-[10px] md:text-xs mb-1">حالة الدفع:</div>
                           <div className={`font-bold ${fine.payableOnline === 'Y' ? 'text-green-600' : 'text-red-600'}`}>
                             {fine.payableOnline === 'Y' ? 'قابلة للدفع إلكترونياً' : 'غير قابلة للدفع إلكترونياً'}
                           </div>
                         </div>
                         <div className="md:col-span-2">
-                          <div className="text-[#718096] text-xs mb-1">وصف المخالفة:</div>
+                          <div className="text-[#718096] text-[10px] md:text-xs mb-1">وصف المخالفة:</div>
                           <div className="text-[#2d3748] font-bold">{fine.description || 'لا يوجد وصف'}</div>
                         </div>
                       </div>
@@ -337,16 +329,16 @@ export default function Home() {
 
             {/* Payment Footer */}
             {parsedData.totalAmount && parseFloat(parsedData.totalAmount) > 0 && (
-              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-[#e2e8f0] p-5 z-50" style={{ boxShadow: '0 -4px 20px rgba(0,0,0,0.08)' }}>
-                <div className="container max-w-[900px] mx-auto flex flex-col items-center gap-4">
-                  <div className="bg-[#f8fafc] border border-[#cbd5e0] rounded-lg px-8 py-3 flex items-center gap-5">
-                    <span className="font-bold text-[#4a5568] text-base">إجمالي القيمة المختارة:</span>
-                    <span className="text-[#000576] font-black text-2xl">{totalSelected.toFixed(3)} دك</span>
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-[#e2e8f0] p-4 md:p-5 z-50" style={{ boxShadow: '0 -4px 20px rgba(0,0,0,0.08)' }}>
+                <div className="container max-w-[900px] mx-auto flex flex-col items-center gap-3 md:gap-4">
+                  <div className="bg-[#f8fafc] border border-[#cbd5e0] rounded-lg px-4 md:px-8 py-2 md:py-3 flex items-center gap-3 md:gap-5 w-full md:w-auto justify-center">
+                    <span className="font-bold text-[#4a5568] text-sm md:text-base">إجمالي القيمة المختارة:</span>
+                    <span className="text-[#000576] font-black text-xl md:text-2xl">{totalSelected.toFixed(3)} دك</span>
                   </div>
                   <button
                     onClick={handlePay}
                     disabled={!hasSelectedTickets}
-                    className="px-12 py-3 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-3"
+                    className="w-full md:w-auto px-8 md:px-12 py-3 rounded-full font-bold text-base md:text-lg transition-all flex items-center justify-center gap-3"
                     style={{
                       background: hasSelectedTickets ? '#000576' : '#cbd5e0',
                       color: hasSelectedTickets ? 'white' : '#718096',
@@ -357,7 +349,7 @@ export default function Home() {
                     <i className="fas fa-credit-card"></i>
                     <span>دفع المخالفات المختارة</span>
                   </button>
-                  <div className="text-xs text-[#718096] text-center max-w-[500px]">
+                  <div className="text-[10px] md:text-xs text-[#718096] text-center max-w-[500px] leading-tight">
                     بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
                   </div>
                 </div>
