@@ -232,7 +232,10 @@ export default function HomeEn() {
             ))}
 
             {selectedTickets.size > 0 && (
-              <Button onClick={handlePay} style={{ width: '100%', backgroundColor: '#2e7d32', color: '#fff', fontWeight: 'bold', height: '50px', marginTop: '10px' }}>
+              <Button 
+                onClick={handlePay} 
+                style={{ width: '100%', backgroundColor: '#2e7d32', color: '#fff', fontWeight: 'bold', height: '50px', marginTop: '10px' }}
+              >
                 Pay Selected ({selectedTickets.size})
               </Button>
             )}
