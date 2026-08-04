@@ -253,19 +253,19 @@ export async function scrapeKuwaitFines(
     }
     if (typeof data === 'string') {
       try {
-        // Remove any BOM or leading/trailing whitespace
         const cleanData = data.trim().replace(/^\uFEFF/, '');
-        data = JSON.parse(cleanData);
+        if (cleanData.startsWith('{') || cleanData.startsWith('[')) {
+            data = JSON.parse(cleanData);
+        } else if (cleanData.includes("<html") || cleanData.includes("<body")) {
+            console.error("[Scraper] Received HTML instead of JSON. Likely a block page.");
+            return {
+                success: false,
+                fines: [],
+                errorMessage: "نعتذر، الموقع الرسمي لوزارة الداخلية يرفض الاتصال حالياً. يرجى المحاولة لاحقاً.",
+            };
+        }
       } catch (e) {
         console.error("[Scraper] JSON Parse Error:", e);
-        // If it looks like HTML, it might be a block page
-        if (data.includes("<html") || data.includes("<body")) {
-          return {
-            success: false,
-            fines: [],
-            errorMessage: "تم حظر الاتصال بالموقع الرسمي (IP Blocked). يرجى استخدام بروكسي.",
-          };
-        }
       }
     }
 

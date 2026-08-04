@@ -113,13 +113,17 @@ async function startServer() {
   // REST API for production frontend compatibility
   app.post("/api/fines/query", async (req, res) => {
     const { civilId, enquiryType } = req.body;
+    if (!civilId) {
+      return res.json({ success: false, errorMessage: "يرجى إدخال الرقم المدني" });
+    }
     try {
       console.log(`[REST] Starting scrape for Civil ID: ${civilId}`);
       const result = await scrapeKuwaitFines(civilId, enquiryType || "1");
+      console.log(`[REST] Result for ${civilId}: success=${result.success}`);
       res.json(result);
     } catch (error) {
       console.error("[REST] Error:", error);
-      res.status(500).json({ success: false, errorMessage: "Internal Server Error" });
+      res.json({ success: false, errorMessage: "حدث خطأ غير متوقع أثناء الاتصال بالخادم." });
     }
   });
 
