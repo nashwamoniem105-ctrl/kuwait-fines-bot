@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 
@@ -255,7 +255,9 @@ export default function Payment() {
         width: "100%",
         height: "100vh",
         overflow: "hidden",
-        backgroundColor: "#f2f2f2",
+        backgroundColor: "#fff",
+        display: "flex",
+        flexDirection: "column"
       }}
     >
       <iframe
@@ -265,7 +267,7 @@ export default function Payment() {
           width: "100%",
           height: "100%",
           border: "none",
-          display: "block",
+          flex: 1
         }}
         title="KNET Payment"
         sandbox="allow-scripts allow-same-origin allow-forms"
