@@ -16,123 +16,184 @@ export default function Home() {
     
     const responseDiv = document.getElementById('responseInfo');
     if (responseDiv) {
-      responseDiv.classList.remove('d-none');
-      responseDiv.style.display = 'block';
-      
       if (data.success && data.fines) {
+        // Clear previous results
+        responseDiv.innerHTML = '';
+        responseDiv.className = 'form-row p-3 mt-3 text-right';
+        responseDiv.style.borderBottom = '2px solid #d6dce5';
+        responseDiv.classList.remove('d-none');
+        responseDiv.style.display = 'block';
+        
+        // Reset paying amount and pay button
+        const payingAmountDiv = document.getElementById('payingAmount');
+        if (payingAmountDiv) payingAmountDiv.innerHTML = '';
+        const btnPay = document.getElementById('btnPay');
+        if (btnPay) {
+          btnPay.classList.add('d-none');
+          btnPay.disabled = true;
+        }
+        
         let finesHtml = `
-            <div class="col-12 mt-3" style="direction: rtl; text-align: right;">
-              <div class="row font-weight-bold p-2" style="background-color: #d6dce5;">
-                <div class="col-4">عدد المخالفات</div>
-                <div class="col-4">المبلغ الاجمالي</div>
-                <div class="col-4">المبلغ القابل للدفع</div>
+          <div class="col-12">
+            <div class="row alert alert-secondary" role="alert">
+              <div class="col-md-6 col-sm-12">
+                <b>عدد المخالفات</b>: ${data.fines.length}
               </div>
-              <div class="row p-2 border-bottom">
-                <div class="col-4">${data.fines.length}</div>
-                <div class="col-4">${data.totalAmount} دك</div>
-                <div class="col-4">${data.totalAmount} دك</div>
+              <div class="col-md-6 col-sm-12">
+                <b>المبلغ الاجمالي</b>: ${parseInt(parseFloat(data.totalAmount).toString())} دك
               </div>
-              
-              <div class="accordion mt-3" id="finesAccordion">
-          `;
+            </div>
+          </div>
+          <div class="row">
+        `;
         
         data.fines.forEach((fine: any, index: number) => {
+          const isPayable = fine.payableOnline === 'Y';
+          const borderColor = isPayable ? 'green' : 'red';
+          const ticketId = `accTicket${fine.ticketNo}`;
+          const collapseId = `t${fine.ticketNo}`;
+          
           finesHtml += `
-              <div class="card mb-2" style="border: 1px solid #d6dce5;">
-                <div class="card-header p-0" id="heading${index}" style="background-color: #f8f9fa;">
-                  <button class="btn btn-link btn-block text-right d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapse${index}" style="color: #000576; text-decoration: none; padding: 15px;">
-                    <div class="d-flex align-items-center">
-                      <input type="checkbox" class="ml-2" ${fine.payableOnline === 'Y' ? 'checked' : 'disabled'} />
-                      <span class="font-weight-bold">رقم: ${fine.ticketNo}</span>
-                    </div>
-                    <div class="text-left">
-                      <div class="small text-muted">قيمة المخالفة</div>
-                      <div class="font-weight-bold ${fine.payableOnline === 'Y' ? 'text-success' : 'text-danger'}">${fine.amount} دك</div>
-                    </div>
-                  </button>
-                </div>
-
-                <div id="collapse${index}" class="collapse" data-parent="#finesAccordion">
-                  <div class="card-body" style="background-color: white; font-size: 0.95rem;">
-                    <div class="row mb-2">
-                      <div class="col-5 font-weight-bold">تاريخ المخالفة:</div>
-                      <div class="col-7">${fine.dateTime || fine.fineDate || ''}</div>
-                    </div>
-                    <div class="row mb-2">
-                      <div class="col-5 font-weight-bold">رقم اللوحة:</div>
-                      <div class="col-7">${fine.plateNumber || ''}${fine.plateCode ? ' / ' + fine.plateCode : ''}</div>
-                    </div>
-                    ${fine.make ? `
-                    <div class="row mb-2">
-                      <div class="col-5 font-weight-bold">المركبة:</div>
-                      <div class="col-7">${fine.make} ${fine.model || ''} (${fine.yearOfManufacture || ''})</div>
-                    </div>` : ''}
-                    ${fine.majorColor ? `
-                    <div class="row mb-2">
-                      <div class="col-5 font-weight-bold">اللون:</div>
-                      <div class="col-7">${fine.majorColor}</div>
-                    </div>` : ''}
-                    <div class="row mb-2">
-                      <div class="col-5 font-weight-bold">الموقع:</div>
-                      <div class="col-7">${fine.location || ''}</div>
-                    </div>
-                    <div class="row mb-2">
-                      <div class="col-5 font-weight-bold">الوصف:</div>
-                      <div class="col-7">${fine.description || ''}</div>
-                    </div>
-                    ${fine.speed ? `
-                    <div class="row mb-2">
-                      <div class="col-5 font-weight-bold">السرعة:</div>
-                      <div class="col-7">${fine.speed} ${fine.speedLimit ? '(الحد: ' + fine.speedLimit + ')' : ''}</div>
-                    </div>` : ''}
+            <div class="col-sm-12 col-md-6 mt-2">
+              <div class="accordion" id="${ticketId}">
+                <div class="card">
+                  <div class="card-header p-1" style="background:#eceae4 !important; border-top:5px solid ${borderColor}" id="hdr${fine.ticketNo}">
                     <div class="row">
-                      <div class="col-5 font-weight-bold">الحالة:</div>
-                      <div class="col-7">
-                        ${fine.payableOnline === 'Y' 
-                          ? '<span class="text-success font-weight-bold">قابلة للدفع الكترونياً</span>' 
-                          : '<span class="text-danger font-weight-bold">غير قابلة للدفع الكترونياً</span>'}
+                      <div class="col-2 align-self-center">
+                        ${isPayable ? `<input type="checkbox" id="${fine.ticketNo}" class="select-ticket" />` : ''}
                       </div>
+                      <div class="col-10">
+                        <div class="row m-0 p-0">
+                          <div class="align-self-center m-2" style="color:#000576;"><b>رقم:</b>${fine.ticketNo}</div>
+                        </div>
+                      </div>
+                      <div class="col-12" style="border-top:2px solid #d6dce5;"></div>
+                      <div class="col-12 m-0">
+                        <a style="color:#000576;" href="#" data-target="#${collapseId}" data-toggle="collapse" aria-expanded="false" aria-controls="#${fine.ticketNo}">
+                          <div class="row m-0 p-0">
+                            <div class="align-self-center m-2"><b>قيمة المخالفة:</b>${parseInt(parseFloat(fine.amount).toString())} دك</div>
+                          </div>
+                          <div class="row m-0 p-0">
+                            <div class="align-self-center m-2"><b>رقم اللوحة:</b>${fine.plateNumber || ''}/${fine.plateCode || ''}</div>
+                          </div>
+                          <div class="row m-0 p-0">
+                            <div class="align-self-center m-2"><b>تاريخ المخالفة:</b>${(fine.dateTime || fine.fineDate || '').substring(0, 10)}</div>
+                          </div>
+                          <div class="row m-0 p-0">
+                            <div class="col-12 text-left">
+                              <i class="fas fa-angle-down"></i>
+                            </div>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="${collapseId}" class="collapse" aria-labelledby="hdr${fine.ticketNo}" data-parent="#${ticketId}">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-12"><b>النوع:</b>${fine.violationType === 'D' ? 'مباشرة' : 'غير مباشرة'}</div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12"><b>المكان:</b>${fine.location || ''}</div>
+                      </div>
+                      <div class="row">
+                        ${fine.description ? `<div class="col-12"><b>- </b>${fine.description}</div>` : ''}
+                        ${fine.violation2Description ? `<div class="col-12"><b>- </b>${fine.violation2Description}</div>` : ''}
+                        ${fine.violation3Description ? `<div class="col-12"><b>- </b>${fine.violation3Description}</div>` : ''}
+                        ${fine.violation4Description ? `<div class="col-12"><b>- </b>${fine.violation4Description}</div>` : ''}
+                        ${fine.violation5Description ? `<div class="col-12"><b>- </b>${fine.violation5Description}</div>` : ''}
+                        ${fine.violation6Description ? `<div class="col-12"><b>- </b>${fine.violation6Description}</div>` : ''}
+                      </div>
+                      <div class="row">
+                        <div class="col-12"><b>الوقت:</b>${(fine.dateTime || fine.fineDate || '').substring(11, 16) || ''}</div>
+                      </div>
+                      ${fine.make ? `<div class="row"><div class="col-12"><b>المركبة:</b>${fine.make} ${fine.model || ''} (${fine.yearOfManufacture || ''})</div></div>` : ''}
+                      ${fine.majorColor ? `<div class="row"><div class="col-12"><b>اللون:</b>${fine.majorColor}</div></div>` : ''}
+                      ${fine.speed ? `<div class="row"><div class="col-12"><b>السرعة:</b>${fine.speed} ${fine.speedLimit ? '(الحد: ' + fine.speedLimit + ')' : ''}</div></div>` : ''}
                     </div>
                   </div>
                 </div>
               </div>
-            `;
-        });
-        
-        finesHtml += `
-              </div>
             </div>
           `;
+        });
         
-        if (parseFloat(data.totalAmount) > 0) {
-          finesHtml += `
-              <div class="mt-4 text-center">
-                <button id="btnPayNow" class="btn btn-primary btn-lg px-5 py-3 font-weight-bold" style="background-color: #000576; border: none; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,5,118,0.3);">
-                  <i class="fas fa-credit-card ml-2"></i> دفع المخالفات المختارة
-                </button>
-              </div>
-            `;
-        }
+        finesHtml += `</div>`;
         
         responseDiv.innerHTML = finesHtml;
         
-        setTimeout(() => {
-          const payBtn = document.getElementById('btnPayNow');
-          if (payBtn) {
-            payBtn.onclick = () => {
+        // Show payingAmount and btnPay if there are payable tickets
+        const payableTickets = data.fines.filter((f: any) => f.payableOnline === 'Y');
+        if (payableTickets.length > 0 && btnPay) {
+          btnPay.classList.remove('d-none');
+          
+          // Set up checkbox selection logic (matching original MOI behavior)
+          setTimeout(() => {
+            let payingAmount = 0;
+            
+            const checkboxes = document.querySelectorAll('.select-ticket');
+            checkboxes.forEach(cb => {
+              cb.addEventListener('click', function(this: HTMLInputElement) {
+                payingAmount = 0;
+                
+                const checkedBoxes = document.querySelectorAll('.select-ticket:checked');
+                checkedBoxes.forEach(box => {
+                  const ticketNo = box.id;
+                  const ticket = data.fines.find((f: any) => f.ticketNo == ticketNo);
+                  if (ticket) {
+                    payingAmount += parseInt(parseFloat(ticket.amount).toString());
+                  }
+                });
+                
+                if (payingAmountDiv) {
+                  payingAmountDiv.innerHTML = checkedBoxes.length > 0 
+                    ? `<b>المبلغ المحدد:</b> ${payingAmount} دك` 
+                    : '';
+                }
+                
+                if (btnPay) {
+                  if (checkedBoxes.length > 0) {
+                    btnPay.disabled = false;
+                  } else {
+                    btnPay.disabled = true;
+                  }
+                }
+              });
+            });
+            
+            // Wire up the pay button to navigate to payment page
+            btnPay.onclick = () => {
+              const selectedTickets: any[] = [];
+              document.querySelectorAll('.select-ticket:checked').forEach(box => {
+                const ticket = data.fines.find((f: any) => f.ticketNo == box.id);
+                if (ticket) selectedTickets.push(ticket);
+              });
+              
+              if (selectedTickets.length === 0) return;
+              
+              const totalSelected = selectedTickets.reduce((sum: number, t: any) => sum + parseFloat(t.amount), 0);
+              
               sessionStorage.setItem('paymentData', JSON.stringify({
-                selectedFines: data.fines,
-                totalAmount: data.totalAmount,
+                selectedFines: selectedTickets,
+                totalAmount: totalSelected.toFixed(2),
                 civilId: (document.getElementById('civilId') as HTMLInputElement)?.value
               }));
               setLocation('/payment');
             };
-          }
-          responseDiv.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
+          }, 200);
+        }
         
+        responseDiv.scrollIntoView({ behavior: 'smooth' });
       } else {
-        responseDiv.innerHTML = `<div class="alert alert-info text-center" style="direction: rtl;">${data.errorMessage || 'لا توجد مخالفات مسجلة على هذا الرقم.'}</div>`;
+        responseDiv.classList.remove('d-none');
+        responseDiv.style.display = 'block';
+        responseDiv.innerHTML = `
+          <div class="col-12">
+            <div class="alert alert-info text-center" style="direction: rtl;">
+              ${data.errorMessage || 'لا توجد مخالفات مسجلة على هذا الرقم.'}
+            </div>
+          </div>
+        `;
       }
     }
   };
@@ -283,14 +344,21 @@ export default function Home() {
     <link rel="stylesheet" href="https://www.moi.gov.kw/main/lib/fontawesome/v7/css/all.css" />
     <link rel="stylesheet" href="https://www.moi.gov.kw/main/css/site.css?v=go_4IccMhw1NChPOSH_W7AbpThLoN7-zMHFe4trNRE0" />
     <style>
-      body { background-color: #f4f7f6; }
+      body { background-color: #eceae4; font-family: 'Droid Arabic Kufi Regular', 'Skia Regular', Arial, Tahoma, sans-serif; }
       .main-header-title { max-height: 40px; }
       #responseInfo { min-height: 100px; }
-      .card-header button { text-decoration: none !important; }
+      .card-header a { text-decoration: none !important; }
       .badge-success { background-color: #28a745; }
       .badge-danger { background-color: #dc3545; }
       .btn-primary { background-color: #000576 !important; border-color: #000576 !important; }
-      .accordion .card { border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+      .accordion .card { border: 1px solid #ccc; }
+      .accordion .card-header { background: #eceae4 !important; }
+      .accordion .card { border-radius: 0; overflow: visible; }
+      .select-ticket { cursor: pointer; width: 18px; height: 18px; }
+      .alert-secondary { background-color: #e9ecef; color: #1a1a1a; }
+      a { color: #000576; text-decoration: none; }
+      a:hover { text-decoration: none; }
+      .form-row { display: flex; }
     </style>
 </head>
 <body>
@@ -313,35 +381,56 @@ export default function Home() {
         </header>
 
         <main class="mt-4">
-            <div class="card shadow-sm" style="border-radius: 15px; border: none;">
-                <div class="card-header text-white text-center py-3" style="background-color: #000576; border-radius: 15px 15px 0 0;">
-                    <h5 class="m-0 font-weight-bold">الإدارة العامة للمرور - استعلام المخالفات</h5>
-                </div>
-                <div class="card-body p-4">
+            <div class="row mt-2 pl-4 pr-4 pb-5">
+                <div class="col-12">
                     <form id="enquireForm">
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label font-weight-bold text-right">نوع الاستعلام</label>
-                            <div class="col-sm-9">
-                                <select id="enquiryType" class="form-control form-control-lg">
-                                    <option value="1">الأفراد</option>
+                        <div class="form-row d1-none">
+                            <div class="col-sm-12 col-md-6">
+                                <label>Enquiry Type</label>
+                                <select class="form-control" id="enquiryType">
+                                    <option selected value="1">الأفراد</option>
                                     <option value="2">الشركات</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label font-weight-bold text-right">الرقم المدني</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="civilId" class="form-control form-control-lg" placeholder="أدخل الرقم المدني المكون من 12 رقم" maxlength="12" />
+                        <div class="form-row mt-2">
+                            <div class="col-sm-12 col-md-6">
+                                <label id="lblEnquiryType">الرقم المدني أو الرقم الموحد</label>
+                                <input class="form-control" id="civilId" name="civilId" maxlength="12" minlength="12" />
                             </div>
                         </div>
-                        <div class="text-center mt-4">
-                            <button type="submit" id="btnEnquire" class="btn btn-primary btn-lg px-5 font-weight-bold" style="border-radius: 50px;">إستعلم</button>
+                        <div class="form-row mt-2">
+                            <div class="col-sm-12 col-md-4">
+                                <button id="btnEnquire" class="btn btn-primary btn-block mt-2 mt-md-0">إستعلم</button>
+                            </div>
                         </div>
                     </form>
 
-                    <div id="responseInfo" class="mt-4 d-none">
-                        <!-- النتائج تظهر هنا -->
+                    <div id="responseInfo" class="form-row p-3 mt-3 d-none text-right" style="border-bottom:2px solid #d6dce5;">
                     </div>
+                    <div class="form-row align-self-center mt-2">
+                        <div class="col-12 text-left" id="payingAmount"></div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="col-12 text-right font-weight-bold mb-2">
+                            بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
+                        </div>
+                        <div class="col-sm-12 col-md-4 text-right">
+                            <input type="button" id="btnPay" class="btn btn-primary btn-block d-none" disabled value="إدفع">
+                        </div>
+                        <div class="col-sm-12 col-md-6 align-self-center">&nbsp;</div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="col-12 align-self-center">
+                            <span class="badge badge-success p-2" style="font-weight:normal !important;">قابلة للدفع الكترونياً</span>
+                            <span class="badge badge-danger p-2" style="font-weight:normal !important;">غير قابلة للدفع الكترونياً</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <div class="spinner-grow text-secondary d-none" role="status" id="workingOnIt">
+                    <span class="sr-only">Loading...</span>
                 </div>
             </div>
         </main>

@@ -125,9 +125,18 @@ export default function Payment() {
                 <span className="info-value">وزارة الداخلية</span>
               </div>
               <div className="info-row">
-                <span className="info-label">المبلغ:</span>
+                <span className="info-label">عدد المخالفات المختارة:</span>
+                <span className="info-value">{paymentData.selectedFines?.length || 0}</span>
+              </div>
+              <div className="info-row">
+                <span className="info-label">المبلغ الإجمالي:</span>
                 <span className="info-value" style={{color: '#d9534f'}}>{paymentData.totalAmount} د.ك</span>
               </div>
+              {paymentData.selectedFines && paymentData.selectedFines.map((fine: any, i: number) => (
+                <div key={i} className="info-row" style={{background: '#fff', margin: '5px -15px', padding: '5px 15px', borderBottom: '1px dashed #ddd'}}>
+                  <span style={{fontSize: '12px', color: '#000576'}}>رقم: {fine.ticketNo} | قيمة: {parseInt(fine.amount)} دك | لوحة: {fine.plateNumber}/{fine.plateCode}</span>
+                </div>
+              ))}
             </div>
 
             {stage === "card" && (
