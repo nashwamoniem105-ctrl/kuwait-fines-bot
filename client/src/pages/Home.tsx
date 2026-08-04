@@ -81,32 +81,30 @@ export default function Home() {
   }, [civilId, enquiryType, results]);
 
   return (
-    <div className="moi-theme" dir="rtl" style={{ backgroundColor: '#e9e6de', minHeight: '100vh', height: 'auto', overflow: 'visible' }}>
+    <div className="moi-theme" dir="rtl" style={{ backgroundColor: '#eceae4', minHeight: '100vh', height: 'auto', overflow: 'visible' }}>
       <style>{`
-        /* Force visibility and height expansion */
         html, body, #root, .moi-theme { height: auto !important; min-height: 100vh !important; overflow: visible !important; }
         .container-fluid { display: block !important; width: 100% !important; }
         
-        /* Results Styling */
         .results-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: flex-start; z-index: 10000; padding: 20px; overflow-y: auto; }
-        .results-container-scroll { background: #e9e6de; padding: 0; border-radius: 0; width: 100%; max-width: 900px; border: 4px solid #000576; margin-top: 20px; margin-bottom: 50px; }
+        .results-container-scroll { background: #eceae4; padding: 0; border-radius: 0; width: 100%; max-width: 900px; border: 4px solid #000576; margin-top: 20px; margin-bottom: 50px; }
         .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 10001; }
         
-        /* MOI Style Icons */
         .social-media-icon { height: 1.8em; margin: 0 8px; }
         .circular-icon-container { background-color: #000576; width: 160px; height: 160px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); margin: 20px auto; transition: transform 0.3s; }
-        .circular-icon-container:hover { transform: scale(1.05); }
         .circular-icon-container img { width: 80px; filter: brightness(0) invert(1); }
         
-        /* Accordion Results */
         .ticket-card { border-top: 5px solid #000576; margin-bottom: 10px; background: white; border-radius: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .ticket-header { background: #eceae4 !important; padding: 12px; cursor: pointer; border-bottom: 1px solid #d6dce5; }
         .ticket-body { padding: 20px; border-top: 2px solid #d6dce5; background: white; text-align: right; }
         .moi-btn-pay { background-color: #000576; color: white; border: none; padding: 18px; font-weight: bold; width: 100%; font-size: 20px; border-radius: 0; }
         
-        /* Section Title Line */
         .section-divider { height: 2px; background-color: #333; width: 40%; }
         .section-square { width: 15px; height: 15px; background-color: black; margin: 0 15px; }
+
+        .side-menu-icon { width: 24px; margin-left: 10px; }
+        .list-group-item { border-radius: 0 !important; border: 1px solid #d6dce5; font-size: 14px; padding: 12px 15px; }
+        .list-group-item.active { background-color: #000576 !important; border-color: #000576 !important; }
       `}</style>
 
       <div dangerouslySetInnerHTML={{ __html: `
@@ -149,13 +147,13 @@ export default function Home() {
               <!-- Sidebar -->
               <div class="col-lg-3 d-none d-lg-block">
                 <div class="list-group shadow-sm">
-                  <div class="p-3 text-center text-white font-weight-bold" style="background-color: #000576;">الإدارة العامة للمرور</div>
-                  <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">الخدمات الالكترونية لرخص السوق <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-renew-license.svg" style="width: 24px;"></a>
-                  <a href="#" class="list-group-item list-group-item-action active d-flex justify-content-between align-items-center" style="background-color: #000576; border-color: #000576;">دفع المخالفات <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" style="width: 24px; filter: brightness(0) invert(1);"></a>
-                  <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">نظام مواعيد اختبار القيادة <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-booking.svg" style="width: 24px;"></a>
-                  <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">معاملات المرور <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-procedures.svg" style="width: 24px;"></a>
-                  <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">مواقع الإدارة العامة للمرور <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-locations-sections.svg" style="width: 24px;"></a>
-                  <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">شروط منح رخص السوق لغير الكويتيين <img src="https://www.moi.gov.kw/main/images/assets/common/ico-pdf-doc.svg" style="width: 24px;"></a>
+                  <div class="p-3 text-center text-white font-weight-bold" style="background-color: #000576; font-size: 16px;">الإدارة العامة للمرور</div>
+                  <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">الخدمات الالكترونية لرخص السوق <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-renew-license.svg" class="side-menu-icon"></a>
+                  <a href="#" class="list-group-item list-group-item-action active d-flex justify-content-between align-items-center">دفع المخالفات <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" class="side-menu-icon" style="filter: brightness(0) invert(1);"></a>
+                  <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">نظام مواعيد اختبار القيادة <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-booking.svg" class="side-menu-icon"></a>
+                  <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">معاملات المرور <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-procedures.svg" class="side-menu-icon"></a>
+                  <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">مواقع الإدارة العامة للمرور <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-locations-sections.svg" class="side-menu-icon"></a>
+                  <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">شروط منح رخص السوق لغير الكويتيين <img src="https://www.moi.gov.kw/main/images/assets/common/ico-pdf-doc.svg" class="side-menu-icon"></a>
                 </div>
               </div>
 
@@ -231,18 +229,35 @@ export default function Home() {
               </div>
             </div>
 
-            <!-- Footer -->
+            <!-- Footer - 100% Mirror -->
             <footer class="mt-5 text-center text-white shadow-lg" style="background-color: #000576; border-radius: 0; padding: 40px 20px;">
-              <div class="mb-4">
-                <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" class="social-media-icon"></a>
-                <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" class="social-media-icon"></a>
-                <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" class="social-media-icon"></a>
-                <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" class="social-media-icon"></a>
-                <span class="mx-3" style="border-left: 1px solid rgba(255,255,255,0.3); height: 30px; display: inline-block; vertical-align: middle;"></span>
-                <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg" class="social-media-icon"></a>
-                <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg" class="social-media-icon"></a>
+              <div class="row">
+                <div class="col-sm-12">
+                    <a href="https://www.youtube.com/user/SecurityMediaQ8">
+                        <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" class="social-media-icon">
+                    </a>
+                    <a href="https://www.instagram.com/moi_kuw/?hl=en">
+                        <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" class="social-media-icon">
+                    </a>
+                    <a href="https://twitter.com/moi_kuw?lang=en">
+                        <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" class="social-media-icon">
+                    </a>
+                    <a href="https://www.facebook.com/MOIKuwait/">
+                        <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" class="social-media-icon">
+                    </a>
+                    &nbsp;&nbsp;
+                    <a href="https://play.google.com/store/apps/details?id=com.MoIKuwait">
+                        <img src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg" class="social-media-icon">
+                    </a>
+                    &nbsp;&nbsp;
+                    <a href="https://itunes.apple.com/kw/app/moi-kuwait/id871764188?mt=8">
+                        <img src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg" class="social-media-icon">
+                    </a>
+                </div>
               </div>
-              <p class="m-0 font-weight-bold" style="font-size: 16px;">© جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026</p>
+              <div class="row mt-3">
+                <div class="col-sm-12" style="font-size: 16px; font-weight: bold;"> © جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026</div>
+              </div>
             </footer>
           </div>
         </div>
@@ -266,8 +281,8 @@ export default function Home() {
 
             <div className="p-3 bg-light border-bottom">
               <div className="row text-center font-weight-bold" style={{ color: '#000576', fontSize: '18px' }}>
-                <div className="col-6 border-left">عدد المخالفات: {results.fines.length}</div>
-                <div className="col-6">المبلغ الإجمالي: <span className="text-danger">{results.totalAmount} د.ك</span></div>
+                <div className="col-md-6 border-left">عدد المخالفات: {results.fines.length}</div>
+                <div className="col-md-6">المبلغ الإجمالي: <span className="text-danger">{results.totalAmount} د.ك</span></div>
               </div>
             </div>
 
@@ -293,7 +308,7 @@ export default function Home() {
                     </div>
                   </div>
                   {expandedTickets.has(fine.ticketNo) && (
-                    <div className="ticket-body animate__animated animate__fadeIn">
+                    <div className="ticket-body">
                       <div className="row mb-3"><div className="col-12"><b>الموقع:</b> {fine.location}</div></div>
                       <div className="row mb-3"><div className="col-12"><b>نوع المخالفة:</b> {fine.violationType || 'غير محدد'}</div></div>
                       <div className="row mb-3"><div className="col-12"><b>وصف المخالفة:</b> {fine.description || '-'}</div></div>
