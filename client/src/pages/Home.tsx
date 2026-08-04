@@ -1,77 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from "wouter";
-import { trpc } from "@/lib/trpc";
-import { useToast } from "@/hooks/use-toast";
+import { useLocation } from 'wouter';
+import { trpc } from '@/lib/trpc';
+import { useToast } from '@/hooks/use-toast';
 
 export default function Home() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const [civilId, setCivilId] = useState("");
-  const [enquiryType, setEnquiryType] = useState("1");
+  const [civilId, setCivilId] = useState('');
+  const [enquiryType, setEnquiryType] = useState('1');
   const [results, setResults] = useState<any>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [expandedTickets, setExpandedTickets] = useState<Set<string>>(new Set());
 
-  // Force global styles for MOI theme and scrolling
   useEffect(() => {
-    const style = document.createElement('style');
-    style.innerHTML = `
-      html, body {
-        height: auto !important;
-        min-height: 100% !important;
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-        background-color: #eceae4 !important;
-        background-image: url('https://www.moi.gov.kw/main/images/assets/common/bg-pattern.png') !important;
-        background-repeat: repeat !important;
-        background-attachment: fixed !important;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    const links = [
+      'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css',
+      'https://www.moi.gov.kw/main/css/site.css',
+      'https://www.moi.gov.kw/main/lib/fontawesome/v7/css/all.css'
+    ];
+    links.forEach(href => {
+      if (!document.querySelector(`link[href="${href}"]`)) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        document.head.appendChild(link);
       }
-      #root {
-        display: block !important;
-        height: auto !important;
-      }
-      .navbar { background-color: #000576 !important; border-bottom: 5px solid #ffcb05 !important; }
-      .nav-link { color: #fff !important; font-weight: 500; font-size: 16px; padding: 15px 20px !important; }
-      .nav-item.active .nav-link { background-color: #ffcb05 !important; color: #000576 !important; }
-      .content-main { background: #fff; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 30px; }
-      .side-menu { background: #000576; color: #fff; min-height: 100%; }
-      .side-menu-item { display: flex; align-items: center; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff !important; text-decoration: none !important; transition: all 0.3s; }
-      .side-menu-item:hover, .side-menu-item.active { background: #fff; color: #000576 !important; }
-      .side-menu-item img { width: 30px; margin-left: 15px; filter: brightness(0) invert(1); }
-      .side-menu-item:hover img, .side-menu-item.active img { filter: none; }
-      .form-label { color: #000576; font-weight: bold; margin-bottom: 8px; display: block; }
-      .btn-moi-primary { background-color: #000576 !important; color: #fff !important; border: none !important; padding: 12px 30px !important; font-weight: bold !important; border-radius: 4px !important; }
-      .btn-moi-primary:hover { background-color: #000350 !important; }
-      .moi-section-title { color: #000576; font-weight: bold; position: relative; padding-bottom: 10px; margin-bottom: 20px; text-align: center; }
-      .moi-section-title::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 3px; background: url('https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg') no-repeat center; background-size: contain; }
-      .lower-section { background: #000576; padding: 60px 0; color: #fff; text-align: center; }
-      .circle-icon-box { width: 150px; height: 150px; border: 2px solid #fff; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; padding: 35px; transition: all 0.3s; }
-      .circle-icon-box:hover { transform: scale(1.05); background: rgba(255,255,255,0.1); }
-      .circle-icon-box img { width: 100%; height: auto; }
-      .white-box { background: #fff; padding: 40px 20px; color: #000576; }
-      .footer { background: #000576; color: #fff; padding: 40px 0; text-align: center; }
-      .social-icon { width: 30px; margin: 0 10px; opacity: 0.8; transition: 0.3s; }
-      .social-icon:hover { opacity: 1; transform: translateY(-3px); }
-      .app-icon { height: 45px; margin: 0 10px; }
-      
-      /* Mobile Adjustments */
-      @media (max-width: 768px) {
-        .nav-link { font-size: 14px; padding: 10px !important; }
-        .side-menu { display: none; }
-        .moi-section-title { font-size: 20px; }
-        .circle-icon-box { width: 120px; height: 120px; padding: 25px; }
-      }
+    });
 
-      /* Results Styling */
-      .ticket-card { border: 1px solid #d6dce5; margin-bottom: 10px; border-radius: 4px; overflow: hidden; background: #fff; }
-      .ticket-header { background: #f8f9fa; padding: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; }
-      .ticket-details { padding: 20px; background: #fff; border-top: 1px solid #eee; }
-      .badge-payable { background-color: #28a745 !important; color: #fff !important; }
-      .badge-unpayable { background-color: #dc3545 !important; color: #fff !important; }
-    `;
-    document.head.appendChild(style);
-    return () => { document.head.removeChild(style); };
+    document.body.style.backgroundColor = '#eceae4';
+    document.body.style.backgroundImage = "url('https://www.moi.gov.kw/main/images/assets/common/bg-pattern.png')";
+    document.body.style.backgroundRepeat = 'repeat';
+    document.body.style.backgroundAttachment = 'fixed';
+    document.body.style.direction = 'rtl';
   }, []);
 
   const queryMutation = trpc.fines.query.useMutation({
@@ -83,34 +43,34 @@ export default function Home() {
           document.getElementById('responseInfo')?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
       } else {
-        toast({ variant: "destructive", title: "خطأ", description: data.errorMessage || "فشل الاستعلام" });
+        toast({ variant: 'destructive', title: 'خطأ', description: data.errorMessage || 'فشل الاستعلام' });
       }
     },
     onError: (err) => {
       setIsSearching(false);
-      toast({ variant: "destructive", title: "خطأ", description: err.message });
+      toast({ variant: 'destructive', title: 'خطأ', description: err.message });
     }
   });
 
   const handleInquire = (e: React.FormEvent) => {
     e.preventDefault();
     if (civilId.length < 8) {
-      toast({ variant: "destructive", description: "يرجى إدخال الرقم المدني بشكل صحيح" });
+      toast({ variant: 'destructive', description: 'يرجى إدخال الرقم المدني بشكل صحيح' });
       return;
     }
     setIsSearching(true);
     setResults(null);
-    queryMutation.mutate({ civilId, enquiryType: enquiryType as "1" | "2", lang: "ar" });
+    queryMutation.mutate({ civilId, enquiryType: enquiryType as '1' | '2', lang: 'ar' });
   };
 
   const handlePay = () => {
     if (!results) return;
-    sessionStorage.setItem("paymentData", JSON.stringify({
+    sessionStorage.setItem('paymentData', JSON.stringify({
       selectedFines: results.fines,
       totalAmount: results.totalAmount,
       civilId: civilId
     }));
-    setLocation("/payment");
+    setLocation('/payment');
   };
 
   const toggleTicket = (ticketNo: string) => {
@@ -121,246 +81,1015 @@ export default function Home() {
   };
 
   return (
-    <div className="moi-wrapper" dir="rtl">
-      {/* External Resources */}
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
-      <link rel="stylesheet" href="https://www.moi.gov.kw/main/lib/fontawesome/v7/css/all.css" />
-
-      {/* TOP HEADER */}
-      <header className="container-fluid py-3 bg-white">
-        <div className="container">
-          <div className="row align-items-center">
-            <div className="col-4 col-md-2 text-center">
-              <a href="/"><img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" style={{ height: '110px' }} alt="MOI Logo" /></a>
-            </div>
-            <div className="col-8 col-md-10 text-right d-flex flex-column align-items-end">
-              <img src="https://www.moi.gov.kw/main/images/assets/common/ar/state-of-kuwait.svg" style={{ height: '45px' }} className="mb-2" alt="State of Kuwait" />
-              <img src="https://www.moi.gov.kw/main/images/assets/common/ar/ministry-of-interior.svg" style={{ height: '35px' }} alt="Ministry of Interior" />
-            </div>
+    <div className="moi-master-layout" dir="rtl" style={{ width: '100%', display: 'block' }}>
+      <div dangerouslySetInnerHTML={{ __html: `<header>
+ <div class="row">
+  <div class="col-4 col-md-2 col-lg-2 text-center" style="border:0px solid red;">
+   <a class="navbar-brand m-0" data-manus_click_id="1" data-manus_clickable="true" href="https://www.moi.gov.kw/main/">
+    <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" style="height: 120px;"/>
+   </a>
+  </div>
+  <div class="col-1 align-self-center" style="border:0px solid red;">
+   <div class="row">
+    <div class="col text-center">
+     <img class="text-center main-header-title" src="https://www.moi.gov.kw/main/images/assets/common/ar/state-of-kuwait.svg"/>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col text-center">
+     <img class="mt-2 main-header-title" src="https://www.moi.gov.kw/main/images/assets/common/ar/ministry-of-interior.svg"/>
+    </div>
+   </div>
+  </div>
+ </div>
+ <nav class="navbar navbar-expand-lg navbar-dark border-bottom box-shadow">
+  <div class="container">
+   <a class="navbar-brand" href="/main">
+   </a>
+   <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarResponsive" data-toggle="collapse" type="button">
+    <span class="navbar-toggler-icon">
+    </span>
+   </button>
+   <div class="navbar-collapse collapse flex-sm-row-reverse" id="navbarResponsive">
+    <ul class="navbar-nav flex-grow-1 p-0 clearfix" style="margin:0 auto;vertical-align:top;border:0px solid red;">
+     <div class="d-flex flex-sm-row flex-column container-navlinks" style="border:0px solid red;overflow:visible;">
+      <style>
+       .dropdown:hover > .dropdown-menu {
+        display: block;
+        margin-top: 0;
+    }
+      </style>
+      <li class="nav-item" data-manus_click_id="2" data-manus_clickable="true">
+       <a class="nav-link" data-manus_click_id="3" data-manus_clickable="true" href="https://www.moi.gov.kw/main">
+        الرئيسيــة
+        <span class="sr-only">
+         (current)
+        </span>
+       </a>
+      </li>
+      <li class="nav-item active" data-manus_click_id="4" data-manus_clickable="true" data-trigger="focus" id="eservicesMenu">
+       <a aria-controls="eservices" aria-expanded="false" class="nav-link" data-manus_click_id="5" data-manus_clickable="true" data-target="#eservices" data-toggle="collapse" href="#" id="nav-eServices">
+        الخدمات الإلكترونيـة
+       </a>
+       <span class="collapse navbar-submenu" data-parent="#navbarResponsive" id="eservices">
+        <ul class="nav justify-content-center pt-2 pb-2 pl-3 pr-3" style="border:0px solid red;">
+         <li class="nav-item m-0">
+          <a href="https://www.moi.gov.kw/main/eservices">
+           <img alt="Information Systems" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/it-comm/ico-it-communications.svg"/>
+          </a>
+          <a class="nav-link active" href="https://www.moi.gov.kw/main/eservices">
+           <div class="main-menu-text">
+            الإدارة العامة
+            <br/>
+            لنظم المعلومات
+           </div>
+          </a>
+         </li>
+         <li class="nav-item">
+          <a href="https://www.moi.gov.kw/gdt">
+           <img alt="Traffic" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-general-traffic.svg"/>
+          </a>
+          <a class="nav-link" href="https://www.moi.gov.kw/gdt">
+           <div class="main-menu-text">
+            الإدارة العامة
+            <br/>
+            للمرور
+           </div>
+          </a>
+         </li>
+         <li class="nav-item">
+          <a href="https://nat.moi.gov.kw/citizenship-passport.nsf/Main?OpenForm&amp;langid=1">
+           <img alt="Citizenship" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/citizenship-passport/ico-citizenship-passport.svg"/>
+          </a>
+          <a class="nav-link" href="https://nat.moi.gov.kw/citizenship-passport.nsf/Main?OpenForm&amp;langid=1">
+           <div class="main-menu-text">
+            الإدارة العامة
+            <br/>
+            للجنسية ووثائق السفر
+           </div>
+          </a>
+         </li>
+         <li class="nav-item">
+          <a href="https://www.moi.gov.kw/main/eservices/residence">
+           <img alt="Immigration" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/residency/ico-residence.svg"/>
+          </a>
+          <a class="nav-link" href="https://www.moi.gov.kw/main/eservices/residence">
+           <div class="main-menu-text">
+            الإدارة العامة
+            <br/>
+            لشؤون  الإقامة
+           </div>
+          </a>
+         </li>
+         <li class="nav-item">
+          <a href="https://www.moi.gov.kw/main/eservices/civildefence">
+           <img alt="Civil Defence" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/civil-defence/ico-civil-defence.svg"/>
+          </a>
+          <a class="nav-link" href="https://www.moi.gov.kw/main/eservices/civildefence">
+           <div class="main-menu-text">
+            الإدارة العامة
+            <br/>
+            للدفاع المدني
+           </div>
+          </a>
+         </li>
+         <li class="nav-item">
+          <a href="https://www.moi.gov.kw/main/eservices/servicecentres">
+           <img alt="Service Centres" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/service-centres/ico-service-centre.svg"/>
+          </a>
+          <a class="nav-link" href="https://www.moi.gov.kw/main/eservices/servicecentres">
+           <div class="main-menu-text">
+            الإدارة العامة
+            <br/>
+            لمراكز الخدمة
+           </div>
+          </a>
+         </li>
+         <li class="nav-item">
+          <a href="https://nat5.moi.gov.kw/Coast-Guard.nsf/Main?openform&amp;langid=1">
+           <img alt="Coast Guard" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/coast-guard/ico-coast-guard.svg"/>
+          </a>
+          <a class="nav-link" href="https://nat5.moi.gov.kw/Coast-Guard.nsf/Main?openform&amp;langid=1">
+           <div class="main-menu-text">
+            الإدارة العامة
+            <br/>
+            لخفر السواحل
+           </div>
+          </a>
+         </li>
+         <li class="nav-item">
+          <a href="https://rnt.moi.gov.kw/pas/">
+           <img alt="Police Affairs" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/ico-shoon-quwa.svg"/>
+          </a>
+          <a class="nav-link" href="https://rnt.moi.gov.kw/pas/">
+           <div class="main-menu-text">
+            الإدارة العامة
+            <br/>
+            لشؤون قوة الشرطة
+           </div>
+          </a>
+         </li>
+         <li class="nav-item">
+          <a href="https://nat4.moi.gov.kw/saad-abdullah-academy.nsf">
+           <img alt="Saad Abdullah Police Academy" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/academy/ico-police-academy.svg"/>
+          </a>
+          <a class="nav-link" href="https://nat4.moi.gov.kw/saad-abdullah-academy.nsf">
+           <div class="main-menu-text">
+            أكاديمية سعد العبدالله
+            <br/>
+            للعلوم الأمنية
+           </div>
+          </a>
+         </li>
+         <li class="nav-item">
+          <a href="https://www.moi.gov.kw/main/eservices/finance">
+           <img alt="Finance" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/finance/ico-finance.svg"/>
+          </a>
+          <a class="nav-link" href="https://www.moi.gov.kw/main/eservices/finance">
+           <div class="main-menu-text">
+            الإدارة العامة
+            <br/>
+            للشؤن المالية
+           </div>
+          </a>
+         </li>
+         <li class="nav-item">
+          <a href="https://eservices5.moi.gov.kw/Investigations.nsf">
+           <img alt="Investigations" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/investigations/ico-investigations.svg"/>
+          </a>
+          <a class="nav-link" href="https://eservices5.moi.gov.kw/Investigations.nsf">
+           <div class="main-menu-text">
+            الإدارة العامة
+            <br/>
+            للتحقيقات
+           </div>
+          </a>
+         </li>
+         <li class="nav-item m-0">
+          <a href="https://www.moi.gov.kw/main/sections/training">
+           <img alt="Training" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/training/ico-training.svg"/>
+          </a>
+          <a class="nav-link" href="https://www.moi.gov.kw/main/sections/training">
+           <div class="main-menu-text">
+            الإدارة العامة
+            <br/>
+            للتدريب
+           </div>
+          </a>
+         </li>
+         <li class="nav-item m-0">
+          <a href="https://www.moi.gov.kw/main/sections/human-resources">
+           <img alt="Administrative Affairs Dept." class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/human-resources/ico-hr.svg"/>
+          </a>
+          <a class="nav-link" href="https://www.moi.gov.kw/main/sections/human-resources">
+           <div class="main-menu-text">
+            الإدارة العامة
+            <br/>
+            للشئون الإدارية
+           </div>
+          </a>
+         </li>
+        </ul>
+       </span>
+      </li>
+      <li class="nav-item" data-manus_click_id="6" data-manus_clickable="true" id="relatedDepartmentsMenu">
+       <a aria-controls="relatedDepts" aria-expanded="false" class="nav-link" data-manus_click_id="7" data-manus_clickable="true" data-target="#relatedDepts" data-toggle="collapse" href="#" id="nav-relDepts">
+        إدارات توعوية
+       </a>
+       <span class="collapse navbar-submenu" data-parent="#navbarResponsive" id="relatedDepts">
+        <ul class="nav justify-content-center pt-2 pb-2 pl-3 pr-3" style="border:0px solid red;">
+         <li class="nav-item m-0">
+          <a href="https://www.moi.gov.kw/main/sections/cyber-crime">
+           <img alt="Cyber Crime" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/cyber-crime/ico-cyber-crime.svg"/>
+          </a>
+          <a class="nav-link" href="https://www.moi.gov.kw/main/sections/cyber-crime">
+           <div class="main-menu-text">
+            إدارة مكافحة
+            <br/>
+            الجرائم الإلكترونية
+           </div>
+          </a>
+         </li>
+         <li class="nav-item m-0">
+          <a href="https://www.moi.gov.kw/main/sections/juvenile-protection">
+           <img alt="Juvenile Protection" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/juvenile-protection/ico-juvenile-protection.svg"/>
+          </a>
+          <a class="nav-link" href="https://www.moi.gov.kw/main/sections/juvenile-protection">
+           <div class="main-menu-text">
+            إدارة حماية الأحداث
+           </div>
+          </a>
+         </li>
+         <li class="nav-item m-0">
+          <a href="https://www.moi.gov.kw/main/sections/anti-drug">
+           <img alt="Anti Drug" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/anti-drug/ico-anti-drug.svg"/>
+          </a>
+          <a class="nav-link" href="https://www.moi.gov.kw/main/sections/anti-drug">
+           <div class="main-menu-text">
+            الإدارة العامة
+            <br/>
+            لمكافحة المخدرات
+           </div>
+          </a>
+         </li>
+         <li class="nav-item m-0">
+          <a href="https://www.moi.gov.kw/main/sections/anti-human-trafficking">
+           <img alt="Anti Human Trafficking" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/cyber-crime/ico-cyber-crime.svg"/>
+          </a>
+          <a class="nav-link" href="https://www.moi.gov.kw/main/sections/anti-human-trafficking">
+           <div class="main-menu-text">
+            إدارة حماية الآداب العامة
+            <br/>
+            ومكافحة الإتجار بالأشخاص
+           </div>
+          </a>
+         </li>
+         <li class="nav-item m-0">
+          <a href="https://www.moi.gov.kw/main/sections/security-media">
+           <img alt="Security Media Dept" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/security-media/ico-security-media.svg"/>
+          </a>
+          <a class="nav-link" href="https://www.moi.gov.kw/main/sections/security-media">
+           <div class="main-menu-text">
+            الإدارة العامة
+            <br/>
+            للعلاقات والإعلام الأمني
+           </div>
+          </a>
+         </li>
+         <li class="nav-item m-0">
+          <a href="https://eservices2.moi.gov.kw/Correctional-Facilities.nsf/Main?OpenForm&amp;LangID=1">
+           <img alt="Correctional Facilities" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/correctional-facilities/icon-correctional-facilities.svg"/>
+          </a>
+          <a class="nav-link" href="https://eservices2.moi.gov.kw/Correctional-Facilities.nsf/Main?OpenForm&amp;LangID=1">
+           <div class="main-menu-text">
+            الإداره العامة
+            <br/>
+            للمؤسسات الإصلاحية
+           </div>
+          </a>
+         </li>
+         <li class="nav-item m-0">
+          <a href="https://www.moi.gov.kw/main/sections/security-systems">
+           <img alt="Security Systems" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/security-systems/ico-security-systems.svg"/>
+          </a>
+          <a class="nav-link" href="https://www.moi.gov.kw/main/sections/security-systems">
+           <div class="main-menu-text">
+            الادارة العامة
+            <br/>
+            للأنظمة الأمنية
+           </div>
+          </a>
+         </li>
+         <li class="nav-item m-0 d-none1">
+          <a href="https://www.moi.gov.kw/main/sections/national-security">
+           <img alt="Training" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/national-security/ico-nat-security.svg"/>
+          </a>
+          <a class="nav-link" href="https://www.moi.gov.kw/main/sections/national-security">
+           <div class="main-menu-text">
+            كلية الأمن الوطني
+           </div>
+          </a>
+         </li>
+         <li class="nav-item m-0">
+          <a href="https://nat2.moi.gov.kw/GDSRC.nsf">
+           <img alt="Administrative Affairs Dept." class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/research-studies/ico-research.svg"/>
+          </a>
+          <a class="nav-link" href="https://nat2.moi.gov.kw/GDSRC.nsf">
+           <div class="main-menu-text">
+            الإدارة العامة
+            <br/>
+            لمركز البحوث والدراسات
+           </div>
+          </a>
+         </li>
+        </ul>
+       </span>
+      </li>
+      <li class="nav-item" data-manus_click_id="8" data-manus_clickable="true">
+       <div class="dropdown">
+        <a aria-expanded="false" class="nav-link" data-manus_click_id="9" data-manus_clickable="true" data-toggle="collapse" href="#">
+         الإصدارات الإلكترونية
+        </a>
+        <div class="dropdown-menu text-right" style="background: #e9e6de;padding:0px;">
+         <a class="dropdown-item" href="https://www.moi.gov.kw/main/emagazine">
+          المجلة الإلكترونية
+         </a>
+         <a class="dropdown-item" href="https://www.moi.gov.kw/main/news/archive">
+          أرشيـف الأخبار
+         </a>
+        </div>
+       </div>
+      </li>
+      <li class="nav-item" data-manus_click_id="10" data-manus_clickable="true">
+       <a class="nav-link" data-manus_click_id="11" data-manus_clickable="true" href="https://eservices.moi.gov.kw:45314/verify/qrcode">
+        التحقق من الوثائق
+       </a>
+      </li>
+      <li class="nav-item" data-manus_click_id="12" data-manus_clickable="true">
+       <a class="nav-link" data-manus_click_id="13" data-manus_clickable="true" href="https://eservices1.moi.gov.kw/moicus.nsf/moicus?openform&amp;LangID=1">
+        يهمنا رايك
+       </a>
+      </li>
+      <li class="nav-item" data-manus_click_id="14" data-manus_clickable="true" id="navEmergency">
+       <a class="nav-link" data-manus_click_id="15" data-manus_clickable="true" data-target="#emergencyContactModal" data-toggle="modal" href="#">
+        أرقام الطوارئ
+       </a>
+      </li>
+      <li class="nav-item" data-manus_click_id="16" data-manus_clickable="true" id="navMeta">
+       <div class="dropdown">
+        <a aria-expanded="false" class="nav-link" data-manus_click_id="17" data-manus_clickable="true" data-toggle="collapse" href="#">
+         منصة المواعيد
+        </a>
+        <div class="dropdown-menu text-right" style="background: #e9e6de;padding:0px;">
+         <a class="dropdown-item" href="https://meta.e.gov.kw/">
+          منصة 'متى'
+         </a>
+         <a class="dropdown-item" href="https://nat2.moi.gov.kw/MOIBioEnrol.nsf/initRequest?OpenForm&amp;LangID=1">
+          حجز موعد البصمة البيومترية للخليجيين
+         </a>
+         <a class="dropdown-item" href="https://nat1.moi.gov.kw/MOIeTPAp.nsf/Request?OpenForm&amp;LangID=1">
+          حجز مواعيد جوازات السفر المؤقتة والوثائق
+         </a>
+        </div>
+       </div>
+      </li>
+      <script>
+       $(document).ready(function () {
+        // Add active class to the current button (highlight it)
+        var header = document.getElementById("navbarResponsive");
+        var btns = header.getElementsByClassName("nav-item");
+        console.log(btns);
+        for (var i = 0; i < btns.length; i++) {
+            btns[i].addEventListener("click", function () {
+                var current = document.getElementsByClassName("nav-item active");
+                if (current.length > 0) {
+                    current[0].className = current[0].className.replace(" active", "");
+                }
+                this.className += " active";
+            });
+        }
+        if (window.location.pathname.toLowerCase().includes("/eservices")) {
+            btns[0].className = btns[0].className.replace(" active", "");
+            btns[1].className += " active";
+        }
+        else if (window.location.pathname.toLowerCase().includes("/sections")) {
+            btns[0].className = btns[0].className.replace(" active", "");
+            $('#relatedDepartmentsMenu').addClass('active');
+        }
+        else if (window.location.pathname.toLowerCase().includes("/emagazine")) {
+            btns[0].className = btns[0].className.replace(" active", "");
+            //btns[10].className += " active";
+            $('#navEMag').addClass('active');
+            //console.log(btns[10]);
+        }
+        else if (window.location.pathname.toLowerCase().includes("/news/archive")) {
+            btns[0].className = btns[0].className.replace(" active", "");
+            //btns[11].className += " active";
+            $('#navArchive').addClass('active');
+        }
+        else if (window.location.pathname.toLowerCase().includes("/home/strategy")) {
+            btns[0].className = btns[0].className.replace(" active", "");
+            //btns[11].className += " active";
+            $('#navStrategy').addClass('active');
+        }
+    });
+      </script>
+     </div>
+     <li class="nav-item mt-0 mb-0 mr-auto" data-manus_click_id="18" data-manus_clickable="true" style="border:0px solid red;float:left;">
+      <div class="form-group text-center" style="border:0px solid white;height:100%;" title="Request culture provider:">
+       <form action="/main/Home/SetLanguage?returnUrl=%2Fmain%2Feservices%2Fgdt%2Fviolation-enquiry" class="form-horizontal d-flex" id="selectLanguage" method="post" role="form" style="border:0px solid green;height:100%;">
+        <div class="col-12 d-flex">
+         <button class="btn btn-lang align-content-center align-self-center text-center" data-manus_click_id="19" data-manus_clickable="true">
+          English
+         </button>
+         <input name="culture" type="hidden" value="en"/>
+        </div>
+        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8BC0QUj6RopNjXFvakHlMJslu6vsN4ZgYX1cvCftHUInrTzVJ2-vqszSgku6V1gzkQYcLujoRcD5aTX00Igt6TsQpNrcrYrxNLe3wD-JzrOly1LYT-4-_k1ZH-esclHy6lzMG5kn3LZlbGp-wtNqU5E"/>
+       </form>
+      </div>
+     </li>
+    </ul>
+   </div>
+  </div>
+ </nav>
+</header>
+` }} />
+      <div dangerouslySetInnerHTML={{ __html: `<nav class="navbar navbar-expand-lg navbar-dark border-bottom box-shadow">
+ <div class="container">
+  <a class="navbar-brand" href="/main">
+  </a>
+  <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarResponsive" data-toggle="collapse" type="button">
+   <span class="navbar-toggler-icon">
+   </span>
+  </button>
+  <div class="navbar-collapse collapse flex-sm-row-reverse" id="navbarResponsive">
+   <ul class="navbar-nav flex-grow-1 p-0 clearfix" style="margin:0 auto;vertical-align:top;border:0px solid red;">
+    <div class="d-flex flex-sm-row flex-column container-navlinks" style="border:0px solid red;overflow:visible;">
+     <style>
+      .dropdown:hover > .dropdown-menu {
+        display: block;
+        margin-top: 0;
+    }
+     </style>
+     <li class="nav-item" data-manus_click_id="2" data-manus_clickable="true">
+      <a class="nav-link" data-manus_click_id="3" data-manus_clickable="true" href="https://www.moi.gov.kw/main">
+       الرئيسيــة
+       <span class="sr-only">
+        (current)
+       </span>
+      </a>
+     </li>
+     <li class="nav-item active" data-manus_click_id="4" data-manus_clickable="true" data-trigger="focus" id="eservicesMenu">
+      <a aria-controls="eservices" aria-expanded="false" class="nav-link" data-manus_click_id="5" data-manus_clickable="true" data-target="#eservices" data-toggle="collapse" href="#" id="nav-eServices">
+       الخدمات الإلكترونيـة
+      </a>
+      <span class="collapse navbar-submenu" data-parent="#navbarResponsive" id="eservices">
+       <ul class="nav justify-content-center pt-2 pb-2 pl-3 pr-3" style="border:0px solid red;">
+        <li class="nav-item m-0">
+         <a href="https://www.moi.gov.kw/main/eservices">
+          <img alt="Information Systems" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/it-comm/ico-it-communications.svg"/>
+         </a>
+         <a class="nav-link active" href="https://www.moi.gov.kw/main/eservices">
+          <div class="main-menu-text">
+           الإدارة العامة
+           <br/>
+           لنظم المعلومات
           </div>
-        </div>
-      </header>
-
-      {/* MAIN NAVIGATION */}
-      <nav className="navbar navbar-expand-lg navbar-dark p-0 sticky-top">
-        <div className="container">
-          <ul className="navbar-nav w-100 d-flex justify-content-start">
-            <li className="nav-item active"><a className="nav-link" href="#">الرئيسيــة</a></li>
-            <li className="nav-item"><a className="nav-link" href="#">الخدمات الإلكترونيـة</a></li>
-            <li className="nav-item"><a className="nav-link" href="#">إدارات توعوية</a></li>
-            <li className="nav-item"><a className="nav-link" href="#">الإصدارات الإلكترونية</a></li>
-            <li className="nav-item d-none d-md-block"><a className="nav-link" href="#">منصة المواعيد</a></li>
-          </ul>
-        </div>
-      </nav>
-
-      {/* MAIN CONTENT SECTION */}
-      <main className="container my-5">
-        <div className="content-main">
-          <div className="row no-gutters">
-            {/* SIDEBAR (Desktop) */}
-            <div className="col-md-3 side-menu d-none d-md-block">
-              <div className="p-3 text-center border-bottom" style={{ background: 'rgba(255,255,255,0.1)', fontSize: '18px', fontWeight: 'bold' }}>
-                الإدارة العامة للمرور
+         </a>
+        </li>
+        <li class="nav-item">
+         <a href="https://www.moi.gov.kw/gdt">
+          <img alt="Traffic" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-general-traffic.svg"/>
+         </a>
+         <a class="nav-link" href="https://www.moi.gov.kw/gdt">
+          <div class="main-menu-text">
+           الإدارة العامة
+           <br/>
+           للمرور
+          </div>
+         </a>
+        </li>
+        <li class="nav-item">
+         <a href="https://nat.moi.gov.kw/citizenship-passport.nsf/Main?OpenForm&amp;langid=1">
+          <img alt="Citizenship" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/citizenship-passport/ico-citizenship-passport.svg"/>
+         </a>
+         <a class="nav-link" href="https://nat.moi.gov.kw/citizenship-passport.nsf/Main?OpenForm&amp;langid=1">
+          <div class="main-menu-text">
+           الإدارة العامة
+           <br/>
+           للجنسية ووثائق السفر
+          </div>
+         </a>
+        </li>
+        <li class="nav-item">
+         <a href="https://www.moi.gov.kw/main/eservices/residence">
+          <img alt="Immigration" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/residency/ico-residence.svg"/>
+         </a>
+         <a class="nav-link" href="https://www.moi.gov.kw/main/eservices/residence">
+          <div class="main-menu-text">
+           الإدارة العامة
+           <br/>
+           لشؤون  الإقامة
+          </div>
+         </a>
+        </li>
+        <li class="nav-item">
+         <a href="https://www.moi.gov.kw/main/eservices/civildefence">
+          <img alt="Civil Defence" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/civil-defence/ico-civil-defence.svg"/>
+         </a>
+         <a class="nav-link" href="https://www.moi.gov.kw/main/eservices/civildefence">
+          <div class="main-menu-text">
+           الإدارة العامة
+           <br/>
+           للدفاع المدني
+          </div>
+         </a>
+        </li>
+        <li class="nav-item">
+         <a href="https://www.moi.gov.kw/main/eservices/servicecentres">
+          <img alt="Service Centres" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/service-centres/ico-service-centre.svg"/>
+         </a>
+         <a class="nav-link" href="https://www.moi.gov.kw/main/eservices/servicecentres">
+          <div class="main-menu-text">
+           الإدارة العامة
+           <br/>
+           لمراكز الخدمة
+          </div>
+         </a>
+        </li>
+        <li class="nav-item">
+         <a href="https://nat5.moi.gov.kw/Coast-Guard.nsf/Main?openform&amp;langid=1">
+          <img alt="Coast Guard" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/coast-guard/ico-coast-guard.svg"/>
+         </a>
+         <a class="nav-link" href="https://nat5.moi.gov.kw/Coast-Guard.nsf/Main?openform&amp;langid=1">
+          <div class="main-menu-text">
+           الإدارة العامة
+           <br/>
+           لخفر السواحل
+          </div>
+         </a>
+        </li>
+        <li class="nav-item">
+         <a href="https://rnt.moi.gov.kw/pas/">
+          <img alt="Police Affairs" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/ico-shoon-quwa.svg"/>
+         </a>
+         <a class="nav-link" href="https://rnt.moi.gov.kw/pas/">
+          <div class="main-menu-text">
+           الإدارة العامة
+           <br/>
+           لشؤون قوة الشرطة
+          </div>
+         </a>
+        </li>
+        <li class="nav-item">
+         <a href="https://nat4.moi.gov.kw/saad-abdullah-academy.nsf">
+          <img alt="Saad Abdullah Police Academy" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/academy/ico-police-academy.svg"/>
+         </a>
+         <a class="nav-link" href="https://nat4.moi.gov.kw/saad-abdullah-academy.nsf">
+          <div class="main-menu-text">
+           أكاديمية سعد العبدالله
+           <br/>
+           للعلوم الأمنية
+          </div>
+         </a>
+        </li>
+        <li class="nav-item">
+         <a href="https://www.moi.gov.kw/main/eservices/finance">
+          <img alt="Finance" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/finance/ico-finance.svg"/>
+         </a>
+         <a class="nav-link" href="https://www.moi.gov.kw/main/eservices/finance">
+          <div class="main-menu-text">
+           الإدارة العامة
+           <br/>
+           للشؤن المالية
+          </div>
+         </a>
+        </li>
+        <li class="nav-item">
+         <a href="https://eservices5.moi.gov.kw/Investigations.nsf">
+          <img alt="Investigations" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/investigations/ico-investigations.svg"/>
+         </a>
+         <a class="nav-link" href="https://eservices5.moi.gov.kw/Investigations.nsf">
+          <div class="main-menu-text">
+           الإدارة العامة
+           <br/>
+           للتحقيقات
+          </div>
+         </a>
+        </li>
+        <li class="nav-item m-0">
+         <a href="https://www.moi.gov.kw/main/sections/training">
+          <img alt="Training" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/training/ico-training.svg"/>
+         </a>
+         <a class="nav-link" href="https://www.moi.gov.kw/main/sections/training">
+          <div class="main-menu-text">
+           الإدارة العامة
+           <br/>
+           للتدريب
+          </div>
+         </a>
+        </li>
+        <li class="nav-item m-0">
+         <a href="https://www.moi.gov.kw/main/sections/human-resources">
+          <img alt="Administrative Affairs Dept." class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/human-resources/ico-hr.svg"/>
+         </a>
+         <a class="nav-link" href="https://www.moi.gov.kw/main/sections/human-resources">
+          <div class="main-menu-text">
+           الإدارة العامة
+           <br/>
+           للشئون الإدارية
+          </div>
+         </a>
+        </li>
+       </ul>
+      </span>
+     </li>
+     <li class="nav-item" data-manus_click_id="6" data-manus_clickable="true" id="relatedDepartmentsMenu">
+      <a aria-controls="relatedDepts" aria-expanded="false" class="nav-link" data-manus_click_id="7" data-manus_clickable="true" data-target="#relatedDepts" data-toggle="collapse" href="#" id="nav-relDepts">
+       إدارات توعوية
+      </a>
+      <span class="collapse navbar-submenu" data-parent="#navbarResponsive" id="relatedDepts">
+       <ul class="nav justify-content-center pt-2 pb-2 pl-3 pr-3" style="border:0px solid red;">
+        <li class="nav-item m-0">
+         <a href="https://www.moi.gov.kw/main/sections/cyber-crime">
+          <img alt="Cyber Crime" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/cyber-crime/ico-cyber-crime.svg"/>
+         </a>
+         <a class="nav-link" href="https://www.moi.gov.kw/main/sections/cyber-crime">
+          <div class="main-menu-text">
+           إدارة مكافحة
+           <br/>
+           الجرائم الإلكترونية
+          </div>
+         </a>
+        </li>
+        <li class="nav-item m-0">
+         <a href="https://www.moi.gov.kw/main/sections/juvenile-protection">
+          <img alt="Juvenile Protection" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/juvenile-protection/ico-juvenile-protection.svg"/>
+         </a>
+         <a class="nav-link" href="https://www.moi.gov.kw/main/sections/juvenile-protection">
+          <div class="main-menu-text">
+           إدارة حماية الأحداث
+          </div>
+         </a>
+        </li>
+        <li class="nav-item m-0">
+         <a href="https://www.moi.gov.kw/main/sections/anti-drug">
+          <img alt="Anti Drug" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/anti-drug/ico-anti-drug.svg"/>
+         </a>
+         <a class="nav-link" href="https://www.moi.gov.kw/main/sections/anti-drug">
+          <div class="main-menu-text">
+           الإدارة العامة
+           <br/>
+           لمكافحة المخدرات
+          </div>
+         </a>
+        </li>
+        <li class="nav-item m-0">
+         <a href="https://www.moi.gov.kw/main/sections/anti-human-trafficking">
+          <img alt="Anti Human Trafficking" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/cyber-crime/ico-cyber-crime.svg"/>
+         </a>
+         <a class="nav-link" href="https://www.moi.gov.kw/main/sections/anti-human-trafficking">
+          <div class="main-menu-text">
+           إدارة حماية الآداب العامة
+           <br/>
+           ومكافحة الإتجار بالأشخاص
+          </div>
+         </a>
+        </li>
+        <li class="nav-item m-0">
+         <a href="https://www.moi.gov.kw/main/sections/security-media">
+          <img alt="Security Media Dept" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/security-media/ico-security-media.svg"/>
+         </a>
+         <a class="nav-link" href="https://www.moi.gov.kw/main/sections/security-media">
+          <div class="main-menu-text">
+           الإدارة العامة
+           <br/>
+           للعلاقات والإعلام الأمني
+          </div>
+         </a>
+        </li>
+        <li class="nav-item m-0">
+         <a href="https://eservices2.moi.gov.kw/Correctional-Facilities.nsf/Main?OpenForm&amp;LangID=1">
+          <img alt="Correctional Facilities" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/correctional-facilities/icon-correctional-facilities.svg"/>
+         </a>
+         <a class="nav-link" href="https://eservices2.moi.gov.kw/Correctional-Facilities.nsf/Main?OpenForm&amp;LangID=1">
+          <div class="main-menu-text">
+           الإداره العامة
+           <br/>
+           للمؤسسات الإصلاحية
+          </div>
+         </a>
+        </li>
+        <li class="nav-item m-0">
+         <a href="https://www.moi.gov.kw/main/sections/security-systems">
+          <img alt="Security Systems" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/security-systems/ico-security-systems.svg"/>
+         </a>
+         <a class="nav-link" href="https://www.moi.gov.kw/main/sections/security-systems">
+          <div class="main-menu-text">
+           الادارة العامة
+           <br/>
+           للأنظمة الأمنية
+          </div>
+         </a>
+        </li>
+        <li class="nav-item m-0 d-none1">
+         <a href="https://www.moi.gov.kw/main/sections/national-security">
+          <img alt="Training" class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/national-security/ico-nat-security.svg"/>
+         </a>
+         <a class="nav-link" href="https://www.moi.gov.kw/main/sections/national-security">
+          <div class="main-menu-text">
+           كلية الأمن الوطني
+          </div>
+         </a>
+        </li>
+        <li class="nav-item m-0">
+         <a href="https://nat2.moi.gov.kw/GDSRC.nsf">
+          <img alt="Administrative Affairs Dept." class="menu-icon" src="https://www.moi.gov.kw/main/images/assets/research-studies/ico-research.svg"/>
+         </a>
+         <a class="nav-link" href="https://nat2.moi.gov.kw/GDSRC.nsf">
+          <div class="main-menu-text">
+           الإدارة العامة
+           <br/>
+           لمركز البحوث والدراسات
+          </div>
+         </a>
+        </li>
+       </ul>
+      </span>
+     </li>
+     <li class="nav-item" data-manus_click_id="8" data-manus_clickable="true">
+      <div class="dropdown">
+       <a aria-expanded="false" class="nav-link" data-manus_click_id="9" data-manus_clickable="true" data-toggle="collapse" href="#">
+        الإصدارات الإلكترونية
+       </a>
+       <div class="dropdown-menu text-right" style="background: #e9e6de;padding:0px;">
+        <a class="dropdown-item" href="https://www.moi.gov.kw/main/emagazine">
+         المجلة الإلكترونية
+        </a>
+        <a class="dropdown-item" href="https://www.moi.gov.kw/main/news/archive">
+         أرشيـف الأخبار
+        </a>
+       </div>
+      </div>
+     </li>
+     <li class="nav-item" data-manus_click_id="10" data-manus_clickable="true">
+      <a class="nav-link" data-manus_click_id="11" data-manus_clickable="true" href="https://eservices.moi.gov.kw:45314/verify/qrcode">
+       التحقق من الوثائق
+      </a>
+     </li>
+     <li class="nav-item" data-manus_click_id="12" data-manus_clickable="true">
+      <a class="nav-link" data-manus_click_id="13" data-manus_clickable="true" href="https://eservices1.moi.gov.kw/moicus.nsf/moicus?openform&amp;LangID=1">
+       يهمنا رايك
+      </a>
+     </li>
+     <li class="nav-item" data-manus_click_id="14" data-manus_clickable="true" id="navEmergency">
+      <a class="nav-link" data-manus_click_id="15" data-manus_clickable="true" data-target="#emergencyContactModal" data-toggle="modal" href="#">
+       أرقام الطوارئ
+      </a>
+     </li>
+     <li class="nav-item" data-manus_click_id="16" data-manus_clickable="true" id="navMeta">
+      <div class="dropdown">
+       <a aria-expanded="false" class="nav-link" data-manus_click_id="17" data-manus_clickable="true" data-toggle="collapse" href="#">
+        منصة المواعيد
+       </a>
+       <div class="dropdown-menu text-right" style="background: #e9e6de;padding:0px;">
+        <a class="dropdown-item" href="https://meta.e.gov.kw/">
+         منصة 'متى'
+        </a>
+        <a class="dropdown-item" href="https://nat2.moi.gov.kw/MOIBioEnrol.nsf/initRequest?OpenForm&amp;LangID=1">
+         حجز موعد البصمة البيومترية للخليجيين
+        </a>
+        <a class="dropdown-item" href="https://nat1.moi.gov.kw/MOIeTPAp.nsf/Request?OpenForm&amp;LangID=1">
+         حجز مواعيد جوازات السفر المؤقتة والوثائق
+        </a>
+       </div>
+      </div>
+     </li>
+     <script>
+      $(document).ready(function () {
+        // Add active class to the current button (highlight it)
+        var header = document.getElementById("navbarResponsive");
+        var btns = header.getElementsByClassName("nav-item");
+        console.log(btns);
+        for (var i = 0; i < btns.length; i++) {
+            btns[i].addEventListener("click", function () {
+                var current = document.getElementsByClassName("nav-item active");
+                if (current.length > 0) {
+                    current[0].className = current[0].className.replace(" active", "");
+                }
+                this.className += " active";
+            });
+        }
+        if (window.location.pathname.toLowerCase().includes("/eservices")) {
+            btns[0].className = btns[0].className.replace(" active", "");
+            btns[1].className += " active";
+        }
+        else if (window.location.pathname.toLowerCase().includes("/sections")) {
+            btns[0].className = btns[0].className.replace(" active", "");
+            $('#relatedDepartmentsMenu').addClass('active');
+        }
+        else if (window.location.pathname.toLowerCase().includes("/emagazine")) {
+            btns[0].className = btns[0].className.replace(" active", "");
+            //btns[10].className += " active";
+            $('#navEMag').addClass('active');
+            //console.log(btns[10]);
+        }
+        else if (window.location.pathname.toLowerCase().includes("/news/archive")) {
+            btns[0].className = btns[0].className.replace(" active", "");
+            //btns[11].className += " active";
+            $('#navArchive').addClass('active');
+        }
+        else if (window.location.pathname.toLowerCase().includes("/home/strategy")) {
+            btns[0].className = btns[0].className.replace(" active", "");
+            //btns[11].className += " active";
+            $('#navStrategy').addClass('active');
+        }
+    });
+     </script>
+    </div>
+    <li class="nav-item mt-0 mb-0 mr-auto" data-manus_click_id="18" data-manus_clickable="true" style="border:0px solid red;float:left;">
+     <div class="form-group text-center" style="border:0px solid white;height:100%;" title="Request culture provider:">
+      <form action="/main/Home/SetLanguage?returnUrl=%2Fmain%2Feservices%2Fgdt%2Fviolation-enquiry" class="form-horizontal d-flex" id="selectLanguage" method="post" role="form" style="border:0px solid green;height:100%;">
+       <div class="col-12 d-flex">
+        <button class="btn btn-lang align-content-center align-self-center text-center" data-manus_click_id="19" data-manus_clickable="true">
+         English
+        </button>
+        <input name="culture" type="hidden" value="en"/>
+       </div>
+       <input name="__RequestVerificationToken" type="hidden" value="CfDJ8BC0QUj6RopNjXFvakHlMJslu6vsN4ZgYX1cvCftHUInrTzVJ2-vqszSgku6V1gzkQYcLujoRcD5aTX00Igt6TsQpNrcrYrxNLe3wD-JzrOly1LYT-4-_k1ZH-esclHy6lzMG5kn3LZlbGp-wtNqU5E"/>
+      </form>
+     </div>
+    </li>
+   </ul>
+  </div>
+ </div>
+</nav>
+` }} />
+      
+      <main className="pb-3" role="main">
+        <div className="row p-0 m-0 content">
+          <div className="col">
+            <div className="row text-justify">
+              <div className="col-sm-4 title">
+                <a href="https://www.moi.gov.kw/main/eservices/gdt">
+                  <img className="intro-logo m-1" src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" alt="GDT" />
+                  الإدارة العامة للمرور
+                </a>
               </div>
-              <a href="#" className="side-menu-item"><img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-renew-license.svg" alt="icon" /><span>رخص السوق</span></a>
-              <a href="#" className="side-menu-item active"><img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" alt="icon" /><span>دفع المخالفات</span></a>
-              <a href="#" className="side-menu-item"><img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-booking.svg" alt="icon" /><span>مواعيد الاختبار</span></a>
-              <a href="#" className="side-menu-item"><img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-procedures.svg" alt="icon" /><span>معاملات المرور</span></a>
-              <a href="#" className="side-menu-item"><img src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-locations-sections.svg" alt="icon" /><span>مواقع الإدارة</span></a>
-              <a href="#" className="side-menu-item"><img src="https://www.moi.gov.kw/main/images/assets/common/ico-pdf-doc.svg" alt="icon" /><span>شروط الرخص</span></a>
             </div>
-
-            {/* ENQUIRY FORM AREA */}
-            <div className="col-md-9 p-4 p-lg-5 text-right">
-              <div className="text-center mb-5">
-                <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" style={{ height: '120px' }} alt="GDT" />
-                <h2 className="moi-section-title mt-3">الإدارة العامة للمرور</h2>
+            
+            <div className="row text-center">
+              <div className="col-sm-12 col-md-4 col-lg-4 side-menu text-right">
+                <div className="row mt-2">
+                  <div className="col-2 mr-1 ml-1">
+                    <img className="side-menu-icon" src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-renew-license.svg" alt="" />
+                  </div>
+                  <div className="col-8 align-self-center">
+                    <a href="#">الخدمات الالكترونية لرخص السوق</a>
+                  </div>
+                </div>
+                <div className="row mt-2">
+                  <div className="col-2 mr-1 ml-1">
+                    <img className="side-menu-icon" src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" alt="" />
+                  </div>
+                  <div className="col-8 align-self-center">
+                    <a href="#" className="active">دفع المخالفات</a>
+                  </div>
+                </div>
+                <div className="row mt-2">
+                  <div className="col-2 mr-1 ml-1">
+                    <img className="side-menu-icon" src="https://www.moi.gov.kw/main/images/assets/general-traffic/ico-booking.svg" alt="" />
+                  </div>
+                  <div className="col-8 align-self-center">
+                    <a href="#">نظام مواعيد اختبار القيادة</a>
+                  </div>
+                </div>
               </div>
 
-              <form onSubmit={handleInquire}>
+              <div className="col-sm-12 col-md-8 col-lg-8" id="GDTContent">
                 <div className="row">
-                  <div className="col-md-6 mb-3">
-                    <label className="form-label">Enquiry Type</label>
-                    <select className="form-control form-control-lg" value={enquiryType} onChange={(e) => setEnquiryType(e.target.value)}>
-                      <option value="1">الأفراد</option>
-                      <option value="2">الشركات</option>
-                    </select>
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <label className="form-label">الرقم المدني أو الرقم الموحد</label>
-                    <input 
-                      type="text" 
-                      className="form-control form-control-lg" 
-                      placeholder="أدخل 12 رقم" 
-                      value={civilId} 
-                      onChange={(e) => setCivilId(e.target.value)} 
-                      maxLength={12} 
-                    />
+                  <div className="col-12 text-center">
+                    <div className="title" style={{color: '#000576', fontWeight: 'bold', fontSize: '24px'}}>الإدارة العامة للمرور</div>
+                    <div><img src="https://www.moi.gov.kw/main/images/assets/common/ico-horizontal-bar.svg" alt="" /></div>
                   </div>
                 </div>
-                <div className="row mt-3">
-                  <div className="col-md-4">
-                    <button type="submit" className="btn btn-moi-primary btn-block btn-lg shadow-sm" disabled={isSearching}>
-                      {isSearching ? 'جاري الاستعلام...' : 'إستعلم'}
-                    </button>
-                  </div>
-                </div>
-              </form>
 
-              {/* RESULTS AREA */}
-              <div id="responseInfo" className="mt-5">
-                {results && (
-                  <div className="results-container">
-                    <div className="alert alert-info d-flex justify-content-between align-items-center mb-4 p-3 shadow-sm border-0" style={{ background: '#000576', color: '#fff' }}>
-                      <h5 className="m-0 font-weight-bold">نتائج الاستعلام</h5>
-                      <div className="text-left">
-                        <span className="badge badge-light p-2 ml-2">المخالفات: {results.fines.length}</span>
-                        <span className="badge badge-warning p-2">الإجمالي: {results.totalAmount} د.ك</span>
-                      </div>
-                    </div>
-
-                    {results.fines.length === 0 ? (
-                      <div className="text-center py-5 border rounded bg-light">
-                        <i className="fas fa-check-circle fa-4x text-success mb-3"></i>
-                        <h4>لا توجد مخالفات مرورية مسجلة</h4>
-                        <p className="text-muted">لم يتم العثور على أي مخالفات مرتبطة بالرقم المدني المدخل.</p>
-                      </div>
-                    ) : (
-                      <>
-                        {results.fines.map((fine: any, index: number) => (
-                          <div key={index} className="ticket-card shadow-sm">
-                            <div className="ticket-header" onClick={() => toggleTicket(fine.ticketNo)}>
-                              <div className="d-flex align-items-center">
-                                <div className={`badge ${fine.payableOnline === 'Y' ? 'badge-payable' : 'badge-unpayable'} p-2 ml-3`}>
-                                  {fine.payableOnline === 'Y' ? 'قابلة للدفع' : 'غير قابلة للدفع'}
-                                </div>
-                                <div className="text-right">
-                                  <div className="font-weight-bold" style={{ color: '#000576' }}>رقم المخالفة: {fine.ticketNo}</div>
-                                  <small className="text-muted">{fine.fineDate} | {fine.amount} د.ك</small>
-                                </div>
-                              </div>
-                              <i className={`fas ${expandedTickets.has(fine.ticketNo) ? 'fa-chevron-up' : 'fa-chevron-down'} text-muted`}></i>
-                            </div>
-                            {expandedTickets.has(fine.ticketNo) && (
-                              <div className="ticket-details animate__animated animate__fadeIn">
-                                <div className="row">
-                                  <div className="col-md-6 mb-2"><strong>الموقع:</strong> {fine.location || 'غير محدد'}</div>
-                                  <div className="col-md-6 mb-2"><strong>التاريخ والوقت:</strong> {fine.dateTime}</div>
-                                  <div className="col-12 mb-2"><strong>الوصف:</strong> {fine.description || fine.violationType}</div>
-                                  {fine.plateNumber && <div className="col-md-6"><strong>رقم اللوحة:</strong> {fine.plateNumber} {fine.plateCode}</div>}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                        <div className="mt-4">
-                          <button className="btn btn-success btn-block btn-lg py-3 font-weight-bold shadow" onClick={handlePay}>
-                            <i className="fas fa-credit-card ml-2"></i> الانتقال لعملية الدفع الآمن
-                          </button>
-                          <p className="text-center text-muted small mt-2">بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة</p>
+                <div className="row mt-2 pl-4 pr-4 pb-5 text-justify">
+                  <div className="col-12">
+                    <form onSubmit={handleInquire} id="enquireForm">
+                      <div className="form-row">
+                        <div className="col-sm-12 col-md-6">
+                          <label style={{color: '#000576', fontWeight: 'bold'}}>Enquiry Type</label>
+                          <select className="form-control" value={enquiryType} onChange={(e) => setEnquiryType(e.target.value)}>
+                            <option value="1">الأفراد</option>
+                            <option value="2">الشركات</option>
+                          </select>
                         </div>
-                      </>
-                    )}
+                      </div>
+                      <div className="form-row mt-2">
+                        <div className="col-sm-12 col-md-6">
+                          <label style={{color: '#000576', fontWeight: 'bold'}}>الرقم المدني أو الرقم الموحد</label>
+                          <input 
+                            className="form-control" 
+                            value={civilId} 
+                            onChange={(e) => setCivilId(e.target.value)} 
+                            maxLength={12} 
+                            placeholder="أدخل الرقم المدني"
+                          />
+                        </div>
+                      </div>
+                      <div className="form-row mt-2">
+                        <div className="col-sm-12 col-md-4">
+                          <button type="submit" className="btn btn-primary btn-block" disabled={isSearching} style={{backgroundColor: '#000576', border: 'none'}}>
+                            {isSearching ? 'جاري الاستعلام...' : 'إستعلم'}
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div id="responseInfo" className="mt-4">
+                        {results && (
+                          <div className="results-box text-right">
+                            <div className="alert alert-info d-flex justify-content-between align-items-center" style={{backgroundColor: '#000576', color: 'white', border: 'none'}}>
+                              <span>إجمالي المخالفات: {results.fines.length}</span>
+                              <span>المبلغ الإجمالي: {results.totalAmount} د.ك</span>
+                            </div>
+                            {results.fines.map((fine: any, idx: number) => (
+                              <div key={idx} className="card mb-2">
+                                <div className="card-header d-flex justify-content-between align-items-center" onClick={() => toggleTicket(fine.ticketNo)} style={{cursor: 'pointer'}}>
+                                  <span>رقم المخالفة: {fine.ticketNo}</span>
+                                  <i className={`fas ${expandedTickets.has(fine.ticketNo) ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
+                                </div>
+                                {expandedTickets.has(fine.ticketNo) && (
+                                  <div className="card-body">
+                                    <p>التاريخ: {fine.fineDate}</p>
+                                    <p>المبلغ: {fine.amount} د.ك</p>
+                                    <p>الموقع: {fine.location}</p>
+                                    <p>الحالة: {fine.payableOnline === 'Y' ? 'قابلة للدفع' : 'غير قابلة للدفع'}</p>
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                            <button className="btn btn-success btn-block py-3 mt-3 font-weight-bold" onClick={handlePay}>دفع المخالفات</button>
+                          </div>
+                        )}
+                      </div>
+                    </form>
                   </div>
-                )}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </main>
 
-      {/* LOWER SECTIONS - EXACT REPLICATION */}
+      <div className="lower-sections">
+        <div dangerouslySetInnerHTML={{ __html: `
+` }} />
+      </div>
+
+      <div dangerouslySetInnerHTML={{ __html: `<footer class="container border-top footer text-muted mt-2 p-0">
+ <div class="col-sm-12 text-center text-white mt-2">
+  <div class="row">
+   <div class="col-sm-12">
+    <a data-manus_click_id="49" data-manus_clickable="true" href="https://www.youtube.com/user/SecurityMediaQ8">
+     <img class="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg"/>
+    </a>
+    <a data-manus_click_id="50" data-manus_clickable="true" href="https://www.instagram.com/moi_kuw/?hl=en">
+     <img class="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg"/>
+    </a>
+    <a data-manus_click_id="51" data-manus_clickable="true" href="https://twitter.com/moi_kuw?lang=en">
+     <img class="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg"/>
+    </a>
+    <a data-manus_click_id="52" data-manus_clickable="true" href="https://www.facebook.com/MOIKuwait/">
+     <img class="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg"/>
+    </a>
+    <a data-manus_click_id="53" data-manus_clickable="true" href="https://play.google.com/store/apps/details?id=com.MoIKuwait">
+     <img class="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg"/>
+    </a>
+    <a data-manus_click_id="54" data-manus_clickable="true" href="https://itunes.apple.com/kw/app/moi-kuwait/id871764188?mt=8">
+     <img class="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg"/>
+    </a>
+   </div>
+  </div>
+  <div class="row">
+   <div class="col-sm-12" id="copyRight">
+    © جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026
+   </div>
+  </div>
+  <div class="row">
+   <div class="col-sm-12">
+    <!--For inquiries - 25581755-->
+   </div>
+  </div>
+ </div>
+ <script>
+  $(document).ready(function() {
+    $('#copyRight').html(getFooterText());
+});
+ </script>
+</footer>
+` }} />
       
-      {/* 1. PAYMENT SECTION */}
-      <section className="lower-section">
-        <div className="container">
-          <div className="circle-icon-box">
-            <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" alt="Payment" />
-          </div>
-          <h3 className="text-white font-weight-bold">دفع المخالفات والغرامات</h3>
-        </div>
-      </section>
-      <section className="white-box">
-        <div className="container" style={{ maxWidth: '600px' }}>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <select className="form-control form-control-lg"><option>المرور</option><option>الإقامة</option></select>
-            </div>
-            <div className="col-md-6 mb-3">
-              <input type="text" className="form-control form-control-lg" placeholder="الرقم المدني" />
-            </div>
-            <div className="col-12">
-              <button className="btn btn-moi-primary btn-block btn-lg">دفع</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 2. REF NUMBER SECTION */}
-      <section className="lower-section" style={{ marginTop: '2px' }}>
-        <div className="container">
-          <div className="circle-icon-box">
-            <img src="https://www.moi.gov.kw/main/images/assets/common/ico-get-ref-num.svg" alt="Ref Number" />
-          </div>
-          <h3 className="text-white font-weight-bold">الإستعلام عن رقم مرجع الداخلية</h3>
-        </div>
-      </section>
-      <section className="white-box">
-        <div className="container" style={{ maxWidth: '600px' }}>
-          <input type="text" className="form-control form-control-lg mb-3" placeholder="الرقم المدني" />
-          <div className="row">
-            <div className="col-6"><button className="btn btn-outline-primary btn-block py-3 font-weight-bold" style={{borderColor:'#000576', color:'#000576'}}>للكويتيين</button></div>
-            <div className="col-6"><button className="btn btn-outline-primary btn-block py-3 font-weight-bold" style={{borderColor:'#000576', color:'#000576'}}>للمقيمين</button></div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. CASE TRACK SECTION */}
-      <section className="lower-section" style={{ marginTop: '2px' }}>
-        <div className="container">
-          <div className="circle-icon-box">
-            <img src="https://www.moi.gov.kw/main/images/assets/common/ico-case-track.svg" alt="Case Track" />
-          </div>
-          <h3 className="text-white font-weight-bold">الاستعلام عن سير القضية</h3>
-        </div>
-      </section>
-      <section className="white-box">
-        <div className="container" style={{ maxWidth: '600px' }}>
-          <input type="text" className="form-control form-control-lg mb-3" placeholder="رقم مرجع الداخلية" />
-          <button className="btn btn-moi-primary btn-block btn-lg">استعلم</button>
-        </div>
-      </section>
-
-      {/* 4. NEW SERVICES SECTION */}
-      <section className="lower-section" style={{ marginTop: '2px' }}>
-        <div className="container">
-          <div className="circle-icon-box">
-            <img src="https://www.moi.gov.kw/main/images/assets/common/ico-new-services.svg" alt="New Services" />
-          </div>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="footer">
-        <div className="container">
-          <div className="social-links mb-4">
-            <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" className="social-icon" alt="Youtube" /></a>
-            <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" className="social-icon" alt="Instagram" /></a>
-            <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" className="social-icon" alt="Twitter" /></a>
-            <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" className="social-icon" alt="Facebook" /></a>
-          </div>
-          <div className="app-links mb-4">
-            <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg" className="app-icon" alt="App Store" /></a>
-            <a href="#"><img src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg" className="app-icon" alt="Play Store" /></a>
-          </div>
-          <div className="copyright pt-3 border-top" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
-            © جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026
-          </div>
-        </div>
-      </footer>
-
-      {/* Loading Overlay */}
       {isSearching && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', zIndex: 10000, color: '#fff' }}>
           <div className="spinner-border mb-3" role="status" style={{ width: '3rem', height: '3rem' }}></div>

@@ -44,77 +44,20 @@
 
 :root {
   --radius: 0.5rem;
-  --background: #eceae4;
+  --background: #ffffff;
   --foreground: #333333;
-  --card: #ffffff;
-  --card-foreground: #333333;
-  --popover: #ffffff;
-  --popover-foreground: #333333;
   --primary: #000576;
   --primary-foreground: #ffffff;
-  --secondary: #e9e6de;
-  --secondary-foreground: #374151;
-  --muted: #f3f4f6;
-  --muted-foreground: #6b7280;
-  --accent: #cc0000;
-  --accent-foreground: #ffffff;
-  --destructive: #cc0000;
-  --destructive-foreground: #ffffff;
-  --border: #d1d5db;
-  --input: #ffffff;
-  --ring: #000576;
-  --chart-1: #000576;
-  --chart-2: #cc0000;
-  --chart-3: #f59e0b;
-  --chart-4: #10b981;
-  --chart-5: #6366f1;
-  --sidebar: #000576;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #000576;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #001a80;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #000576;
-  --sidebar-ring: #ffffff;
 }
 
-/*
- * CRITICAL FIX: Allow scrolling and full content visibility
- */
-html {
+/* Remove all global layout overrides to let MOI styles take over */
+html, body, #root {
+  margin: 0;
+  padding: 0;
   height: auto !important;
   min-height: 100% !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
 }
 
 body {
   direction: rtl;
-  font-family: 'Droid Arabic Kufi Regular', 'Cairo', 'Segoe UI', Tahoma, sans-serif;
-  font-size: 14px;
-  margin: 0;
-  padding: 0;
-  background-color: #eceae4;
-  background-image: url('https://www.moi.gov.kw/main/images/assets/common/bg-pattern.png');
-  background-size: 77px 200px;
-  background-repeat: repeat;
-  min-height: 100vh !important;
-  height: auto !important;
-  color: #333;
-  overflow-y: visible !important;
-  display: block !important;
-}
-
-#root {
-  height: auto !important;
-  min-height: 100vh !important;
-  display: block !important;
-  overflow-y: visible !important;
-}
-
-.moi-theme-wrapper {
-  width: 100%;
-  height: auto !important;
-  min-height: 100vh !important;
-  display: block !important;
 }
