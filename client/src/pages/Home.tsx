@@ -38,7 +38,7 @@ export default function Home() {
 
   const queryMutation = trpc.fines.query.useMutation();
 
-  // Load FontAwesome for icons
+  // Load FontAwesome
   useEffect(() => {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -148,31 +148,30 @@ export default function Home() {
         civilId: (civilId || '').padStart(12, '0'),
       })
     );
-    // Use the absolute URL if needed, but local path is better for routing
     setLocation('/payment');
   };
 
   const hasSelected = selectedTickets.size > 0;
 
   return (
-    <div className="bg-[#f2f2f2] min-h-screen text-right font-sans" dir="rtl">
+    <div className="bg-[#f2f2f2] min-h-screen text-right font-sans" dir="rtl" style={{ fontFamily: 'Arial, sans-serif' }}>
       {/* Header */}
-      <div className="bg-white border-b p-4 flex justify-between items-center">
-        <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" alt="MOI" className="h-12" />
-        <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" alt="Traffic" className="h-10" />
+      <div className="bg-white border-b p-3 flex justify-between items-center shadow-sm">
+        <img src="https://www.moi.gov.kw/main/images/assets/common/logo-moi.svg" alt="MOI" className="h-10 md:h-12" />
+        <img src="https://www.moi.gov.kw/main/images/assets/general-traffic/logo-general-traffic.svg" alt="Traffic" className="h-8 md:h-10" />
       </div>
 
-      <div className="container max-w-2xl mx-auto p-4">
-        {/* Inquiry Form */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <h2 className="text-[#003366] text-xl font-bold text-center mb-6">الاستعلام عن المخالفات</h2>
+      <div className="container max-w-xl mx-auto p-4">
+        {/* Inquiry Card */}
+        <div className="bg-white rounded-lg shadow-sm p-5 mb-6 border-t-4 border-[#003366]">
+          <h2 className="text-[#003366] text-lg font-bold text-center mb-5">الاستعلام عن المخالفات</h2>
           <div className="space-y-4">
-            <div className="flex justify-center gap-6">
+            <div className="flex justify-center gap-6 text-sm">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="radio" checked={enquiryType === '1'} onChange={() => setEnquiryType('1')} /> الأفراد
+                <input type="radio" checked={enquiryType === '1'} onChange={() => setEnquiryType('1')} className="w-4 h-4" /> الأفراد
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="radio" checked={enquiryType === '2'} onChange={() => setEnquiryType('2')} /> الشركات
+                <input type="radio" checked={enquiryType === '2'} onChange={() => setEnquiryType('2')} className="w-4 h-4" /> الشركات
               </label>
             </div>
             <input
@@ -180,12 +179,12 @@ export default function Home() {
               value={civilId}
               onChange={(e) => setCivilId(e.target.value)}
               placeholder="الرقم المدني"
-              className="w-full p-3 border rounded text-center text-lg outline-none focus:border-[#003366]"
+              className="w-full p-3 border rounded text-center text-lg outline-none focus:border-[#003366] bg-gray-50"
             />
             <button
               onClick={handleInquire}
               disabled={loading}
-              className="w-full bg-[#003366] text-white py-3 rounded font-bold text-lg hover:bg-[#002244]"
+              className="w-full bg-[#003366] text-white py-3 rounded font-bold text-lg hover:bg-[#002244] transition-all"
             >
               {loading ? 'جاري الاستعلام...' : 'إستعلم'}
             </button>
@@ -194,77 +193,76 @@ export default function Home() {
 
         {/* Results */}
         {parsedData && parsedData.success && (
-          <div className="space-y-4 pb-24">
+          <div className="space-y-4">
             {parsedData.fines.length === 0 ? (
-              <div className="bg-white p-6 rounded-lg text-center text-green-600 font-bold">
-                لا توجد مخالفات مسجلة.
+              <div className="bg-white p-6 rounded-lg text-center text-green-600 font-bold border border-green-100">
+                لا توجد مخالفات مسجلة على هذا الرقم.
               </div>
             ) : (
               <>
                 {parsedData.fines.map((fine) => (
-                  <div key={fine.ticketNo} className="bg-white rounded-lg shadow-md overflow-hidden border-t-4 border-[#28a745]">
+                  <div key={fine.ticketNo} className="bg-white rounded-lg shadow-sm overflow-hidden border-t-4 border-[#28a745]">
                     <div className="p-4">
-                      {/* Row 1: Checkbox + Ticket Number */}
-                      <div className="flex items-center gap-3 mb-3">
+                      {/* Top Section: Checkbox + Ticket No */}
+                      <div className="flex items-center gap-3 mb-4">
                         <input
                           type="checkbox"
                           checked={selectedTickets.has(fine.ticketNo)}
                           onChange={(e) => handleCheckboxChange(fine.ticketNo, e.target.checked)}
                           disabled={fine.payableOnline === 'N'}
-                          className="w-6 h-6 cursor-pointer"
+                          className="w-6 h-6 cursor-pointer accent-[#003366]"
                         />
-                        <div className="flex-1">
-                          <span className="text-gray-500 text-sm ml-2">رقم المخالفة:</span>
+                        <div className="flex flex-col">
+                          <span className="text-gray-400 text-[10px] mb-[-4px]">رقم المخالفة</span>
                           <span className="font-bold text-lg text-[#003366]">{fine.ticketNo}</span>
                         </div>
                       </div>
 
-                      {/* Row 2: Amount + Plate Number */}
-                      <div className="grid grid-cols-2 gap-2 mb-2 text-sm border-t pt-2">
-                        <div>
-                          <span className="text-gray-500 ml-1">القيمة:</span>
-                          <span className="font-bold text-green-600">{fine.amount} د.ك</span>
+                      {/* Middle Section: Amount + Plate */}
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div className="bg-gray-50 p-2 rounded">
+                          <div className="text-gray-400 text-[10px] mb-1">القيمة</div>
+                          <div className="font-bold text-green-600 text-lg">{fine.amount} د.ك</div>
                         </div>
-                        <div>
-                          <span className="text-gray-500 ml-1">اللوحة:</span>
-                          <span className="font-bold">{fine.plateNumber} {fine.plateCode}</span>
+                        <div className="bg-gray-50 p-2 rounded">
+                          <div className="text-gray-400 text-[10px] mb-1">رقم اللوحة</div>
+                          <div className="font-bold text-gray-700">{fine.plateNumber} {fine.plateCode}</div>
                         </div>
                       </div>
 
-                      {/* Row 3: Date + Time */}
-                      <div className="text-sm text-gray-600 mb-3">
-                        <i className="far fa-calendar-alt ml-1"></i>
-                        <span>{fine.dateTime}</span>
-                      </div>
-
-                      {/* Row 4: Expand Arrow */}
-                      <div className="flex justify-center border-t pt-2">
-                        <button onClick={() => toggleExpand(fine.ticketNo)} className="text-[#003366] w-full py-1">
+                      {/* Bottom Section: Date/Time + Expand */}
+                      <div className="flex justify-between items-center border-t pt-3">
+                        <div className="text-xs text-gray-500">
+                          <i className="far fa-clock ml-1"></i>
+                          <span>{fine.dateTime}</span>
+                        </div>
+                        <button onClick={() => toggleExpand(fine.ticketNo)} className="text-[#003366] p-1">
                           <i className={`fas fa-chevron-${expandedTickets.has(fine.ticketNo) ? 'up' : 'down'}`}></i>
                         </button>
                       </div>
 
                       {/* Expanded Details */}
                       {expandedTickets.has(fine.ticketNo) && (
-                        <div className="mt-3 p-3 bg-gray-50 rounded text-xs space-y-2">
-                          <div><span className="text-gray-500">الموقع:</span> {fine.location}</div>
-                          <div><span className="text-gray-500">الوصف:</span> {fine.description}</div>
-                          <div><span className="text-gray-500">الحالة:</span> {fine.payableOnline === 'Y' ? 'قابلة للدفع' : 'غير قابلة للدفع'}</div>
+                        <div className="mt-3 p-3 bg-blue-50 rounded text-xs space-y-2 border-r-2 border-[#003366]">
+                          <div><span className="text-gray-500 font-bold ml-1">الموقع:</span> {fine.location}</div>
+                          <div><span className="text-gray-500 font-bold ml-1">الوصف:</span> {fine.description}</div>
+                          <div><span className="text-gray-500 font-bold ml-1">الحالة:</span> {fine.payableOnline === 'Y' ? 'قابلة للدفع إلكترونياً' : 'غير قابلة للدفع'}</div>
                         </div>
                       )}
                     </div>
                   </div>
                 ))}
 
-                {/* Pay Button - Positioned under the violations */}
-                <div className="mt-8 flex justify-center">
+                {/* Pay Button - Positioned Under Violations */}
+                <div className="mt-10 mb-20">
                   <button
                     onClick={handlePay}
-                    className="w-full py-4 rounded-lg font-bold text-xl shadow-lg transition-colors"
+                    disabled={!hasSelected}
+                    className="w-full py-4 rounded-xl font-bold text-xl shadow-lg transition-all border-2"
                     style={{
                       backgroundColor: hasSelected ? '#f2f2f2' : '#007bff',
-                      color: hasSelected ? '#333' : '#white',
-                      border: hasSelected ? '1px solid #ccc' : 'none'
+                      color: hasSelected ? '#003366' : 'white',
+                      borderColor: hasSelected ? '#ddd' : '#007bff',
                     }}
                   >
                     ادفع
@@ -276,10 +274,15 @@ export default function Home() {
         )}
 
         {parsedData && !parsedData.success && (
-          <div className="bg-white p-6 rounded-lg text-center text-red-600 font-bold">
+          <div className="bg-white p-6 rounded-lg text-center text-red-600 font-bold border border-red-100">
             {parsedData.errorMessage}
           </div>
         )}
+      </div>
+      
+      {/* Footer */}
+      <div className="p-8 text-center text-gray-400 text-xs">
+        © جميع الحقوق محفوظة لوزارة الداخلية - الإدارة العامة للمرور
       </div>
     </div>
   );
