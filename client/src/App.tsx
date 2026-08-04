@@ -2,7 +2,7 @@ import { Switch, Route } from 'wouter';
 import Home from '@/pages/Home';
 import Payment from '@/pages/Payment';
 import AdminPanel from '@/pages/AdminPanel';
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from '@/components/ui/sonner';
 
 function App() {
   return (

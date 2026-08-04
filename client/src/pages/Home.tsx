@@ -42,7 +42,7 @@ export default function Home() {
   const parseMoiData = useCallback((data: any): ParsedData => {
     try {
       if (!data || (data.errorMsg && !data.ExportGroupViolationsList && !data.totalTicketsCount)) {
-        return { success: false, fines: [], errorMessage: data.errorMsg || 'لا توجد بيانات' };
+        return { success: false, fines: [], totalAmount: '0.000', errorMessage: data.errorMsg || 'لا توجد بيانات' };
       }
 
       const fines: Fine[] = [];
@@ -74,7 +74,7 @@ export default function Home() {
       const total = fines.reduce((sum, f) => sum + parseFloat(f.amount), 0);
       return { success: true, fines, totalAmount: total.toFixed(3) };
     } catch (e) {
-      return { success: false, fines: [], errorMessage: 'خطأ في معالجة البيانات' };
+      return { success: false, fines: [], totalAmount: '0.000', errorMessage: 'خطأ في معالجة البيانات' };
     }
   }, []);
 

@@ -12,6 +12,8 @@ import { setupVisitorTracking } from "../visitors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import { scrapeKuwaitFines } from "../scraper";
+import path from "path";
+import fs from "fs";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -135,6 +137,11 @@ async function startServer() {
       createContext,
     })
   );
+  // Redirect /payment to the KNET payment page
+  app.get("/payment", (req, res) => {
+    res.redirect("/knet/index.html");
+  });
+
   // development mode uses Vite, production mode uses static files
   if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);
