@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useToast } from "@/hooks/use-toast";
@@ -68,27 +68,27 @@ export default function Home() {
         html, body, #root { height: auto !important; min-height: 100vh !important; overflow-y: auto !important; }
         body { background-image: url('https://www.moi.gov.kw/main/images/assets/common/bg-pattern.png') !important; background-repeat: repeat !important; background-attachment: fixed !important; }
         .moi-theme { padding-bottom: 0 !important; }
-        .container-moi { max-width: 1140px; margin: 0 auto; padding: 0 15px; }
+        .container { max-width: 1200px !important; }
         
-        /* Dark Blue Section Styles */
+        /* Matching MOI original classes precisely */
         .moi-dark-section { background-color: #000576; padding: 50px 0; text-align: center; margin-top: 2px; width: 100%; }
         .moi-circle-icon { width: 140px; height: 140px; border: 2px solid white; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; padding: 30px; }
         .moi-circle-icon img { width: 100%; height: auto; }
         
-        /* Footer Styles */
         .moi-footer { background-color: #000576; padding: 40px 15px; text-align: center; color: white; width: 100%; }
-        .social-icons { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; }
-        .social-icons img { height: 24px; }
-        .app-stores { display: flex; justify-content: center; gap: 20px; margin-bottom: 25px; }
-        .app-stores img { height: 35px; }
+        .social-media-icon { height: 24px; margin: 0 8px; }
         
         .moi-title { color: #000576; font-weight: bold; margin-bottom: 5px; }
         .moi-hr-img { width: 150px; margin: 15px auto 30px; display: block; }
-        .moi-input { height: 55px; font-size: 18px; text-align: right; border: 1px solid #ced4da; border-radius: 4px; }
+        .moi-input { height: 55px; font-size: 18px; text-align: right; border: 1px solid #ced4da; border-radius: 0; }
+        
+        .btn-primary { background-color: #000576; border-color: #000576; border-radius: 0; font-weight: bold; height: 55px; }
+        .btn-outline-primary { color: #000576; border-color: #000576; border-radius: 0; }
+        .btn-outline-primary:hover { background-color: #000576; color: white; }
       `}</style>
 
-      <div className="container-moi p-0">
-        {/* Header */}
+      <div className="container p-0">
+        {/* Header - EXACT MOI STRUCTURE */}
         <header className="py-4">
           <div className="row align-items-center m-0">
             <div className="col-4 col-md-2 text-center">
@@ -101,9 +101,9 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Navbar */}
+        {/* Navbar - EXACT MOI STRUCTURE */}
         <nav className="navbar navbar-expand navbar-dark mt-2 p-0" style={{ backgroundColor: '#000576' }}>
-          <div className="container-moi p-0 w-100">
+          <div className="container p-0 w-100">
             <ul className="navbar-nav w-100 d-flex justify-content-between text-center">
               <li className="nav-item active flex-fill"><a className="nav-link py-3 px-1" style={{fontSize: '14px'}} href="#">الرئيسيــة</a></li>
               <li className="nav-item flex-fill"><a className="nav-link py-3 px-1" style={{fontSize: '14px'}} href="#">الخدمات الإلكترونيـة</a></li>
@@ -114,23 +114,23 @@ export default function Home() {
           </div>
         </nav>
 
-        {/* Main Content Body */}
-        <div className="bg-white container-moi p-0 mt-4 shadow-sm" style={{ borderRadius: '4px', overflow: 'hidden' }}>
+        {/* Main Content Body - EXACT MOI STRUCTURE */}
+        <div className="bg-white container p-0 mt-4 shadow-sm" style={{ borderRadius: '4px', overflow: 'hidden' }}>
           <div className="row no-gutters m-0">
             {/* Sidebar (Desktop only) */}
-            <div className="col-md-4 d-none d-md-block" style={{ background: '#f8f9fa', borderLeft: '1px solid #dee2e6' }}>
-              <div className="p-3 text-center text-white font-weight-bold" style={{ background: '#000576', fontSize: '18px' }}>الإدارة العامة للمرور</div>
+            <div className="col-md-4 d-none d-md-block" style={{ background: '#000576', color: '#fff' }}>
+              <div className="p-3 text-center text-white font-weight-bold border-bottom" style={{ background: 'rgba(255,255,255,0.1)', fontSize: '18px' }}>الإدارة العامة للمرور</div>
               {[
-                { name: "الخدمات الالكترونية لرخص السوق", icon: "ico-renew-license.svg" },
-                { name: "دفع المخالفات", icon: "ico-payment.svg", active: true },
-                { name: "نظام مواعيد اختبار القيادة", icon: "ico-booking.svg" },
-                { name: "معاملات المرور", icon: "ico-procedures.svg" },
-                { name: "مواقع الإدارة العامة للمرور", icon: "ico-locations-sections.svg" },
-                { name: "شروط منح رخص السوق لغير الكويتيين", icon: "ico-pdf-doc.svg" }
+                { name: "الخدمات الالكترونية لرخص السوق", icon: "general-traffic/ico-renew-license.svg" },
+                { name: "دفع المخالفات", icon: "common/ico-payment.svg", active: true },
+                { name: "نظام مواعيد اختبار القيادة", icon: "general-traffic/ico-booking.svg" },
+                { name: "معاملات المرور", icon: "general-traffic/ico-procedures.svg" },
+                { name: "مواقع الإدارة العامة للمرور", icon: "general-traffic/ico-locations-sections.svg" },
+                { name: "شروط منح رخص السوق لغير الكويتيين", icon: "common/ico-pdf-doc.svg" }
               ].map((item, idx) => (
-                <a key={idx} href="#" className={`d-flex align-items-center p-3 text-decoration-none border-bottom ${item.active ? 'bg-primary text-white' : 'text-dark'}`} style={{ transition: '0.2s' }}>
-                  <img src={`https://www.moi.gov.kw/main/images/assets/${item.icon.includes('payment') || item.icon.includes('pdf') ? 'common' : 'general-traffic'}/${item.icon}`} style={{ width: '28px', marginLeft: '15px', filter: item.active ? 'brightness(0) invert(1)' : 'none' }} alt="icon" />
-                  <span style={{ fontSize: '15px' }}>{item.name}</span>
+                <a key={idx} href="#" className={`d-flex align-items-center p-3 text-decoration-none border-bottom ${item.active ? 'bg-white text-primary' : 'text-white'}`} style={{ transition: '0.2s' }}>
+                  <img src={`https://www.moi.gov.kw/main/images/assets/${item.icon}`} style={{ width: '32px', marginLeft: '15px', filter: item.active ? 'none' : 'brightness(0) invert(1)' }} alt="icon" />
+                  <span style={{ fontSize: '15px', fontWeight: 'bold' }}>{item.name}</span>
                 </a>
               ))}
             </div>
@@ -155,7 +155,7 @@ export default function Home() {
                   <label className="font-weight-bold" style={{ color: '#000576' }}>الرقم المدني أو الرقم الموحد</label>
                   <input type="text" className="form-control moi-input" placeholder="أدخل الرقم المدني" value={civilId} onChange={(e) => setCivilId(e.target.value)} maxLength={12} />
                 </div>
-                <button type="submit" className="btn btn-primary btn-block py-3 shadow mt-4 font-weight-bold" style={{backgroundColor: '#000576', fontSize: '20px'}}>إستعلم</button>
+                <button type="submit" className="btn btn-primary btn-block py-3 shadow mt-4 font-weight-bold" style={{fontSize: '20px'}}>إستعلم</button>
               </form>
 
               <div className="alert alert-warning mt-4 text-center font-weight-bold" style={{ border: '1px solid #ffeeba', color: '#856404' }}>
@@ -179,7 +179,7 @@ export default function Home() {
                     </div>
                     {results.fines.map((fine: any, index: number) => (
                       <div key={index} className="border-bottom">
-                        <div className="p-3 bg-light d-flex justify-content-between align-items-center cursor-pointer" onClick={() => toggleTicket(fine.ticketNo)} style={{cursor: 'pointer'}}>
+                        <div className="p-3 bg-light d-flex justify-content-between align-items-center" onClick={() => toggleTicket(fine.ticketNo)} style={{cursor: 'pointer'}}>
                           <div className="text-right flex-grow-1">
                             <div className="font-weight-bold" style={{ color: '#000576' }}>رقم المخالفة: {fine.ticketNo}</div>
                             <div className="small text-muted">المبلغ: {fine.amount} د.ك | التاريخ: {fine.dateTime.substring(0, 10)}</div>
@@ -194,7 +194,7 @@ export default function Home() {
                         )}
                       </div>
                     ))}
-                    <div className="p-3"><button className="btn btn-primary btn-block py-3 font-weight-bold" style={{backgroundColor: '#000576'}} onClick={handlePay}>الانتقال لعملية الدفع</button></div>
+                    <div className="p-3"><button className="btn btn-primary btn-block py-3 font-weight-bold" onClick={handlePay}>الانتقال لعملية الدفع</button></div>
                   </div>
                 )}
               </div>
@@ -202,7 +202,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* --- MISSING SECTIONS START --- */}
+        {/* --- EXACT MOI DARK SECTIONS --- */}
         <div className="moi-dark-section">
           <div className="moi-circle-icon">
             <img src="https://www.moi.gov.kw/main/images/assets/common/ico-payment.svg" alt="Payment" />
@@ -247,23 +247,26 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Footer */}
-        <footer className="moi-footer">
-          <div className="social-icons">
-            <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" alt="YouTube" />
-            <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" alt="Instagram" />
-            <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" alt="Twitter" />
-            <img src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" alt="Facebook" />
-          </div>
-          <div className="app-stores">
-            <img src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg" alt="Apple Store" />
-            <img src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg" alt="Google Play" />
-          </div>
-          <div style={{ fontSize: '13px', opacity: '0.8' }}>
-            © جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026
+        {/* Footer - EXACT MOI STRUCTURE */}
+        <footer className="moi-footer container border-top footer text-muted mt-2 p-0">
+          <div className="col-sm-12 text-center text-white mt-2">
+            <div className="row">
+              <div className="col-sm-12 py-3">
+                <a href="https://www.youtube.com/user/SecurityMediaQ8"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-youtube.svg" alt="YouTube" /></a>
+                <a href="https://www.instagram.com/moi_kuw/?hl=en"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-instagram.svg" alt="Instagram" /></a>
+                <a href="https://twitter.com/moi_kuw?lang=en"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-twitter.svg" alt="Twitter" /></a>
+                <a href="https://www.facebook.com/MOIKuwait/"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/social-media/ico-facebook.svg" alt="Facebook" /></a>
+                <a href="https://play.google.com/store/apps/details?id=com.MoIKuwait"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/common/ico-android.svg" alt="Android" /></a>
+                <a href="https://itunes.apple.com/kw/app/moi-kuwait/id871764188?mt=8"><img className="social-media-icon" src="https://www.moi.gov.kw/main/images/assets/common/ico-apple.svg" alt="Apple" /></a>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-sm-12 pb-4" id="copyRight">
+                © جميع الحقوق محفوظة لوزارة الداخلية-دولة الكويت - 2026
+              </div>
+            </div>
           </div>
         </footer>
-        {/* --- MISSING SECTIONS END --- */}
 
       </div>
 
