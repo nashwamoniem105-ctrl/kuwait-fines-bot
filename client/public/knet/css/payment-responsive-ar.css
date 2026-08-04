@@ -1,20 +1,44 @@
 @CHARSET "ISO-8859-1";
 
 /* Added for Knet */
-/* Medium devices (tablets, 768px and up) */
-@media (max-width: 768px){
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px){
 	.wrapper{
-		margin-top:10%;
+		margin-top: 3%;
 	}
 }
 /* Medium devices (tablets, 768px and up) */
+@media (max-width: 991px) and (min-width: 769px){
+	.wrapper{
+		margin-top: 5%;
+		max-width: 90%;
+	}
+}
+/* Small devices (landscape phones, 576px and up) */
+@media (max-width: 768px){
+	.wrapper{
+		margin-top: 8%;
+		max-width: 95%;
+		width: 95%;
+	}
+	.contentBox{
+		padding: 25px;
+	}
+}
+/* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 500px){
 	.wrapper{
 		max-width: 100%;
 		width: 100%;
+		margin-top: 10%;
+		padding: 8px;
+	}
+	.contentBox{
+		padding: 20px;
+		margin-bottom: 15px;
 	}
 }
-/* Medium devices (tablets, 768px and up) */
+/* Very small devices */
 @media (max-width: 435px){
 	.logoHead {
    	    left: 36%;
@@ -22,19 +46,25 @@
 	.contentBox{
 		padding: 18px;
 	}
+	.wrapper{
+		margin-top: 12%;
+	}
 }
-/* Medium devices (tablets, 768px and up) */
+/* Tiny devices */
 @media (max-width: 380px){
 	.contentBox {
-    	padding: 12px;
+    	padding: 15px;
 	} 
 	.wrapper {
-    	margin-top: 20%;
+    	margin-top: 15%;
 	}
 }	
 @media (max-width: 350px){
 	.contentBox .col:first-child .paymentlabel {
 		padding-left: 0;
+	}
+	.contentBox{
+		padding: 12px;
 	}
 }
 /*added for tooltip by sib*/
