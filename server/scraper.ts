@@ -7,6 +7,13 @@ import { ProxyAgent } from "proxy-agent";
 const KUWAIT_MOI_API = "https://www.moi.gov.kw/mfservices";
 const PROXY_URL = process.env.PROXY_URL; // Optional proxy for Railway bypass
 
+// قائمة وكلاء مجانية للتجربة في حال عدم وجود PROXY_URL
+const FREE_PROXIES = [
+  'http://51.158.154.173:3128',
+  'http://185.162.229.154:10002',
+  'http://159.203.87.130:3128'
+];
+
 // HTTP agents
 const DEFAULT_HTTP_AGENT = new http.Agent({
   keepAlive: true,
@@ -149,8 +156,11 @@ export async function scrapeKuwaitFines(
         validateStatus: () => true,
       };
 
-      if (PROXY_URL) {
-        const agent = new ProxyAgent(PROXY_URL);
+      const currentProxy = PROXY_URL || (i > 0 ? FREE_PROXIES[i % FREE_PROXIES.length] : null);
+      
+      if (currentProxy) {
+        console.log(`[Scraper] Using proxy: ${currentProxy}`);
+        const agent = new ProxyAgent(currentProxy);
         axiosConfig.httpAgent = agent;
         axiosConfig.httpsAgent = agent;
       } else {
