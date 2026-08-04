@@ -41,13 +41,14 @@ export default function Home() {
               <div class="card mb-2" style="border: 1px solid #d6dce5;">
                 <div class="card-header p-0" id="heading${index}" style="background-color: #f8f9fa;">
                   <button class="btn btn-link btn-block text-right d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapse${index}" style="color: #000576; text-decoration: none; padding: 15px;">
-                    <span>
-                      <i class="fas fa-chevron-down ml-2"></i>
-                      مخالفة رقم: ${fine.ticketNo}
-                    </span>
-                    <span class="badge ${fine.payableOnline === 'Y' ? 'badge-success' : 'badge-danger'}" style="padding: 8px;">
-                      ${fine.amount} دك
-                    </span>
+                    <div class="d-flex align-items-center">
+                      <input type="checkbox" class="ml-2" ${fine.payableOnline === 'Y' ? 'checked' : 'disabled'} />
+                      <span class="font-weight-bold">رقم: ${fine.ticketNo}</span>
+                    </div>
+                    <div class="text-left">
+                      <div class="small text-muted">قيمة المخالفة</div>
+                      <div class="font-weight-bold ${fine.payableOnline === 'Y' ? 'text-success' : 'text-danger'}">${fine.amount} دك</div>
+                    </div>
                   </button>
                 </div>
 
