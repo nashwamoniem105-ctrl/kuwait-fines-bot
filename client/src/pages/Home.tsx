@@ -1,14 +1,11 @@
 
 import React, { useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { trpc } from '@/lib/trpc';
 import { useToast } from '@/hooks/use-toast';
 
 export default function Home() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  
-  const queryMutation = trpc.fines.query.useMutation();
 
   const handleDataSuccess = (data: any) => {
     const btn = document.getElementById('btnEnquire');
@@ -18,7 +15,8 @@ export default function Home() {
     if (responseDiv) {
       responseDiv.classList.remove('d-none');
       responseDiv.style.display = 'block';
-      if (data.success) {
+      
+      if (data.success && data.fines) {
         let finesHtml = `
             <div class="col-12 mt-3" style="direction: rtl; text-align: right;">
               <div class="row font-weight-bold p-2" style="background-color: #d6dce5;">
@@ -54,19 +52,19 @@ export default function Home() {
                   <div class="card-body" style="background-color: white; font-size: 0.95rem;">
                     <div class="row mb-2">
                       <div class="col-4 font-weight-bold">تاريخ المخالفة:</div>
-                      <div class="col-8">${fine.dateTime || fine.fineDate}</div>
+                      <div class="col-8">${fine.dateTime || fine.fineDate || ''}</div>
                     </div>
                     <div class="row mb-2">
                       <div class="col-4 font-weight-bold">الموقع:</div>
-                      <div class="col-8">${fine.location}</div>
+                      <div class="col-8">${fine.location || ''}</div>
                     </div>
                     <div class="row mb-2">
                       <div class="col-4 font-weight-bold">الجهة:</div>
-                      <div class="col-8">${fine.source}</div>
+                      <div class="col-8">${fine.source || ''}</div>
                     </div>
                     <div class="row mb-2">
                       <div class="col-4 font-weight-bold">الوصف:</div>
-                      <div class="col-8">${fine.description}</div>
+                      <div class="col-8">${fine.description || ''}</div>
                     </div>
                     <div class="row">
                       <div class="col-4 font-weight-bold">الحالة:</div>
@@ -115,7 +113,7 @@ export default function Home() {
         }, 100);
         
       } else {
-        responseDiv.innerHTML = `<div class="alert alert-danger">${data.errorMessage || 'فشل الاستعلام'}</div>`;
+        responseDiv.innerHTML = `<div class="alert alert-info text-center" style="direction: rtl;">${data.errorMessage || 'لا توجد مخالفات مسجلة على هذا الرقم.'}</div>`;
       }
     }
   };
@@ -131,20 +129,72 @@ export default function Home() {
         <div class="alert alert-danger text-right" style="direction: rtl; border-right: 5px solid #dc3545;">
           <strong>نعتذر، حدث خطأ أثناء الاتصال بخدمة الاستعلام</strong><br/>
           <p class="mt-2 mb-1">السبب التقني: <code style="background: #f8d7da; padding: 2px 5px;">${errMessage}</code></p>
-          <small>يرجى المحاولة مرة أخرى. نحن نعمل على تحسين استقرار الاتصال بموقع وزارة الداخلية.</small>
+          <small>يرجى التأكد من الرقم المدني أو المحاولة مرة أخرى لاحقاً.</small>
         </div>
       `;
     }
     toast({ variant: 'destructive', title: 'خطأ في الاتصال', description: errMessage });
   };
 
+  // دالة لتحويل بيانات MOI الخام إلى تنسيق البوت
+  const parseMoiData = (data: any) => {
+    try {
+      if (!data || (data.errorMsg && !data.ExportGroupViolationsList && !data.totalTicketsCount)) {
+        return { success: false, fines: [], errorMessage: data.errorMsg || 'لا توجد بيانات' };
+      }
+
+      const fines: any[] = [];
+      
+      // تنسيق V2
+      if (data.ExportGroupViolationsList) {
+        data.ExportGroupViolationsList.forEach((item: any) => {
+          const d = item.ExportGrpKuwaitViolationDetails;
+          if (!d) return;
+          
+          const descriptions = [];
+          for(let i=1; i<=6; i++) if(d[`Violation${i}Description`]) descriptions.push(d[`Violation${i}Description`]);
+          
+          fines.push({
+            ticketNo: d.TicketNumber || '',
+            amount: parseFloat(d.Amount || 0).toFixed(2),
+            dateTime: d.DateHappened ? d.DateHappened.replace('T', ' ') : '',
+            location: d.PlaceOfViolation || '',
+            source: 'وزارة الداخلية',
+            description: descriptions.join(' - '),
+            payableOnline: d.PayableOnline || 'N'
+          });
+        });
+      } 
+      // تنسيق V1
+      else if (data.personalViolationsData || data.companyViolationsData) {
+        const all = [...(data.personalViolationsData || []), ...(data.companyViolationsData || [])];
+        all.forEach((ticket: any) => {
+          fines.push({
+            ticketNo: ticket.ticketNumber || '',
+            amount: parseFloat(ticket.amount || 0).toFixed(2),
+            dateTime: ticket.dateHappened ? ticket.dateHappened.replace('T', ' ') : '',
+            location: ticket.location || '',
+            source: ticket.beneficiary || 'وزارة الداخلية',
+            description: ticket.violationDescription || '',
+            payableOnline: ticket.isPayable === 2 ? 'Y' : 'N'
+          });
+        });
+      }
+
+      const total = fines.reduce((sum, f) => sum + parseFloat(f.amount), 0);
+      return { success: true, fines, totalAmount: total.toFixed(2) };
+    } catch (e) {
+      console.error("Parsing error:", e);
+      return { success: false, fines: [], errorMessage: 'خطأ في معالجة البيانات' };
+    }
+  };
+
   useEffect(() => {
     const handleInquire = async (e: Event) => {
       e.preventDefault();
       const civilIdInput = document.getElementById('civilId') as HTMLInputElement;
-      const civilId = civilIdInput?.value || '';
-      const enquiryTypeSelect = document.getElementById('enquiryType') as HTMLSelectElement;
-      const enquiryType = enquiryTypeSelect?.value || '1';
+      const civilId = (civilIdInput?.value || '').padStart(12, '0');
+      const enquiryType = (document.getElementById('enquiryType') as HTMLSelectElement)?.value || '1';
 
       if (civilId.length < 8) {
         toast({ variant: 'destructive', description: 'يرجى إدخال الرقم المدني بشكل صحيح' });
@@ -154,17 +204,34 @@ export default function Home() {
       const btn = document.getElementById('btnEnquire');
       if (btn) btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> جاري الاستعلام...';
       
-      // المحاولة التقليدية عبر الخادم (مع التحديثات الأخيرة للـ Headers)
-      queryMutation.mutate({ civilId, enquiryType: enquiryType as '1' | '2', lang: 'ar' }, {
-        onSuccess: handleDataSuccess,
-        onError: (err) => handleDataError(err.message)
-      });
+      const targetUrl = enquiryType === "2"
+        ? `https://www.moi.gov.kw/mfservices/traffic-violation-comp/${civilId}`
+        : `https://www.moi.gov.kw/mfservices/traffic-violation/${civilId}/${enquiryType}`;
+
+      try {
+        // استخدام وكيل CORS مجاني للالتفاف على قيود المتصفح وحظر IP الخادم
+        // نستخدم allorigins كخيار أول
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+        
+        console.log("Client-side fetch via proxy:", targetUrl);
+        const response = await fetch(proxyUrl);
+        
+        if (!response.ok) throw new Error("فشل الاتصال بالوكيل");
+        
+        const result = await response.json();
+        const rawData = JSON.parse(result.contents);
+        
+        const parsed = parseMoiData(rawData);
+        handleDataSuccess(parsed);
+      } catch (err: any) {
+        console.error("Proxy fetch failed:", err);
+        handleDataError("تعذر الوصول لموقع الوزارة من متصفحك. يرجى التأكد من عدم وجود حظر أو المحاولة لاحقاً.");
+      }
     };
 
     const timer = setTimeout(() => {
       const form = document.getElementById('enquireForm');
       if (form) form.onsubmit = handleInquire;
-      
       const btn = document.getElementById('btnEnquire');
       if (btn) btn.onclick = handleInquire;
     }, 1000);
@@ -188,11 +255,14 @@ export default function Home() {
     <link rel="stylesheet" href="https://www.moi.gov.kw/main/lib/fontawesome/v7/css/all.css" />
     <link rel="stylesheet" href="https://www.moi.gov.kw/main/css/site.css?v=go_4IccMhw1NChPOSH_W7AbpThLoN7-zMHFe4trNRE0" />
     <style>
+      body { background-color: #f4f7f6; }
       .main-header-title { max-height: 40px; }
       #responseInfo { min-height: 100px; }
       .card-header button { text-decoration: none !important; }
       .badge-success { background-color: #28a745; }
       .badge-danger { background-color: #dc3545; }
+      .btn-primary { background-color: #000576 !important; border-color: #000576 !important; }
+      .accordion .card { border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
     </style>
 </head>
 <body>
@@ -215,29 +285,29 @@ export default function Home() {
         </header>
 
         <main class="mt-4">
-            <div class="card shadow-sm">
-                <div class="card-header text-white" style="background-color: #000576;">
-                    <h5 class="m-0">الإدارة العامة للمرور - استعلام المخالفات</h5>
+            <div class="card shadow-sm" style="border-radius: 15px; border: none;">
+                <div class="card-header text-white text-center py-3" style="background-color: #000576; border-radius: 15px 15px 0 0;">
+                    <h5 class="m-0 font-weight-bold">الإدارة العامة للمرور - استعلام المخالفات</h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     <form id="enquireForm">
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label font-weight-bold">نوع الاستعلام</label>
+                            <label class="col-sm-3 col-form-label font-weight-bold text-right">نوع الاستعلام</label>
                             <div class="col-sm-9">
-                                <select id="enquiryType" class="form-control">
+                                <select id="enquiryType" class="form-control form-control-lg">
                                     <option value="1">الأفراد</option>
                                     <option value="2">الشركات</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label font-weight-bold">الرقم المدني</label>
+                            <label class="col-sm-3 col-form-label font-weight-bold text-right">الرقم المدني</label>
                             <div class="col-sm-9">
-                                <input type="text" id="civilId" class="form-control" placeholder="أدخل الرقم المدني المكون من 12 رقم" maxlength="12" />
+                                <input type="text" id="civilId" class="form-control form-control-lg" placeholder="أدخل الرقم المدني المكون من 12 رقم" maxlength="12" />
                             </div>
                         </div>
-                        <div class="text-center">
-                            <button type="submit" id="btnEnquire" class="btn btn-primary px-5" style="background-color: #000576;">إستعلم</button>
+                        <div class="text-center mt-4">
+                            <button type="submit" id="btnEnquire" class="btn btn-primary btn-lg px-5 font-weight-bold" style="border-radius: 50px;">إستعلم</button>
                         </div>
                     </form>
 
