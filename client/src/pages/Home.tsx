@@ -155,7 +155,7 @@ export default function Home() {
   }, [selectedTickets, parsedData, civilId, setLocation]);
 
   return (
-    <div style={{ backgroundColor: '#f2f2f2', minHeight: '100vh', fontFamily: 'Cairo, sans-serif', paddingBottom: '200px' }} dir="rtl">
+    <div style={{ backgroundColor: '#f2f2f2', minHeight: '100vh', fontFamily: 'Cairo, sans-serif' }} dir="rtl">
       {/* Header & Nav - Simplified to match MOI */}
       <div style={{ background: 'white', borderBottom: '1px solid #ddd' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', padding: '10px 15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -164,7 +164,7 @@ export default function Home() {
         </div>
       </div>
 
-      <main style={{ maxWidth: '600px', margin: '20px auto', padding: '0 15px' }}>
+      <main style={{ maxWidth: '600px', margin: '20px auto', padding: '0 15px', paddingBottom: '40px' }}>
         {/* Enquiry Form */}
         <div style={{ background: 'white', borderRadius: '4px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginBottom: '20px', borderTop: '4px solid #003366' }}>
           <div style={{ padding: '20px' }}>
@@ -258,6 +258,41 @@ export default function Home() {
                 )}
               </div>
             ))}
+
+            {/* Payment Section - Below Fines */}
+            {payingAmount > 0 && (
+              <div style={{ marginTop: '20px', padding: '20px', background: 'white', borderRadius: '4px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', borderTop: '3px solid #28a745' }}>
+                <div style={{ marginBottom: '15px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '14px', color: '#666', marginBottom: '5px' }}>إجمالي القيمة المختارة</div>
+                  <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#000576' }}>{payingAmount.toFixed(3)} دك</div>
+                </div>
+
+                <button
+                  onClick={handlePay}
+                  style={{ width: '100%', background: '#003366', color: 'white', border: 'none', padding: '14px', borderRadius: '4px', fontWeight: 'bold', fontSize: '18px', cursor: 'pointer', transition: 'background 0.2s' }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = '#002244')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = '#003366')}
+                >
+                  إدفع
+                </button>
+
+                <div style={{ fontSize: '12px', color: '#999', marginTop: '12px', textAlign: 'center', lineHeight: '1.5' }}>
+                  بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
+                </div>
+              </div>
+            )}
+
+            {/* Legend */}
+            <div style={{ marginTop: '20px', padding: '15px', background: '#f8f9fa', borderRadius: '4px', fontSize: '13px', display: 'flex', gap: '20px', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '12px', height: '12px', background: '#28a745', borderRadius: '2px' }}></div>
+                <span>قابلة للدفع الكترونياً</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '12px', height: '12px', background: '#dc3545', borderRadius: '2px' }}></div>
+                <span>غير قابلة للدفع الكترونياً</span>
+              </div>
+            </div>
           </div>
         )}
 
@@ -267,26 +302,6 @@ export default function Home() {
           </div>
         )}
       </main>
-
-      {/* Payment Bar - Sticky at Bottom */}
-      {payingAmount > 0 && (
-        <div style={{ position: 'fixed', bottom: '0', left: '0', right: '0', background: 'white', borderTop: '2px solid #003366', padding: '15px', boxShadow: '0 -2px 10px rgba(0,0,0,0.1)', zIndex: 1000 }}>
-          <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
-            <div style={{ marginBottom: '10px', fontSize: '15px' }}>
-              إجمالي القيمة المختارة: <b style={{ color: '#000576', fontSize: '20px' }}>{payingAmount.toFixed(3)} دك</b>
-            </div>
-            <button
-              onClick={handlePay}
-              style={{ width: '100%', background: '#003366', color: 'white', border: 'none', padding: '12px', borderRadius: '4px', fontWeight: 'bold', fontSize: '16px', cursor: 'pointer' }}
-            >
-              إدفع
-            </button>
-            <div style={{ fontSize: '11px', color: '#999', marginTop: '8px' }}>
-              بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
