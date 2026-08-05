@@ -337,7 +337,7 @@ export default function Home() {
               cursor: loading ? 'not-allowed' : 'pointer',
             }}
           >
-            {loading ? 'جاري الاستعلام...' : 'إستعلم'}
+            {loading ? 'جاري الاستعلام...' : 'ادفع'}
           </button>
         </div>
 
@@ -357,14 +357,14 @@ export default function Home() {
                     borderRadius: '4px',
                     padding: '15px 18px',
                     marginBottom: '20px',
-                    direction: 'ltr',
+                    direction: 'rtl',
                   }}
                 >
                   <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#333', marginBottom: '6px' }}>
-                    Total tickets: {parsedData.totalFines || parsedData.fines.length}
+                    إجمالي عدد المخالفات: {parsedData.totalFines || parsedData.fines.length}
                   </div>
                   <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#333' }}>
-                    Total Amount: {parsedData.totalAmount} KD
+                    إجمالي المبلغ: {parsedData.totalAmount} د.ك
                   </div>
                 </div>
 
@@ -398,8 +398,8 @@ export default function Home() {
                               />
                             )}
                           </div>
-                          <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#000080', direction: 'ltr' }}>
-                            Ticket: <span style={{ fontWeight: 'normal' }}>{fine.ticketNo}</span>
+                          <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#000080', direction: 'rtl' }}>
+                            رقم المخالفة: <span style={{ fontWeight: 'normal' }}>{fine.ticketNo}</span>
                           </span>
                         </div>
 
@@ -407,23 +407,23 @@ export default function Home() {
                         <div style={{ borderTop: '1px solid #ddd', margin: '8px 0' }}></div>
 
                         {/* Row 2: Amount */}
-                        <div style={{ marginBottom: '6px', direction: 'ltr' }}>
+                        <div style={{ marginBottom: '6px', direction: 'rtl' }}>
                           <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#000080' }}>
-                            Amount: <span style={{ fontWeight: 'normal', color: '#333' }}>{fine.amount} KD</span>
+                            المبلغ: <span style={{ fontWeight: 'normal', color: '#333' }}>{fine.amount} د.ك</span>
                           </span>
                         </div>
 
                         {/* Row 3: Plate */}
-                        <div style={{ marginBottom: '6px', direction: 'ltr' }}>
+                        <div style={{ marginBottom: '6px', direction: 'rtl' }}>
                           <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#000080' }}>
-                            Plate: <span style={{ fontWeight: 'normal', color: '#333' }}>{fine.plateNumber}{fine.plateCode ? '/' + fine.plateCode : ''}</span>
+                            اللوحة: <span style={{ fontWeight: 'normal', color: '#333' }}>{fine.plateNumber}{fine.plateCode ? '/' + fine.plateCode : ''}</span>
                           </span>
                         </div>
 
                         {/* Row 4: Date */}
-                        <div style={{ marginBottom: '6px', direction: 'ltr' }}>
+                        <div style={{ marginBottom: '6px', direction: 'rtl' }}>
                           <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#000080' }}>
-                            Date: <span style={{ fontWeight: 'normal', color: '#333' }}>{fine.dateTime || fine.fineDate || ''}</span>
+                            التاريخ: <span style={{ fontWeight: 'normal', color: '#333' }}>{fine.dateTime || fine.fineDate || ''}</span>
                           </span>
                         </div>
 
@@ -445,7 +445,7 @@ export default function Home() {
                         {isExpanded && (
                           <div style={{ marginTop: '10px', padding: '12px', backgroundColor: '#fff', borderTop: '1px solid #ddd' }}>
                             {fine.violationType && (
-                              <div style={{ marginBottom: '8px', direction: 'ltr' }}>
+                              <div style={{ marginBottom: '8px', direction: 'rtl' }}>
                                 <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#000' }}>
                                   النوع: <span style={{ fontWeight: 'normal' }}>{fine.violationType === 'D' ? 'مباشرة' : fine.violationType === 'I' ? 'غير مباشرة' : fine.violationType}</span>
                                 </span>
@@ -478,10 +478,10 @@ export default function Home() {
                     fontWeight: 'bold',
                     textAlign: 'center',
                     marginBottom: '15px',
-                    direction: 'ltr',
+                    direction: 'rtl',
                     lineHeight: '1.5',
                   }}>
-                    After making the payment please do not try to pay again as it may take upto 15 minutes to update the data
+                    بعد إجراء عملية الدفع، يرجى عدم المحاولة مرة أخرى حيث قد يستغرق تحديث البيانات ما يصل إلى 15 دقيقة.
                   </p>
 
                   {/* Pay Button */}
